@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIE Parser for LLM Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SIE Parser for LLM Analysis</h1>
+            <p>Upload, process, and prepare Swedish SIE 4 files for LLM analysis</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <h2>Upload SIE File</h2>
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="file-input">
+                        <input type="file" id="sie-file" name="file" accept=".se,.sie">
+                        <label for="sie-file">Choose a SIE file</label>
+                    </div>
+                    <button type="submit" id="upload-btn">Process File</button>
+                </form>
+                <div id="upload-status" class="status-message"></div>
+            </section>
+
+            <section class="results-section" id="results-section" style="display: none;">
+                <h2>Processing Results</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="summary">Summary</button>
+                    <button class="tab-btn" data-tab="balance">Balance Sheet</button>
+                    <button class="tab-btn" data-tab="income">Income Statement</button>
+                    <button class="tab-btn" data-tab="opening">Opening Balance</button>
+                    <button class="tab-btn" data-tab="ledger">Ledger</button>
+                    <button class="tab-btn" data-tab="transactions">Transactions</button>
+                    <button class="tab-btn" data-tab="json">JSON Output</button>
+                    <button class="tab-btn" data-tab="schema">Schema</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div id="summary-tab" class="tab-pane active">
+                        <div class="summary-cards">
+                            <div class="card">
+                                <h3>Company</h3>
+                                <p id="company-name" class="highlight-text">-</p>
+                            </div>
+                            <div class="card">
+                                <h3>Fiscal Year</h3>
+                                <p id="period" class="highlight-text">-</p>
+                            </div>
+                            <div class="card">
+                                <h3>Accounts</h3>
+                                <p id="total-accounts" class="highlight-text">-</p>
+                            </div>
+                            <div class="card">
+                                <h3>Transactions</h3>
+                                <p id="total-transactions" class="highlight-text">-</p>
+                            </div>
+                            <div class="card">
+                                <h3>Net Result</h3>
+                                <p id="net-result" class="highlight-text">-</p>
+                            </div>
+                        </div>
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <h3>Income vs Expenses</h3>
+                                <canvas id="income-expense-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Account Distribution</h3>
+                                <canvas id="account-types-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="balance-tab" class="tab-pane">
+                        <div class="balance-controls">
+                            <div class="search-box">
+                                <input type="text" id="balance-search" placeholder="Search accounts...">
+                            </div>
+                            <div class="balance-year-selector">
+                                <select id="balance-year-selector"></select>
+                                <label><input type="checkbox" id="show-decimals" checked> Show decimals</label>
+                            </div>
+                            <div class="balance-info">
+                                <span id="balance-account-count">0</span> accounts shown
+                            </div>
+                        </div>
+                        <div class="balance-container">
+                            <div class="balance-header">
+                                <h3>Balance Sheet <span id="balance-year"></span></h3>
+                            </div>
+                            <div class="balance-table-container">
+                                <table class="balance-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="account-column">Accounts</th>
+                                            <th class="amount-column">OB<br><span class="date-label" id="ob-date-label"></span></th>
+                                            <th class="amount-column">Movement</th>
+                                            <th class="amount-column">CB<br><span class="date-label" id="cb-date-label"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="section-header">
+                                            <td colspan="4">Assets</td>
+                                        </tr>
+                                        <tr class="subsection-header">
+                                            <td colspan="4">Fixed Assets</td>
+                                        </tr>
+                                        <tr id="fixed-assets-row">
+                                            <td>Fixed Assets</td>
+                                            <td class="amount-column" id="fixed-assets-ob">0.00</td>
+                                            <td class="amount-column" id="fixed-assets-movement">0.00</td>
+                                            <td class="amount-column" id="fixed-assets-cb">0.00</td>
+                                        </tr>
+                                        <tr class="subsection-header">
+                                            <td colspan="4">Current Assets</td>
+                                        </tr>
+                                        <tr id="current-assets-placeholder">
+                                            <td colspan="4" class="expandable-section">
+                                                <div id="current-assets-list" class="account-list"></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="total-row">
+                                            <td>Total Assets</td>
+                                            <td class="amount-column" id="total-assets-ob">0.00</td>
+                                            <td class="amount-column" id="total-assets-movement">0.00</td>
+                                            <td class="amount-column" id="total-assets-cb">0.00</td>
+                                        </tr>
+                                        
+                                        <tr class="section-header">
+                                            <td colspan="4">Liabilities and Equity</td>
+                                        </tr>
+                                        <tr class="subsection-header">
+                                            <td colspan="4">Current Liabilities</td>
+                                        </tr>
+                                        <tr id="current-liabilities-placeholder">
+                                            <td colspan="4" class="expandable-section">
+                                                <div id="current-liabilities-list" class="account-list"></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="subsection-header">
+                                            <td colspan="4">Equity</td>
+                                        </tr>
+                                        <tr id="equity-placeholder">
+                                            <td colspan="4" class="expandable-section">
+                                                <div id="equity-list" class="account-list"></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="total-row">
+                                            <td>Total Liabilities and Equity</td>
+                                            <td class="amount-column" id="total-liab-equity-ob">0.00</td>
+                                            <td class="amount-column" id="total-liab-equity-movement">0.00</td>
+                                            <td class="amount-column" id="total-liab-equity-cb">0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="income-tab" class="tab-pane">
+                        <div class="income-container">
+                            <div class="income-column">
+                                <h3>Income</h3>
+                                <div id="income-list" class="account-list"></div>
+                                <div class="total-row">
+                                    <strong>Total Income:</strong>
+                                    <span id="total-income">-</span>
+                                </div>
+                            </div>
+                            <div class="income-column">
+                                <h3>Expenses</h3>
+                                <div id="expenses-list" class="account-list"></div>
+                                <div class="total-row">
+                                    <strong>Total Expenses:</strong>
+                                    <span id="total-expenses">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-row">
+                            <strong>Net Result:</strong>
+                            <span id="income-net-result">-</span>
+                        </div>
+                    </div>
+                    
+                    <div id="opening-tab" class="tab-pane">
+                        <div class="opening-controls">
+                            <div class="search-box">
+                                <input type="text" id="opening-search" placeholder="Search accounts...">
+                            </div>
+                            <div class="opening-info">
+                                <span id="opening-account-count">0</span> accounts shown
+                            </div>
+                        </div>
+                        <div class="opening-container">
+                            <div class="opening-header">
+                                <h3>Opening Balance <span id="opening-year"></span></h3>
+                                <p class="note">Opening balances (#IB) represent account values at the beginning of the fiscal year.</p>
+                            </div>
+                            <div class="balance-container">
+                                <div class="balance-column">
+                                    <h3>Assets</h3>
+                                    <div id="opening-assets-list" class="account-list"></div>
+                                    <div class="total-row">
+                                        <strong>Total Assets:</strong>
+                                        <span id="opening-total-assets">-</span>
+                                    </div>
+                                </div>
+                                <div class="balance-column">
+                                    <h3>Liabilities & Equity</h3>
+                                    <div id="opening-liabilities-list" class="account-list"></div>
+                                    <div id="opening-equity-list" class="account-list"></div>
+                                    <div class="total-row">
+                                        <strong>Total Liabilities & Equity:</strong>
+                                        <span id="opening-total-liab-equity">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="ledger-tab" class="tab-pane">
+                        <div class="ledger-controls">
+                            <div class="search-box">
+                                <input type="text" id="ledger-search" placeholder="Search accounts...">
+                            </div>
+                            <div class="ledger-info">
+                                <span id="account-count">0</span> accounts shown
+                            </div>
+                        </div>
+                        <div class="ledger-container">
+                            <div id="accounts-list" class="accounts-list">
+                                <!-- Account sections will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="transactions-tab" class="tab-pane">
+                        <div class="transactions-controls">
+                            <div class="search-box">
+                                <input type="text" id="search-transactions" placeholder="Search transactions...">
+                            </div>
+                            <div class="transactions-info">
+                                <span id="transactions-count">0</span> transactions shown
+                            </div>
+                        </div>
+                        <div class="transactions-container">
+                            <table id="transactions-table" class="data-table">
+                                <!-- Table content will be populated by JavaScript -->
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="json-tab" class="tab-pane">
+                        <div class="json-controls">
+                            <h3>LLM-Ready JSON Output</h3>
+                            <div class="description-box">
+                                <label for="llm-description">Add description for LLM context:</label>
+                                <textarea id="llm-description" placeholder="Describe what you want the LLM to analyze in this data..."></textarea>
+                                <button id="add-description-btn">Add Description</button>
+                            </div>
+                            <div class="save-controls">
+                                <input type="text" id="json-filename" placeholder="filename.json">
+                                <button id="save-json-btn">Save JSON</button>
+                                <button id="copy-json-btn">Copy to Clipboard</button>
+                            </div>
+                        </div>
+                        <div class="json-preview">
+                            <pre id="json-output"></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="schema-tab" class="tab-pane">
+                        <!-- Schema tab content will be added here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>SIE Parser for LLM Analysis - Handles CP437 encoding for Swedish characters</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

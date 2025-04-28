@@ -1,0 +1,4974 @@
+{
+  "1010": {
+    "name": "Utvecklingsutgifter",
+    "type": "asset"
+  },
+  "1011": {
+    "name": "Balanserade utgifter fr forskning och utveckling",
+    "type": "asset"
+  },
+  "1012": {
+    "name": "Balanserade utgifter fr programvaror",
+    "type": "asset"
+  },
+  "1018": {
+    "name": "Ackumulerade nedskrivningar p balanserade utgifter",
+    "type": "asset"
+  },
+  "1019": {
+    "name": "Ackumulerade avskrivningar p balanserade utgifter",
+    "type": "asset"
+  },
+  "1020": {
+    "name": "Koncessioner m.m.",
+    "type": "asset"
+  },
+  "1028": {
+    "name": "Ackumulerade nedskrivningar p koncessioner m.m.",
+    "type": "asset"
+  },
+  "1029": {
+    "name": "Ackumulerade avskrivningar p koncessioner m.m.",
+    "type": "asset"
+  },
+  "1030": {
+    "name": "Patent",
+    "type": "asset"
+  },
+  "1038": {
+    "name": "Ackumulerade nedskrivningar p patent",
+    "type": "asset"
+  },
+  "1039": {
+    "name": "Ackumulerade avskrivningar p patent",
+    "type": "asset"
+  },
+  "1040": {
+    "name": "Licenser",
+    "type": "asset"
+  },
+  "1048": {
+    "name": "Ackumulerade nedskrivningar p licenser",
+    "type": "asset"
+  },
+  "1049": {
+    "name": "Ackumulerade avskrivningar p licenser",
+    "type": "asset"
+  },
+  "1050": {
+    "name": "Varumrken",
+    "type": "asset"
+  },
+  "1058": {
+    "name": "Ackumulerade nedskrivningar p varumrken",
+    "type": "asset"
+  },
+  "1059": {
+    "name": "Ackumulerade avskrivningar p varumrken",
+    "type": "asset"
+  },
+  "1060": {
+    "name": "Hyresrtter, tomtrtter och liknande",
+    "type": "asset"
+  },
+  "1068": {
+    "name": "Ackumulerade nedskrivningar p hyresrtter, tomtrtter och liknande",
+    "type": "asset"
+  },
+  "1069": {
+    "name": "Ackumulerade avskrivningar p hyresrtter, tomtrtter och liknande",
+    "type": "asset"
+  },
+  "1070": {
+    "name": "Goodwill",
+    "type": "asset"
+  },
+  "1078": {
+    "name": "Ackumulerade nedskrivningar p goodwill",
+    "type": "asset"
+  },
+  "1079": {
+    "name": "Ackumulerade avskrivningar p goodwill",
+    "type": "asset"
+  },
+  "1080": {
+    "name": "Pgende projekt och frskott fr immateriella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1081": {
+    "name": "Pgende projekt fr immateriella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1088": {
+    "name": "Frskott fr immateriella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1110": {
+    "name": "Byggnader",
+    "type": "asset"
+  },
+  "1111": {
+    "name": "Byggnader p egen mark",
+    "type": "asset"
+  },
+  "1112": {
+    "name": "Byggnader p annans mark",
+    "type": "asset"
+  },
+  "1118": {
+    "name": "Ackumulerade nedskrivningar p byggnader",
+    "type": "asset"
+  },
+  "1119": {
+    "name": "Ackumulerade avskrivningar p byggnader",
+    "type": "asset"
+  },
+  "1120": {
+    "name": "Frbttringsutgifter p annans fastighet",
+    "type": "asset"
+  },
+  "1129": {
+    "name": "Ackumulerade avskrivningar p frbttringsutgifter p annans fastighet",
+    "type": "asset"
+  },
+  "1130": {
+    "name": "Mark",
+    "type": "asset"
+  },
+  "1140": {
+    "name": "Tomter och obebyggda markomrden",
+    "type": "asset"
+  },
+  "1150": {
+    "name": "Markanlggningar",
+    "type": "asset"
+  },
+  "1158": {
+    "name": "Ackumulerade nedskrivningar p markanlggningar",
+    "type": "asset"
+  },
+  "1159": {
+    "name": "Ackumulerade avskrivningar p markanlggningar",
+    "type": "asset"
+  },
+  "1180": {
+    "name": "Pgende nyanlggningar och frskott fr byggnader och mark",
+    "type": "asset"
+  },
+  "1181": {
+    "name": "Pgende ny-, till- och ombyggnad",
+    "type": "asset"
+  },
+  "1188": {
+    "name": "Frskott fr byggnader och mark",
+    "type": "asset"
+  },
+  "1210": {
+    "name": "Maskiner och andra tekniska anlggningar",
+    "type": "asset"
+  },
+  "1211": {
+    "name": "Maskiner",
+    "type": "asset"
+  },
+  "1213": {
+    "name": "Andra tekniska anlggningar",
+    "type": "asset"
+  },
+  "1218": {
+    "name": "Ackumulerade nedskrivningar p maskiner och andra tekniska anlggningar",
+    "type": "asset"
+  },
+  "1219": {
+    "name": "Ackumulerade avskrivningar p maskiner och andra tekniska anlggningar",
+    "type": "asset"
+  },
+  "1220": {
+    "name": "Inventarier och verktyg",
+    "type": "asset"
+  },
+  "1221": {
+    "name": "Inventarier",
+    "type": "asset"
+  },
+  "1222": {
+    "name": "Byggnadsinventarier",
+    "type": "asset"
+  },
+  "1223": {
+    "name": "Markinventarier",
+    "type": "asset"
+  },
+  "1225": {
+    "name": "Verktyg",
+    "type": "asset"
+  },
+  "1228": {
+    "name": "Ackumulerade nedskrivningar p inventarier och verktyg",
+    "type": "asset"
+  },
+  "1229": {
+    "name": "Ackumulerade avskrivningar p inventarier och verktyg",
+    "type": "asset"
+  },
+  "1230": {
+    "name": "Installationer",
+    "type": "asset"
+  },
+  "1231": {
+    "name": "Installationer p egen fastighet",
+    "type": "asset"
+  },
+  "1232": {
+    "name": "Installationer p annans fastig het",
+    "type": "asset"
+  },
+  "1238": {
+    "name": "Ackumulerade nedskrivningar p installationer",
+    "type": "asset"
+  },
+  "1239": {
+    "name": "Ackumulerade avskrivningar p installationer",
+    "type": "asset"
+  },
+  "1240": {
+    "name": "Bilar och andra transportmedel",
+    "type": "asset"
+  },
+  "1241": {
+    "name": "Personbilar",
+    "type": "asset"
+  },
+  "1242": {
+    "name": "Lastbilar",
+    "type": "asset"
+  },
+  "1243": {
+    "name": "Truckar",
+    "type": "asset"
+  },
+  "1244": {
+    "name": "Arbetsmaskiner",
+    "type": "asset"
+  },
+  "1245": {
+    "name": "Traktorer",
+    "type": "asset"
+  },
+  "1246": {
+    "name": "Motorcyklar, mopeder och skotrar",
+    "type": "asset"
+  },
+  "1247": {
+    "name": "Btar, flygplan och helikoptrar",
+    "type": "asset"
+  },
+  "1248": {
+    "name": "Ackumulerade nedskrivningar p bilar och andra transportmedel",
+    "type": "asset"
+  },
+  "1249": {
+    "name": "Ackumulerade avskrivningar p bilar och andra transportmedel",
+    "type": "asset"
+  },
+  "1250": {
+    "name": "Datorer",
+    "type": "asset"
+  },
+  "1251": {
+    "name": "Datorer, fretaget",
+    "type": "asset"
+  },
+  "1257": {
+    "name": "Datorer, personal",
+    "type": "asset"
+  },
+  "1258": {
+    "name": "Ackumulerade nedskrivningar p datorer",
+    "type": "asset"
+  },
+  "1259": {
+    "name": "Ackumulerade avskrivningar p datorer",
+    "type": "asset"
+  },
+  "1260": {
+    "name": "Leasade tillgngar",
+    "type": "asset"
+  },
+  "1269": {
+    "name": "Ackumulerade avskrivningar p leasade tillgngar",
+    "type": "asset"
+  },
+  "1280": {
+    "name": "Pgende nyanlggningar och frskott fr maskiner och inventarier",
+    "type": "asset"
+  },
+  "1281": {
+    "name": "Pgende nyanlggningar, maskiner och inventarier",
+    "type": "asset"
+  },
+  "1288": {
+    "name": "Frskott fr maskiner och inventarier",
+    "type": "asset"
+  },
+  "1290": {
+    "name": "vriga materiella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1291": {
+    "name": "Konst och liknande tillgngar",
+    "type": "asset"
+  },
+  "1292": {
+    "name": "Djur som klassificeras som anlggningstillgng",
+    "type": "asset"
+  },
+  "1298": {
+    "name": "Ackumulerade nedskrivningar p vriga materiella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1299": {
+    "name": "Ackumulerade avskrivningar p vriga materiella anlggningstillgngar",
+    "type": "asset"
+  },
+  "1310": {
+    "name": "Andelar i koncernfretag",
+    "type": "asset"
+  },
+  "1311": {
+    "name": "Aktier i noterade svenska koncernfretag",
+    "type": "asset"
+  },
+  "1312": {
+    "name": "Aktier i onoterade svenska koncernfretag",
+    "type": "asset"
+  },
+  "1313": {
+    "name": "Aktier i noterade utlndska koncernfretag",
+    "type": "asset"
+  },
+  "1314": {
+    "name": "Aktier i onoterade utlndska koncernfretag",
+    "type": "asset"
+  },
+  "1316": {
+    "name": "vriga andelar i koncernfretag",
+    "type": "asset"
+  },
+  "1318": {
+    "name": "Ackumulerade nedskrivningar av andelar i koncernfretag",
+    "type": "asset"
+  },
+  "1320": {
+    "name": "Lngfristiga fordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1321": {
+    "name": "Lngfristiga fordringar hos moderfretag",
+    "type": "asset"
+  },
+  "1322": {
+    "name": "Lngfristiga fordringar hos dotterfretag",
+    "type": "asset"
+  },
+  "1323": {
+    "name": "Lngfristiga fordringar hos andra koncernfretag",
+    "type": "asset"
+  },
+  "1328": {
+    "name": "Ackumulerade nedskrivningar av lngfristiga fordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1330": {
+    "name": "Andelar i intressefretag",
+    "type": "asset"
+  },
+  "1336": {
+    "name": "Andelar i ekonomiska freningar, intressefretag",
+    "type": "asset"
+  },
+  "1338": {
+    "name": "Ackumulerade nedskrivningar av andelar i intressefretag",
+    "type": "asset"
+  },
+  "1340": {
+    "name": "Lngfristiga fordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1348": {
+    "name": "Ackumulerade nedskrivningar av lngfristiga fordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1350": {
+    "name": "Andelar och vrdepapper i andra fretag",
+    "type": "asset"
+  },
+  "1351": {
+    "name": "Andelar i brsnoterade fretag",
+    "type": "asset"
+  },
+  "1352": {
+    "name": "Andra andelar",
+    "type": "asset"
+  },
+  "1353": {
+    "name": "Andelar i bostadsrttsfreningar",
+    "type": "asset"
+  },
+  "1354": {
+    "name": "Obligationer",
+    "type": "asset"
+  },
+  "1356": {
+    "name": "Andelar i ekonomiska freningar, vriga fretag",
+    "type": "asset"
+  },
+  "1358": {
+    "name": "Ackumulerade nedskrivningar av andra andelar och vrdepapper",
+    "type": "asset"
+  },
+  "1360": {
+    "name": "Ln till delgare eller nrstende, lngfristig del",
+    "type": "asset"
+  },
+  "1369": {
+    "name": "Ackumulerade nedskrivningar p ln till delgare eller nrstende, lngfristig del",
+    "type": "asset"
+  },
+  "1370": {
+    "name": "Uppskjuten skattefordran",
+    "type": "asset"
+  },
+  "1380": {
+    "name": "Andra lngfristiga fordringar",
+    "type": "asset"
+  },
+  "1381": {
+    "name": "Lngfristiga reversfordringar",
+    "type": "asset"
+  },
+  "1382": {
+    "name": "Lngfristiga fordringar hos anstllda",
+    "type": "asset"
+  },
+  "1383": {
+    "name": "Lmnade depositioner, lngfristiga",
+    "type": "asset"
+  },
+  "1384": {
+    "name": "Derivat",
+    "type": "asset"
+  },
+  "1385": {
+    "name": "Vrde av kapitalfrskring",
+    "type": "asset"
+  },
+  "1386": {
+    "name": "Frutbetalda leasingavgifter, lngfristig del",
+    "type": "asset"
+  },
+  "1387": {
+    "name": "Lngfristiga kontraktsfordringar",
+    "type": "asset"
+  },
+  "1389": {
+    "name": "Ackumulerade nedskrivningar av andra lngfristiga fordringar",
+    "type": "asset"
+  },
+  "1410": {
+    "name": "Lager av rvaror",
+    "type": "asset"
+  },
+  "1419": {
+    "name": "Frndring av lager av rvaror",
+    "type": "asset"
+  },
+  "1420": {
+    "name": "Lager av tillsatsmaterial och frndenheter",
+    "type": "asset"
+  },
+  "1429": {
+    "name": "Frndring av lager av tillsatsmaterial och frndenheter",
+    "type": "asset"
+  },
+  "1430": {
+    "name": "Lager av halvfabrikat",
+    "type": "asset"
+  },
+  "1431": {
+    "name": "Lager av kpta halvfabrikat",
+    "type": "asset"
+  },
+  "1432": {
+    "name": "Lager av egentillverkade halvfabrikat",
+    "type": "asset"
+  },
+  "1438": {
+    "name": "Frndring av lager av kpta halvfabrikat",
+    "type": "asset"
+  },
+  "1439": {
+    "name": "Frndring av lager av egentillverkade halvfabrikat",
+    "type": "asset"
+  },
+  "1440": {
+    "name": "Produkter i arbete",
+    "type": "asset"
+  },
+  "1449": {
+    "name": "Frndring av produkter i arbete",
+    "type": "asset"
+  },
+  "1450": {
+    "name": "Lager av frdiga varor",
+    "type": "asset"
+  },
+  "1459": {
+    "name": "Frndring av lager av frdiga varor",
+    "type": "asset"
+  },
+  "1460": {
+    "name": "Lager av handelsvaror",
+    "type": "asset"
+  },
+  "1465": {
+    "name": "Lager av varor VMB",
+    "type": "asset"
+  },
+  "1466": {
+    "name": "Nedskrivning av varor VMB",
+    "type": "asset"
+  },
+  "1467": {
+    "name": "Lager av varor VMB frenklad",
+    "type": "asset"
+  },
+  "1469": {
+    "name": "Frndring av lager av handelsvaror",
+    "type": "asset"
+  },
+  "1470": {
+    "name": "Pgende arbeten",
+    "type": "asset"
+  },
+  "1471": {
+    "name": "Pgende arbeten, nedlagda kostnader",
+    "type": "asset"
+  },
+  "1478": {
+    "name": "Pgende arbeten, fakturering",
+    "type": "asset"
+  },
+  "1479": {
+    "name": "Frndring av pgende arbeten",
+    "type": "asset"
+  },
+  "1480": {
+    "name": "Frskott fr varor och tjnster",
+    "type": "asset"
+  },
+  "1481": {
+    "name": "Remburser",
+    "type": "asset"
+  },
+  "1489": {
+    "name": "vriga frskott till leverantrer",
+    "type": "asset"
+  },
+  "1490": {
+    "name": "vriga lagertillgngar",
+    "type": "asset"
+  },
+  "1491": {
+    "name": "Lager av vrdepapper",
+    "type": "asset"
+  },
+  "1492": {
+    "name": "Lager av fastigheter",
+    "type": "asset"
+  },
+  "1493": {
+    "name": "Djur som klassificeras som omsttningstillgng",
+    "type": "asset"
+  },
+  "1510": {
+    "name": "Kundfordringar",
+    "type": "asset"
+  },
+  "1511": {
+    "name": "Kundfordringar",
+    "type": "asset"
+  },
+  "1512": {
+    "name": "Belnade kundfordringar (factoring)",
+    "type": "asset"
+  },
+  "1513": {
+    "name": "Kundfordringar - delad faktura",
+    "type": "asset"
+  },
+  "1515": {
+    "name": "Oskra kundfordringar",
+    "type": "asset"
+  },
+  "1516": {
+    "name": "Tvistiga kundfordringar",
+    "type": "asset"
+  },
+  "1518": {
+    "name": "Ej reskontrafrda kundfordringar",
+    "type": "asset"
+  },
+  "1519": {
+    "name": "Nedskrivning av kundfordringar",
+    "type": "asset"
+  },
+  "1520": {
+    "name": "Vxelfordringar",
+    "type": "asset"
+  },
+  "1525": {
+    "name": "Oskra vxelfordringar",
+    "type": "asset"
+  },
+  "1529": {
+    "name": "Nedskrivning av vxelfordringar",
+    "type": "asset"
+  },
+  "1530": {
+    "name": "Kontraktsfordringar",
+    "type": "asset"
+  },
+  "1531": {
+    "name": "Kontraktsfordringar",
+    "type": "asset"
+  },
+  "1532": {
+    "name": "Belnade kontraktsfordringar",
+    "type": "asset"
+  },
+  "1535": {
+    "name": "Oskra kontraktsfordringar",
+    "type": "asset"
+  },
+  "1536": {
+    "name": "Tvistiga kontraktsfordringar",
+    "type": "asset"
+  },
+  "1539": {
+    "name": "Nedskrivning av kontraktsfordringar",
+    "type": "asset"
+  },
+  "1550": {
+    "name": "Konsignationsfordringar",
+    "type": "asset"
+  },
+  "1560": {
+    "name": "Kundfordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1561": {
+    "name": "Kundfordringar hos moderfretag",
+    "type": "asset"
+  },
+  "1562": {
+    "name": "Kundfordringar hos dotterfretag",
+    "type": "asset"
+  },
+  "1563": {
+    "name": "Kundfordringar hos andra koncernfretag",
+    "type": "asset"
+  },
+  "1565": {
+    "name": "Oskra kundfordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1568": {
+    "name": "Ej reskontrafrda kundfordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1569": {
+    "name": "Nedskrivning av kundfordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1570": {
+    "name": "Kundfordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1575": {
+    "name": "Oskra kundfordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1578": {
+    "name": "Ej reskontrafrda kundfordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1579": {
+    "name": "Nedskrivning av kundfordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1580": {
+    "name": "Fordringar fr kontokort och kuponger",
+    "type": "asset"
+  },
+  "1610": {
+    "name": "Kortfristiga fordringar hos anstllda",
+    "type": "asset"
+  },
+  "1611": {
+    "name": "Resefrskott",
+    "type": "asset"
+  },
+  "1612": {
+    "name": "Kassafrskott",
+    "type": "asset"
+  },
+  "1613": {
+    "name": "vriga frskott",
+    "type": "asset"
+  },
+  "1614": {
+    "name": "Tillflliga ln till anstllda",
+    "type": "asset"
+  },
+  "1619": {
+    "name": "vriga fordringar hos anstllda",
+    "type": "asset"
+  },
+  "1620": {
+    "name": "Upparbetad men ej fakturerad intkt",
+    "type": "asset"
+  },
+  "1630": {
+    "name": "Avrkning fr skatter och avgifter (skattekonto)",
+    "type": "asset"
+  },
+  "1640": {
+    "name": "Skattefordringar",
+    "type": "asset"
+  },
+  "1650": {
+    "name": "Momsfordran",
+    "type": "asset"
+  },
+  "1660": {
+    "name": "Kortfristiga fordringar hos koncernfretag",
+    "type": "asset"
+  },
+  "1661": {
+    "name": "Kortfristiga fordringar hos moderfretag",
+    "type": "asset"
+  },
+  "1662": {
+    "name": "Kortfristiga fordringar hos dotterfretag",
+    "type": "asset"
+  },
+  "1663": {
+    "name": "Kortfristiga fordringar hos andra koncernfretag",
+    "type": "asset"
+  },
+  "1670": {
+    "name": "Kortfristiga fordringar hos intressefretag",
+    "type": "asset"
+  },
+  "1680": {
+    "name": "Andra kortfristiga fordringar",
+    "type": "asset"
+  },
+  "1681": {
+    "name": "Utlgg fr kunder",
+    "type": "asset"
+  },
+  "1682": {
+    "name": "Kortfristiga lnefordringar",
+    "type": "asset"
+  },
+  "1683": {
+    "name": "Derivat",
+    "type": "asset"
+  },
+  "1684": {
+    "name": "Kortfristiga fordringar hos leverantrer",
+    "type": "asset"
+  },
+  "1685": {
+    "name": "Kortfristiga fordringar hos delgare eller nrstende",
+    "type": "asset"
+  },
+  "1687": {
+    "name": "Kortfristig del av lngfristiga fordringar",
+    "type": "asset"
+  },
+  "1688": {
+    "name": "Fordran arbetsmarknadsfrskringar",
+    "type": "asset"
+  },
+  "1689": {
+    "name": "vriga kortfristiga fordringar",
+    "type": "asset"
+  },
+  "1690": {
+    "name": "Fordringar fr tecknat men ej inbetalt aktiekapital",
+    "type": "asset"
+  },
+  "1710": {
+    "name": "Frutbetalda hyreskostnader",
+    "type": "asset"
+  },
+  "1720": {
+    "name": "Frutbetalda leasingavgifter, kortfristig del",
+    "type": "asset"
+  },
+  "1730": {
+    "name": "Frutbetalda frskringspremier",
+    "type": "asset"
+  },
+  "1740": {
+    "name": "Frutbetalda rntekostnader",
+    "type": "asset"
+  },
+  "1750": {
+    "name": "Upplupna hyresintkter",
+    "type": "asset"
+  },
+  "1760": {
+    "name": "Upplupna rnteintkter",
+    "type": "asset"
+  },
+  "1770": {
+    "name": "Tillgngar av kostnadsnatur",
+    "type": "asset"
+  },
+  "1780": {
+    "name": "Upplupna avtalsintkter",
+    "type": "asset"
+  },
+  "1790": {
+    "name": "vriga frutbetalda kostnader och upplupna intkter",
+    "type": "asset"
+  },
+  "1810": {
+    "name": "Andelar i brsnoterade fretag",
+    "type": "asset"
+  },
+  "1820": {
+    "name": "Obligationer",
+    "type": "asset"
+  },
+  "1830": {
+    "name": "Konvertibla skuldebrev",
+    "type": "asset"
+  },
+  "1860": {
+    "name": "Andelar i koncernfretag",
+    "type": "asset"
+  },
+  "1869": {
+    "name": "Nedskrivning av andelar i koncernfretag",
+    "type": "asset"
+  },
+  "1880": {
+    "name": "Andra kortfristiga placeringar",
+    "type": "asset"
+  },
+  "1886": {
+    "name": "Derivat",
+    "type": "asset"
+  },
+  "1889": {
+    "name": "Andelar i vriga fretag",
+    "type": "asset"
+  },
+  "1890": {
+    "name": "Nedskrivning av kortfristiga placeringar",
+    "type": "asset"
+  },
+  "1910": {
+    "name": "Kassa",
+    "type": "asset"
+  },
+  "1911": {
+    "name": "Huvudkassa",
+    "type": "asset"
+  },
+  "1912": {
+    "name": "Kassa 2",
+    "type": "asset"
+  },
+  "1913": {
+    "name": "Kassa 3",
+    "type": "asset"
+  },
+  "1914": {
+    "name": "Kassa 4",
+    "type": "asset"
+  },
+  "1920": {
+    "name": "PlusGiro",
+    "type": "asset"
+  },
+  "1930": {
+    "name": "Fretagskonto / affrskonto",
+    "type": "asset"
+  },
+  "1931": {
+    "name": "Sparkonto",
+    "type": "asset"
+  },
+  "1940": {
+    "name": "vriga bankkonton",
+    "type": "asset"
+  },
+  "1950": {
+    "name": "Bankcertifikat",
+    "type": "asset"
+  },
+  "1960": {
+    "name": "Koncernkonto moderfretag",
+    "type": "asset"
+  },
+  "1970": {
+    "name": "Srskilda bankkonton",
+    "type": "asset"
+  },
+  "1972": {
+    "name": "Upphovsmannakonto",
+    "type": "asset"
+  },
+  "1973": {
+    "name": "Skogskonto",
+    "type": "asset"
+  },
+  "1974": {
+    "name": "Sprrade bankmedel",
+    "type": "asset"
+  },
+  "1979": {
+    "name": "vriga srskilda bankkonton",
+    "type": "asset"
+  },
+  "1980": {
+    "name": "Valutakonton",
+    "type": "asset"
+  },
+  "1990": {
+    "name": "Redovisningsmedel",
+    "type": "asset"
+  },
+  "2010": {
+    "name": "Eget kapital, delgare 1",
+    "type": "liability"
+  },
+  "2011": {
+    "name": "Egna varuuttag",
+    "type": "liability"
+  },
+  "2012": {
+    "name": "Avrkning fr skatter och avgifter (skattekonto)",
+    "type": "liability"
+  },
+  "2013": {
+    "name": "vriga egna uttag",
+    "type": "liability"
+  },
+  "2017": {
+    "name": "rets kapitaltillskott",
+    "type": "liability"
+  },
+  "2018": {
+    "name": "vriga egna insttningar",
+    "type": "liability"
+  },
+  "2019": {
+    "name": "rets resultat, delgare 1",
+    "type": "liability"
+  },
+  "2020": {
+    "name": "Eget kapital, delgare 2",
+    "type": "liability"
+  },
+  "2023": {
+    "name": "Egna uttag delgare 2 (Handelsbolag)",
+    "type": "liability"
+  },
+  "2028": {
+    "name": "vriga egna insttningar, delgare 2",
+    "type": "liability"
+  },
+  "2029": {
+    "name": "rets resultat, delgare 2",
+    "type": "liability"
+  },
+  "2030": {
+    "name": "Eget kapital, delgare 3",
+    "type": "liability"
+  },
+  "2033": {
+    "name": "Egna uttag delgare 3 (Handelsbolag)",
+    "type": "liability"
+  },
+  "2038": {
+    "name": "vriga egna insttningar, delgare 3",
+    "type": "liability"
+  },
+  "2039": {
+    "name": "rets resultat, delgare 3",
+    "type": "liability"
+  },
+  "2040": {
+    "name": "Eget kapital, delgare 4",
+    "type": "liability"
+  },
+  "2043": {
+    "name": "Egna uttag delgare 4 (Handelsbolag)",
+    "type": "liability"
+  },
+  "2048": {
+    "name": "vriga egna insttningar, delgare 4",
+    "type": "liability"
+  },
+  "2049": {
+    "name": "rets resultat, delgare 4",
+    "type": "liability"
+  },
+  "2050": {
+    "name": "Avsttning till expansionsfond",
+    "type": "liability"
+  },
+  "2060": {
+    "name": "Eget kapital i ideella freningar, stiftelser och registrerade trossamfund",
+    "type": "liability"
+  },
+  "2061": {
+    "name": "Eget kapital/stiftelsekapital/grundkapital",
+    "type": "liability"
+  },
+  "2065": {
+    "name": "Frndring i fond fr verkligt vrde",
+    "type": "liability"
+  },
+  "2066": {
+    "name": "Vrdeskringsfond",
+    "type": "liability"
+  },
+  "2067": {
+    "name": "Balanserad vinst eller frlust/balanserat kapital",
+    "type": "liability"
+  },
+  "2068": {
+    "name": "Vinst eller frlust frn fregende r",
+    "type": "liability"
+  },
+  "2069": {
+    "name": "rets resultat",
+    "type": "liability"
+  },
+  "2070": {
+    "name": "ndamlsbestmda medel",
+    "type": "liability"
+  },
+  "2071": {
+    "name": "ndaml 1",
+    "type": "liability"
+  },
+  "2072": {
+    "name": "ndaml 2",
+    "type": "liability"
+  },
+  "2080": {
+    "name": "Bundet eget kapital",
+    "type": "liability"
+  },
+  "2081": {
+    "name": "Aktiekapital",
+    "type": "liability"
+  },
+  "2082": {
+    "name": "Ej registrerat aktiekapital",
+    "type": "liability"
+  },
+  "2083": {
+    "name": "Medlemsinsatser",
+    "type": "liability"
+  },
+  "2084": {
+    "name": "Frlagsinsatser",
+    "type": "liability"
+  },
+  "2085": {
+    "name": "Uppskrivningsfond",
+    "type": "liability"
+  },
+  "2086": {
+    "name": "Reservfond",
+    "type": "liability"
+  },
+  "2087": {
+    "name": "Insatsemission",
+    "type": "liability"
+  },
+  "2088": {
+    "name": "Fond fr yttre underhll",
+    "type": "liability"
+  },
+  "2090": {
+    "name": "Fritt eget kapital",
+    "type": "liability"
+  },
+  "2091": {
+    "name": "Balanserad vinst eller frlust",
+    "type": "liability"
+  },
+  "2092": {
+    "name": "Mottagna/lmnade koncernbidrag",
+    "type": "liability"
+  },
+  "2093": {
+    "name": "Erhllna aktiegartillskott",
+    "type": "liability"
+  },
+  "2094": {
+    "name": "Egna aktier",
+    "type": "liability"
+  },
+  "2095": {
+    "name": "Fusionsresultat",
+    "type": "liability"
+  },
+  "2096": {
+    "name": "Fond fr verkligt vrde",
+    "type": "liability"
+  },
+  "2097": {
+    "name": "verkursfond",
+    "type": "liability"
+  },
+  "2098": {
+    "name": "Vinst eller frlust frn fregende r",
+    "type": "liability"
+  },
+  "2099": {
+    "name": "rets resultat",
+    "type": "liability"
+  },
+  "2110": {
+    "name": "Periodiseringsfond vid 2010 rs taxering",
+    "type": "liability"
+  },
+  "2111": {
+    "name": "Periodiseringsfond vid 2011 rs taxering",
+    "type": "liability"
+  },
+  "2112": {
+    "name": "Periodiseringsfond vid 2012 rs taxering",
+    "type": "liability"
+  },
+  "2113": {
+    "name": "Periodiseringsfond vid 2013 rs taxering",
+    "type": "liability"
+  },
+  "2120": {
+    "name": "Periodiseringsfonder",
+    "type": "liability"
+  },
+  "2123": {
+    "name": "Periodiseringsfond 2020",
+    "type": "liability"
+  },
+  "2124": {
+    "name": "Periodiseringsfond 2021",
+    "type": "liability"
+  },
+  "2125": {
+    "name": "Periodiseringsfond 2022",
+    "type": "liability"
+  },
+  "2126": {
+    "name": "Periodiseringsfond 2023",
+    "type": "liability"
+  },
+  "2127": {
+    "name": "Periodiseringsfond 2017",
+    "type": "liability"
+  },
+  "2128": {
+    "name": "Periodiseringsfond 2018",
+    "type": "liability"
+  },
+  "2129": {
+    "name": "Periodiseringsfond 2019",
+    "type": "liability"
+  },
+  "2130": {
+    "name": "Periodiseringsfond 2010",
+    "type": "liability"
+  },
+  "2131": {
+    "name": "Periodiseringsfond 2011",
+    "type": "liability"
+  },
+  "2150": {
+    "name": "Ackumulerade veravskrivningar",
+    "type": "liability"
+  },
+  "2151": {
+    "name": "Ackumulerade veravskrivningar p immateriella anlggningstillgngar",
+    "type": "liability"
+  },
+  "2152": {
+    "name": "Ackumulerade veravskrivningar p byggnader och markanlggningar",
+    "type": "liability"
+  },
+  "2153": {
+    "name": "Ackumulerade veravskrivningar p maskiner och inventarier",
+    "type": "liability"
+  },
+  "2160": {
+    "name": "Ersttningsfond",
+    "type": "liability"
+  },
+  "2161": {
+    "name": "Ersttningsfond maskiner och inventarier",
+    "type": "liability"
+  },
+  "2162": {
+    "name": "Ersttningsfond byggnader och markanlggningar",
+    "type": "liability"
+  },
+  "2163": {
+    "name": "Ersttningsfond mark",
+    "type": "liability"
+  },
+  "2164": {
+    "name": "Ersttningsfond fr djurlager i jordbruk och rensktsel",
+    "type": "liability"
+  },
+  "2180": {
+    "name": "Obeskattade intkter",
+    "type": "liability"
+  },
+  "2181": {
+    "name": "Obeskattade upphovsmannaintkter",
+    "type": "liability"
+  },
+  "2185": {
+    "name": "Obeskattade skogsintkter",
+    "type": "liability"
+  },
+  "2190": {
+    "name": "vriga obeskattade reserver",
+    "type": "liability"
+  },
+  "2196": {
+    "name": "Lagerreserv",
+    "type": "liability"
+  },
+  "2199": {
+    "name": "vriga obeskattade reserver",
+    "type": "liability"
+  },
+  "2210": {
+    "name": "Avsttningar fr pensioner enligt tryggandelagen",
+    "type": "liability"
+  },
+  "2220": {
+    "name": "Avsttningar fr garantier",
+    "type": "liability"
+  },
+  "2230": {
+    "name": "vriga avsttningar fr pensioner och liknande frpliktelser",
+    "type": "liability"
+  },
+  "2240": {
+    "name": "Avsttningar fr uppskjutna skatter",
+    "type": "liability"
+  },
+  "2250": {
+    "name": "vriga avsttningar fr skatter",
+    "type": "liability"
+  },
+  "2252": {
+    "name": "Avsttningar fr tvistiga skatter",
+    "type": "liability"
+  },
+  "2253": {
+    "name": "Avsttningar srskild lneskatt, deklarationspost",
+    "type": "liability"
+  },
+  "2290": {
+    "name": "vriga avsttningar",
+    "type": "liability"
+  },
+  "2310": {
+    "name": "Obligations- och frlagsln",
+    "type": "liability"
+  },
+  "2320": {
+    "name": "Konvertibla ln och liknande",
+    "type": "liability"
+  },
+  "2321": {
+    "name": "Konvertibla ln",
+    "type": "liability"
+  },
+  "2322": {
+    "name": "Ln frenade med optionsrtt",
+    "type": "liability"
+  },
+  "2323": {
+    "name": "Vinstandelsln",
+    "type": "liability"
+  },
+  "2324": {
+    "name": "Kapitalandelsln",
+    "type": "liability"
+  },
+  "2330": {
+    "name": "Checkrkningskredit",
+    "type": "liability"
+  },
+  "2340": {
+    "name": "Byggnadskreditiv",
+    "type": "liability"
+  },
+  "2350": {
+    "name": "Andra lngfristiga skulder till kreditinstitut",
+    "type": "liability"
+  },
+  "2351": {
+    "name": "Fastighetsln, lngfristig del",
+    "type": "liability"
+  },
+  "2355": {
+    "name": "Lngfristiga ln i utlndsk valuta frn kreditinstitut",
+    "type": "liability"
+  },
+  "2359": {
+    "name": "vriga lngfristiga ln frn kreditinstitut",
+    "type": "liability"
+  },
+  "2360": {
+    "name": "Lngfristiga skulder till koncernfretag",
+    "type": "liability"
+  },
+  "2361": {
+    "name": "Lngfristiga skulder till moderfretag",
+    "type": "liability"
+  },
+  "2362": {
+    "name": "Lngfristiga skulder till dotterfretag",
+    "type": "liability"
+  },
+  "2363": {
+    "name": "Lngfristiga skulder till andra koncernfretag",
+    "type": "liability"
+  },
+  "2370": {
+    "name": "Lngfristiga skulder till intressefretag",
+    "type": "liability"
+  },
+  "2390": {
+    "name": "vriga lngfristiga skulder",
+    "type": "liability"
+  },
+  "2391": {
+    "name": "Avbetalningskontrakt, lngfristig del",
+    "type": "liability"
+  },
+  "2392": {
+    "name": "Villkorliga lngfristiga skulder",
+    "type": "liability"
+  },
+  "2393": {
+    "name": "Ln frn nrstende personer, lngfristig del",
+    "type": "liability"
+  },
+  "2394": {
+    "name": "Lngfristiga leverantrskrediter",
+    "type": "liability"
+  },
+  "2395": {
+    "name": "Andra lngfristiga ln i utlndsk valuta",
+    "type": "liability"
+  },
+  "2396": {
+    "name": "Derivat",
+    "type": "liability"
+  },
+  "2397": {
+    "name": "Mottagna depositioner, lngfristiga",
+    "type": "liability"
+  },
+  "2399": {
+    "name": "vriga lngfristiga skulder",
+    "type": "liability"
+  },
+  "2410": {
+    "name": "Andra kortfristiga lneskulder till kreditinstitut",
+    "type": "liability"
+  },
+  "2411": {
+    "name": "Kortfristiga ln frn kreditinstitut",
+    "type": "liability"
+  },
+  "2417": {
+    "name": "Kortfristig del av lngfristiga skulder till kreditinstitut",
+    "type": "liability"
+  },
+  "2419": {
+    "name": "vriga kortfristiga skulder till kreditinstitut",
+    "type": "liability"
+  },
+  "2420": {
+    "name": "Frskott frn kunder",
+    "type": "liability"
+  },
+  "2421": {
+    "name": "Ej inlsta presentkort",
+    "type": "liability"
+  },
+  "2429": {
+    "name": "vriga frskott frn kunder",
+    "type": "liability"
+  },
+  "2430": {
+    "name": "Pgende arbeten",
+    "type": "liability"
+  },
+  "2431": {
+    "name": "Pgende arbeten, fakturering",
+    "type": "liability"
+  },
+  "2438": {
+    "name": "Pgende arbeten, nedlagda kostnader",
+    "type": "liability"
+  },
+  "2439": {
+    "name": "Berknad frndring av pgende arbeten",
+    "type": "liability"
+  },
+  "2440": {
+    "name": "Leverantrsskulder",
+    "type": "liability"
+  },
+  "2441": {
+    "name": "Leverantrsskulder",
+    "type": "liability"
+  },
+  "2443": {
+    "name": "Konsignationsskulder",
+    "type": "liability"
+  },
+  "2445": {
+    "name": "Tvistiga leverantrsskulder",
+    "type": "liability"
+  },
+  "2448": {
+    "name": "Ej reskontrafrda leverantrsskulder",
+    "type": "liability"
+  },
+  "2450": {
+    "name": "Fakturerad men ej upparbetad intkt",
+    "type": "liability"
+  },
+  "2460": {
+    "name": "Leverantrsskulder till koncernfretag",
+    "type": "liability"
+  },
+  "2461": {
+    "name": "Leverantrsskulder till moderfretag",
+    "type": "liability"
+  },
+  "2462": {
+    "name": "Leverantrsskulder till dotterfretag",
+    "type": "liability"
+  },
+  "2463": {
+    "name": "Leverantrsskulder till andra koncernfretag",
+    "type": "liability"
+  },
+  "2470": {
+    "name": "Leverantrsskulder till intressefretag",
+    "type": "liability"
+  },
+  "2480": {
+    "name": "Checkrkningskredit, kortfristig",
+    "type": "liability"
+  },
+  "2490": {
+    "name": "vriga kortfristiga skulder till kreditinstitut, kunder och leverantrer",
+    "type": "liability"
+  },
+  "2491": {
+    "name": "Avrkning spelarrangrer",
+    "type": "liability"
+  },
+  "2492": {
+    "name": "Vxelskulder",
+    "type": "liability"
+  },
+  "2499": {
+    "name": "Andra vriga kortfristiga skulder",
+    "type": "liability"
+  },
+  "2510": {
+    "name": "Skatteskulder",
+    "type": "liability"
+  },
+  "2512": {
+    "name": "Berknad inkomstskatt",
+    "type": "liability"
+  },
+  "2513": {
+    "name": "Berknad fastighetsskatt/fastighetsavgift",
+    "type": "liability"
+  },
+  "2514": {
+    "name": "Berknad srskild lneskatt p pensionskostnader",
+    "type": "liability"
+  },
+  "2515": {
+    "name": "Berknad avkastningsskatt",
+    "type": "liability"
+  },
+  "2516": {
+    "name": "Moms",
+    "type": "liability"
+  },
+  "2517": {
+    "name": "Berknad utlndsk skatt",
+    "type": "liability"
+  },
+  "2518": {
+    "name": "Betald F-skatt",
+    "type": "liability"
+  },
+  "2610": {
+    "name": "Utgende moms, 25 %",
+    "type": "liability"
+  },
+  "2611": {
+    "name": "Utgende moms p frsljning inom Sverige, 25 %",
+    "type": "liability"
+  },
+  "2612": {
+    "name": "Utgende moms p egna uttag, 25 %",
+    "type": "liability"
+  },
+  "2613": {
+    "name": "Utgende moms fr uthyrning, 25 %",
+    "type": "liability"
+  },
+  "2614": {
+    "name": "Utgende moms omvnd skattskyldighet, 25 %",
+    "type": "liability"
+  },
+  "2615": {
+    "name": "Utgende moms import av varor, 25%",
+    "type": "liability"
+  },
+  "2616": {
+    "name": "Utgende moms VMB 25ÿ%",
+    "type": "liability"
+  },
+  "2617": {
+    "name": "Utgende moms omvnd skattskyldighet varor och tjnster i Sverige, 25 %",
+    "type": "liability"
+  },
+  "2618": {
+    "name": "Vilande utgende moms, 25 %",
+    "type": "liability"
+  },
+  "2620": {
+    "name": "Utgende moms, 12 %",
+    "type": "liability"
+  },
+  "2621": {
+    "name": "Utgende moms p frsljning inom Sverige, 12 %",
+    "type": "liability"
+  },
+  "2622": {
+    "name": "Utgende moms p egna uttag, 12 %",
+    "type": "liability"
+  },
+  "2623": {
+    "name": "Utgende moms fr uthyrning, 12 %",
+    "type": "liability"
+  },
+  "2624": {
+    "name": "Utgende moms omvnd skattskyldighet, 12 %",
+    "type": "liability"
+  },
+  "2625": {
+    "name": "Utgende moms import av varor, 12 %",
+    "type": "liability"
+  },
+  "2626": {
+    "name": "Utgende moms VMB 12ÿ%",
+    "type": "liability"
+  },
+  "2627": {
+    "name": "Utgende moms omvnd skattskyldighet varor och tjnster i Sverige, 12 %",
+    "type": "liability"
+  },
+  "2628": {
+    "name": "Vilande utgende moms, 12 %",
+    "type": "liability"
+  },
+  "2630": {
+    "name": "Utgende moms, 6 %",
+    "type": "liability"
+  },
+  "2631": {
+    "name": "Utgende moms p frsljning inom Sverige, 6 %",
+    "type": "liability"
+  },
+  "2632": {
+    "name": "Utgende moms p egna uttag, 6 %",
+    "type": "liability"
+  },
+  "2633": {
+    "name": "Utgende moms fr uthyrning, 6 %",
+    "type": "liability"
+  },
+  "2634": {
+    "name": "Utgende moms omvnd skattskyldighet, 6 %",
+    "type": "liability"
+  },
+  "2635": {
+    "name": "Utgende moms import av varor, 6 %",
+    "type": "liability"
+  },
+  "2636": {
+    "name": "Utgende moms VMB 6ÿ%",
+    "type": "liability"
+  },
+  "2637": {
+    "name": "Utgende moms omvnd skattskyldighet varor och tjnster i Sverige, 6 %",
+    "type": "liability"
+  },
+  "2638": {
+    "name": "Vilande utgende moms, 6 %",
+    "type": "liability"
+  },
+  "2640": {
+    "name": "Ingende moms",
+    "type": "liability"
+  },
+  "2641": {
+    "name": "Debiterad ingende moms",
+    "type": "liability"
+  },
+  "2642": {
+    "name": "Debiterad ingende moms i anslutning till frivillig skattskyldighet",
+    "type": "liability"
+  },
+  "2645": {
+    "name": "Berknad ingende moms p frvrv frn utlandet",
+    "type": "liability"
+  },
+  "2646": {
+    "name": "Ingende moms p uthyrning",
+    "type": "liability"
+  },
+  "2647": {
+    "name": "Ingende moms omvnd skattskyldighet varor och tjnster i Sverige",
+    "type": "liability"
+  },
+  "2648": {
+    "name": "Vilande ingende moms",
+    "type": "liability"
+  },
+  "2649": {
+    "name": "Ingende moms, blandad verksamhet",
+    "type": "liability"
+  },
+  "2650": {
+    "name": "Redovisningskonto fr moms",
+    "type": "liability"
+  },
+  "2660": {
+    "name": "Srskilda punktskatter",
+    "type": "liability"
+  },
+  "2661": {
+    "name": "Reklamskatt",
+    "type": "liability"
+  },
+  "2668": {
+    "name": "MOSS, moms",
+    "type": "liability"
+  },
+  "2669": {
+    "name": "vriga punktskatter",
+    "type": "liability"
+  },
+  "2710": {
+    "name": "Personalskatt",
+    "type": "liability"
+  },
+  "2730": {
+    "name": "Lagstadgade sociala avgifter och srskild lneskatt",
+    "type": "liability"
+  },
+  "2731": {
+    "name": "Avrkning lagstadgade sociala avgifter",
+    "type": "liability"
+  },
+  "2732": {
+    "name": "Avrkning srskild lneskatt",
+    "type": "liability"
+  },
+  "2740": {
+    "name": "Avtalade sociala avgifter",
+    "type": "liability"
+  },
+  "2750": {
+    "name": "Utmtning i ln m.m.",
+    "type": "liability"
+  },
+  "2760": {
+    "name": "Semestermedel",
+    "type": "liability"
+  },
+  "2761": {
+    "name": "Avrkning semesterlner",
+    "type": "liability"
+  },
+  "2762": {
+    "name": "Semesterlnekassa",
+    "type": "liability"
+  },
+  "2790": {
+    "name": "vriga lneavdrag",
+    "type": "liability"
+  },
+  "2791": {
+    "name": "Personalens intressekonto",
+    "type": "liability"
+  },
+  "2792": {
+    "name": "Lnsparande",
+    "type": "liability"
+  },
+  "2793": {
+    "name": "Gruppfrskringspremier",
+    "type": "liability"
+  },
+  "2794": {
+    "name": "Fackfreningsavgifter",
+    "type": "liability"
+  },
+  "2795": {
+    "name": "Mtnings- och granskningsarvoden",
+    "type": "liability"
+  },
+  "2799": {
+    "name": "vriga lneavdrag",
+    "type": "liability"
+  },
+  "2810": {
+    "name": "Avrkning fr factoring och belnade kontraktsfordringar",
+    "type": "liability"
+  },
+  "2811": {
+    "name": "Avrkning fr factoring",
+    "type": "liability"
+  },
+  "2812": {
+    "name": "Avrkning fr belnade kontraktsfordringar",
+    "type": "liability"
+  },
+  "2820": {
+    "name": "Kortfristiga skulder till anstllda",
+    "type": "liability"
+  },
+  "2821": {
+    "name": "Lneskulder",
+    "type": "liability"
+  },
+  "2822": {
+    "name": "Reserkningar",
+    "type": "liability"
+  },
+  "2823": {
+    "name": "Tantiem, gratifikationer",
+    "type": "liability"
+  },
+  "2829": {
+    "name": "vriga kortfristiga skulder till anstllda",
+    "type": "liability"
+  },
+  "2830": {
+    "name": "Avrkning fr annans rkning",
+    "type": "liability"
+  },
+  "2840": {
+    "name": "Kortfristiga lneskulder",
+    "type": "liability"
+  },
+  "2841": {
+    "name": "Kortfristig del av lngfristiga skulder",
+    "type": "liability"
+  },
+  "2849": {
+    "name": "vriga kortfristiga lneskulder",
+    "type": "liability"
+  },
+  "2850": {
+    "name": "Avrkning fr skatter och avgifter (skattekonto)",
+    "type": "liability"
+  },
+  "2860": {
+    "name": "Kortfristiga skulder till koncernfretag",
+    "type": "liability"
+  },
+  "2861": {
+    "name": "Kortfristiga skulder till moderfretag",
+    "type": "liability"
+  },
+  "2862": {
+    "name": "Kortfristiga skulder till dotterfretag",
+    "type": "liability"
+  },
+  "2863": {
+    "name": "Kortfristiga skulder till andra koncernfretag",
+    "type": "liability"
+  },
+  "2870": {
+    "name": "Kortfristiga skulder till intressefretag",
+    "type": "liability"
+  },
+  "2880": {
+    "name": "Skuld erhllna bidrag",
+    "type": "liability"
+  },
+  "2890": {
+    "name": "vriga kortfristiga skulder",
+    "type": "liability"
+  },
+  "2891": {
+    "name": "Skulder under indrivning",
+    "type": "liability"
+  },
+  "2892": {
+    "name": "Inre reparationsfond/underhllsfond",
+    "type": "liability"
+  },
+  "2893": {
+    "name": "Skulder till nrstende personer, kortfristig del",
+    "type": "liability"
+  },
+  "2895": {
+    "name": "Derivat (kortfristiga skulder)",
+    "type": "liability"
+  },
+  "2897": {
+    "name": "Mottagna depositioner, kortfristiga",
+    "type": "liability"
+  },
+  "2898": {
+    "name": "Outtagen vinstutdelning",
+    "type": "liability"
+  },
+  "2899": {
+    "name": "vriga kortfristiga skulder",
+    "type": "liability"
+  },
+  "2910": {
+    "name": "Upplupna lner",
+    "type": "liability"
+  },
+  "2911": {
+    "name": "Lneskulder",
+    "type": "liability"
+  },
+  "2912": {
+    "name": "Ackordsverskott",
+    "type": "liability"
+  },
+  "2919": {
+    "name": "vriga upplupna lner",
+    "type": "liability"
+  },
+  "2920": {
+    "name": "Upplupna semesterlner",
+    "type": "liability"
+  },
+  "2930": {
+    "name": "Upplupna pensionskostnader",
+    "type": "liability"
+  },
+  "2931": {
+    "name": "Upplupna pensionsutbetalningar",
+    "type": "liability"
+  },
+  "2940": {
+    "name": "Upplupna lagstadgade sociala och andra avgifter",
+    "type": "liability"
+  },
+  "2941": {
+    "name": "Berknade upplupna lagstadgade sociala avgifter",
+    "type": "liability"
+  },
+  "2942": {
+    "name": "Berknad upplupen srskild lneskatt",
+    "type": "liability"
+  },
+  "2943": {
+    "name": "Berknad upplupen srskild lneskatt p pensionskostnader, deklarationspost",
+    "type": "liability"
+  },
+  "2944": {
+    "name": "Berknad upplupen avkastningsskatt p pensionskostnader",
+    "type": "liability"
+  },
+  "2950": {
+    "name": "Upplupna avtalade sociala avgifter",
+    "type": "liability"
+  },
+  "2951": {
+    "name": "Upplupna avtalade arbetsmarknadsfrskringar",
+    "type": "liability"
+  },
+  "2959": {
+    "name": "Upplupna avtalade pensionsfrskringsavgifter, deklarationspost",
+    "type": "liability"
+  },
+  "2960": {
+    "name": "Upplupna rntekostnader",
+    "type": "liability"
+  },
+  "2970": {
+    "name": "Frutbetalda intkter",
+    "type": "liability"
+  },
+  "2971": {
+    "name": "Frutbetalda hyresintkter",
+    "type": "liability"
+  },
+  "2972": {
+    "name": "Frutbetalda medlemsavgifter",
+    "type": "liability"
+  },
+  "2979": {
+    "name": "vriga frutbetalda intkter",
+    "type": "liability"
+  },
+  "2980": {
+    "name": "Upplupna avtalskostnader",
+    "type": "liability"
+  },
+  "2990": {
+    "name": "vriga upplupna kostnader och frutbetalda intkter",
+    "type": "liability"
+  },
+  "2991": {
+    "name": "Berknat arvode fr bokslut",
+    "type": "liability"
+  },
+  "2992": {
+    "name": "Berknat arvode fr revision",
+    "type": "liability"
+  },
+  "2993": {
+    "name": "Ospecificerad skuld till leverantrer",
+    "type": "liability"
+  },
+  "2998": {
+    "name": "vriga upplupna kostnader och frutbetalda intkter",
+    "type": "liability"
+  },
+  "2999": {
+    "name": "OBS-konto",
+    "type": "liability"
+  },
+  "3000": {
+    "name": "Frsljning inom Sverige",
+    "type": "equity_or_liability"
+  },
+  "3001": {
+    "name": "Frsljning varor inom Sverige, 25 % moms",
+    "type": "equity_or_liability"
+  },
+  "3002": {
+    "name": "Frsljning varor inom Sverige, 12 % moms",
+    "type": "equity_or_liability"
+  },
+  "3003": {
+    "name": "Frsljning varor inom Sverige, 6 % moms",
+    "type": "equity_or_liability"
+  },
+  "3004": {
+    "name": "Frsljning varor inom Sverige, momsfri",
+    "type": "equity_or_liability"
+  },
+  "3011": {
+    "name": "Frsljning tjnster inom Sverige, 25 % moms",
+    "type": "equity_or_liability"
+  },
+  "3012": {
+    "name": "Frsljning tjnster inom Sverige, 12 % moms",
+    "type": "equity_or_liability"
+  },
+  "3013": {
+    "name": "Frsljning tjnster inom Sverige, 6 % moms",
+    "type": "equity_or_liability"
+  },
+  "3014": {
+    "name": "Frsljning tjnster inom Sverige, momsfri",
+    "type": "equity_or_liability"
+  },
+  "3041": {
+    "name": "Fsg tjnster",
+    "type": "equity_or_liability"
+  },
+  "3071": {
+    "name": "Frutbetalda intkter, varor och tjnster",
+    "type": "equity_or_liability"
+  },
+  "3089": {
+    "name": "Frsljning inom Sverige, momsfri",
+    "type": "equity_or_liability"
+  },
+  "3105": {
+    "name": "Frsljning varor till land utanfr EU",
+    "type": "equity_or_liability"
+  },
+  "3106": {
+    "name": "Frsljning varor till annat EU-land, momspliktig",
+    "type": "equity_or_liability"
+  },
+  "3107": {
+    "name": "Treparts frsljn varor till EU",
+    "type": "equity_or_liability"
+  },
+  "3108": {
+    "name": "Frsljning varor till annat EU-land, momsfri",
+    "type": "equity_or_liability"
+  },
+  "3200": {
+    "name": "Frsljning VMB och omvnd moms",
+    "type": "equity_or_liability"
+  },
+  "3211": {
+    "name": "Frsljning positiv VMB 25 %",
+    "type": "equity_or_liability"
+  },
+  "3212": {
+    "name": "Frsljning negativ VMB 25 %",
+    "type": "equity_or_liability"
+  },
+  "3223": {
+    "name": "Positiv VM omfringskonto",
+    "type": "equity_or_liability"
+  },
+  "3231": {
+    "name": "Frsljning inom byggsektorn, omvnd skattskyldighet moms",
+    "type": "equity_or_liability"
+  },
+  "3305": {
+    "name": "Frsljning tjnster till land utanfr EU",
+    "type": "equity_or_liability"
+  },
+  "3308": {
+    "name": "Frsljning tjnster till annat EU-land",
+    "type": "equity_or_liability"
+  },
+  "3389": {
+    "name": "Frsljning EU moms/MOSS",
+    "type": "equity_or_liability"
+  },
+  "3401": {
+    "name": "Egna uttag momspliktiga, 25 %",
+    "type": "equity_or_liability"
+  },
+  "3402": {
+    "name": "Egna uttag momspliktiga, 12 %",
+    "type": "equity_or_liability"
+  },
+  "3403": {
+    "name": "Egna uttag momspliktiga, 6 %",
+    "type": "equity_or_liability"
+  },
+  "3404": {
+    "name": "Egna uttag, momsfria",
+    "type": "equity_or_liability"
+  },
+  "3500": {
+    "name": "Fakturerade kostnader (gruppkonto)",
+    "type": "equity_or_liability"
+  },
+  "3510": {
+    "name": "Fakturerat emballage",
+    "type": "equity_or_liability"
+  },
+  "3511": {
+    "name": "Fakturerat emballage",
+    "type": "equity_or_liability"
+  },
+  "3518": {
+    "name": "Returnerat emballage",
+    "type": "equity_or_liability"
+  },
+  "3520": {
+    "name": "Fakturerade frakter",
+    "type": "equity_or_liability"
+  },
+  "3521": {
+    "name": "Fakturerade frakter, EU-land",
+    "type": "equity_or_liability"
+  },
+  "3522": {
+    "name": "Fakturerade frakter, export",
+    "type": "equity_or_liability"
+  },
+  "3530": {
+    "name": "Fakturerade tull- och speditionskostnader m.m.",
+    "type": "equity_or_liability"
+  },
+  "3540": {
+    "name": "Faktureringsavgifter",
+    "type": "equity_or_liability"
+  },
+  "3541": {
+    "name": "Faktureringsavgifter, EU-land",
+    "type": "equity_or_liability"
+  },
+  "3542": {
+    "name": "Faktureringsavgifter, export",
+    "type": "equity_or_liability"
+  },
+  "3550": {
+    "name": "Fakturerade resekostnader",
+    "type": "equity_or_liability"
+  },
+  "3560": {
+    "name": "Fakturerade kostnader till koncernfretag",
+    "type": "equity_or_liability"
+  },
+  "3561": {
+    "name": "Fakturerade kostnader till moderfretag",
+    "type": "equity_or_liability"
+  },
+  "3562": {
+    "name": "Fakturerade kostnader till dotterfretag",
+    "type": "equity_or_liability"
+  },
+  "3563": {
+    "name": "Fakturerade kostnader till andra koncernfretag",
+    "type": "equity_or_liability"
+  },
+  "3570": {
+    "name": "Fakturerade kostnader till intressefretag",
+    "type": "equity_or_liability"
+  },
+  "3590": {
+    "name": "vriga fakturerade kostnader",
+    "type": "equity_or_liability"
+  },
+  "3600": {
+    "name": "Rrelsens sidointkter (gruppkonto)",
+    "type": "equity_or_liability"
+  },
+  "3610": {
+    "name": "Frsljning av material",
+    "type": "equity_or_liability"
+  },
+  "3611": {
+    "name": "Frsljning av rmaterial",
+    "type": "equity_or_liability"
+  },
+  "3612": {
+    "name": "Frsljning av skrot",
+    "type": "equity_or_liability"
+  },
+  "3613": {
+    "name": "Frsljning av frbrukningsmaterial",
+    "type": "equity_or_liability"
+  },
+  "3619": {
+    "name": "Frsljning av vrigt material",
+    "type": "equity_or_liability"
+  },
+  "3620": {
+    "name": "Tillfllig uthyrning av personal",
+    "type": "equity_or_liability"
+  },
+  "3630": {
+    "name": "Tillfllig uthyrning av transportmedel",
+    "type": "equity_or_liability"
+  },
+  "3670": {
+    "name": "Intkter frn vrdepapper",
+    "type": "equity_or_liability"
+  },
+  "3671": {
+    "name": "Frsljning av vrdepapper",
+    "type": "equity_or_liability"
+  },
+  "3672": {
+    "name": "Utdelning frn vrdepapper",
+    "type": "equity_or_liability"
+  },
+  "3679": {
+    "name": "vriga intkter frn vrdepapper",
+    "type": "equity_or_liability"
+  },
+  "3680": {
+    "name": "Management fees",
+    "type": "equity_or_liability"
+  },
+  "3690": {
+    "name": "vriga sidointkter",
+    "type": "equity_or_liability"
+  },
+  "3700": {
+    "name": "Intktskorrigeringar (gruppkonto)",
+    "type": "equity_or_liability"
+  },
+  "3710": {
+    "name": "Ofrdelade intktsreduktioner",
+    "type": "equity_or_liability"
+  },
+  "3730": {
+    "name": "Lmnade rabatter",
+    "type": "equity_or_liability"
+  },
+  "3731": {
+    "name": "Lmnade kassarabatter",
+    "type": "equity_or_liability"
+  },
+  "3732": {
+    "name": "Lmnade mngdrabatter",
+    "type": "equity_or_liability"
+  },
+  "3740": {
+    "name": "res- och kronutjmning",
+    "type": "equity_or_liability"
+  },
+  "3750": {
+    "name": "Punktskatter",
+    "type": "equity_or_liability"
+  },
+  "3751": {
+    "name": "Intktsfrda punktskatter (kreditkonto)",
+    "type": "equity_or_liability"
+  },
+  "3752": {
+    "name": "Skuldfrda punktskatter (debetkonto)",
+    "type": "equity_or_liability"
+  },
+  "3790": {
+    "name": "vriga intktskorrigeringar",
+    "type": "equity_or_liability"
+  },
+  "3800": {
+    "name": "Aktiverat arbete fr egen rkning (gruppkonto)",
+    "type": "equity_or_liability"
+  },
+  "3840": {
+    "name": "Aktiverat arbete (material)",
+    "type": "equity_or_liability"
+  },
+  "3850": {
+    "name": "Aktiverat arbete (omkostnader)",
+    "type": "equity_or_liability"
+  },
+  "3870": {
+    "name": "Aktiverat arbete (personal)",
+    "type": "equity_or_liability"
+  },
+  "3900": {
+    "name": "vriga rrelseintkter (gruppkonto)",
+    "type": "equity_or_liability"
+  },
+  "3910": {
+    "name": "Hyres- och arrendeintkter",
+    "type": "equity_or_liability"
+  },
+  "3911": {
+    "name": "Hyresintkter",
+    "type": "equity_or_liability"
+  },
+  "3912": {
+    "name": "Arrendeintkter",
+    "type": "equity_or_liability"
+  },
+  "3913": {
+    "name": "Frivilligt momspliktiga hyresintkter",
+    "type": "equity_or_liability"
+  },
+  "3914": {
+    "name": "vriga momspliktiga hyresintkter",
+    "type": "equity_or_liability"
+  },
+  "3920": {
+    "name": "Provisionsintkter, licensintkter och royalties",
+    "type": "equity_or_liability"
+  },
+  "3921": {
+    "name": "Provisionsintkter",
+    "type": "equity_or_liability"
+  },
+  "3922": {
+    "name": "Licensintkter och royalties",
+    "type": "equity_or_liability"
+  },
+  "3925": {
+    "name": "Franchiseintkter",
+    "type": "equity_or_liability"
+  },
+  "3929": {
+    "name": "Kickback momsfri",
+    "type": "equity_or_liability"
+  },
+  "3930": {
+    "name": "Pminnelseavgifter",
+    "type": "equity_or_liability"
+  },
+  "3940": {
+    "name": "Orealiserade negativa/positiva vrdefrndringar p skringsinstrument",
+    "type": "equity_or_liability"
+  },
+  "3950": {
+    "name": "tervunna, tidigare avskrivna kundfordringar",
+    "type": "equity_or_liability"
+  },
+  "3960": {
+    "name": "Valutakursvinster p fordringar och skulder av rrelsekaraktr",
+    "type": "equity_or_liability"
+  },
+  "3970": {
+    "name": "Vinst vid avyttring av immateriella och materiella anlggningstillgngar",
+    "type": "equity_or_liability"
+  },
+  "3971": {
+    "name": "Vinst vid avyttring av immateriella anlggningstillgngar",
+    "type": "equity_or_liability"
+  },
+  "3972": {
+    "name": "Vinst vid avyttring av byggnader och mark",
+    "type": "equity_or_liability"
+  },
+  "3973": {
+    "name": "Vinst vid avyttring av maskiner och inventarier",
+    "type": "equity_or_liability"
+  },
+  "3980": {
+    "name": "Erhllna offentliga std m.m.",
+    "type": "equity_or_liability"
+  },
+  "3981": {
+    "name": "Erhllna EU-bidrag",
+    "type": "equity_or_liability"
+  },
+  "3985": {
+    "name": "Erhllna statliga bidrag",
+    "type": "equity_or_liability"
+  },
+  "3987": {
+    "name": "Erhllna kommunala bidrag",
+    "type": "equity_or_liability"
+  },
+  "3988": {
+    "name": "Erhllna bidrag och ersttningar fr personal",
+    "type": "equity_or_liability"
+  },
+  "3989": {
+    "name": "vriga erhllna bidrag",
+    "type": "equity_or_liability"
+  },
+  "3990": {
+    "name": "vriga ersttningar och intkter",
+    "type": "equity_or_liability"
+  },
+  "3991": {
+    "name": "Konfliktersttning",
+    "type": "equity_or_liability"
+  },
+  "3992": {
+    "name": "Erhllna skadestnd",
+    "type": "equity_or_liability"
+  },
+  "3993": {
+    "name": "Erhllna donationer och gvor",
+    "type": "equity_or_liability"
+  },
+  "3994": {
+    "name": "Frskringsersttningar",
+    "type": "equity_or_liability"
+  },
+  "3995": {
+    "name": "Erhllet ackord p skulder av rrelsekaraktr",
+    "type": "equity_or_liability"
+  },
+  "3996": {
+    "name": "Erhllna reklambidrag",
+    "type": "equity_or_liability"
+  },
+  "3997": {
+    "name": "Sjuklneersttning",
+    "type": "equity_or_liability"
+  },
+  "3998": {
+    "name": "Sjukpenning",
+    "type": "equity_or_liability"
+  },
+  "3999": {
+    "name": "vriga rrelseintkter",
+    "type": "equity_or_liability"
+  },
+  "4000": {
+    "name": "Inkp av varor frn Sverige",
+    "type": "income_statement"
+  },
+  "4010": {
+    "name": "Inkp material och varor",
+    "type": "income_statement"
+  },
+  "4200": {
+    "name": "Slda varor VMB",
+    "type": "income_statement"
+  },
+  "4211": {
+    "name": "Slda varor positiv VMB 25 %",
+    "type": "income_statement"
+  },
+  "4212": {
+    "name": "Slda varor negativ VMB 25 %",
+    "type": "income_statement"
+  },
+  "4400": {
+    "name": "Inkpta tjnster i Sverige, omvnd skattskyldighet",
+    "type": "income_statement"
+  },
+  "4415": {
+    "name": "Inkpta varor i Sverige, omvnd skattskyldighet, 25 %",
+    "type": "income_statement"
+  },
+  "4416": {
+    "name": "Inkpta varor i Sverige, omvnd skattskyldighet, 12 %",
+    "type": "income_statement"
+  },
+  "4417": {
+    "name": "Inkpta varor i Sverige, omvnd skattskyldighet, 6 %",
+    "type": "income_statement"
+  },
+  "4425": {
+    "name": "Inkpta tjnster i Sverige, omvnd skattskyldighet, 25 %",
+    "type": "income_statement"
+  },
+  "4426": {
+    "name": "Inkpta tjnster i Sverige, omvnd skattskyldighet, 12 %",
+    "type": "income_statement"
+  },
+  "4427": {
+    "name": "Inkpta tjnster i Sverige, omvnd skattskyldighet, 6 %",
+    "type": "income_statement"
+  },
+  "4500": {
+    "name": "Inkp utanfr Sverige",
+    "type": "income_statement"
+  },
+  "4512": {
+    "name": "Frvrv varor, trepartsfrvrv frn annat EU-land, mellan man",
+    "type": "income_statement"
+  },
+  "4515": {
+    "name": "Inkp av varor frn annat EU-land, 25 %",
+    "type": "income_statement"
+  },
+  "4516": {
+    "name": "Inkp av varor frn annat EU-land, 12 %",
+    "type": "income_statement"
+  },
+  "4517": {
+    "name": "Inkp av varor frn annat EU-land, 6 %",
+    "type": "income_statement"
+  },
+  "4518": {
+    "name": "Inkp av varor frn annat EU-land, momsfri",
+    "type": "income_statement"
+  },
+  "4531": {
+    "name": "Import tjnster land utanfr EU, 25% moms",
+    "type": "income_statement"
+  },
+  "4532": {
+    "name": "Import tjnster land utanfr EU, 12% moms",
+    "type": "income_statement"
+  },
+  "4533": {
+    "name": "Import tjnster land utanfr EU, 6% moms",
+    "type": "income_statement"
+  },
+  "4534": {
+    "name": "Import tjnster land utanfr EU, momsfri",
+    "type": "income_statement"
+  },
+  "4535": {
+    "name": "Inkp av tjnster frn annat EU-land, 25 %",
+    "type": "income_statement"
+  },
+  "4536": {
+    "name": "Inkp av tjnster frn annat EU-land, 12 %",
+    "type": "income_statement"
+  },
+  "4537": {
+    "name": "Inkp av tjnster frn annat EU-land, 6 %",
+    "type": "income_statement"
+  },
+  "4538": {
+    "name": "Inkp av tjnster frn annat EU-land, momsfri",
+    "type": "income_statement"
+  },
+  "4545": {
+    "name": "Import av varor, 25 % moms",
+    "type": "income_statement"
+  },
+  "4546": {
+    "name": "Import av varor, 12 % moms",
+    "type": "income_statement"
+  },
+  "4547": {
+    "name": "Import av varor, 6 % moms",
+    "type": "income_statement"
+  },
+  "4549": {
+    "name": "Motkonto beskattningsunderlag import",
+    "type": "income_statement"
+  },
+  "4598": {
+    "name": "Justering, omvnd moms",
+    "type": "income_statement"
+  },
+  "4600": {
+    "name": "Legoarbeten och underentreprenader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "4700": {
+    "name": "Reduktion av inkpspriser (gruppkonto)",
+    "type": "income_statement"
+  },
+  "4730": {
+    "name": "Erhllna rabatter",
+    "type": "income_statement"
+  },
+  "4731": {
+    "name": "Erhllna kassarabatter",
+    "type": "income_statement"
+  },
+  "4732": {
+    "name": "Erhllna mngdrabatter (inkl. bonus)",
+    "type": "income_statement"
+  },
+  "4733": {
+    "name": "Erhllet aktivitetsstd",
+    "type": "income_statement"
+  },
+  "4790": {
+    "name": "vriga reduktioner av inkpspriser",
+    "type": "income_statement"
+  },
+  "4900": {
+    "name": "Frndring av lager (gruppkonto)",
+    "type": "income_statement"
+  },
+  "4910": {
+    "name": "Frndring av lager av rvaror",
+    "type": "income_statement"
+  },
+  "4920": {
+    "name": "Frndring av lager av tillsatsmaterial och frndenheter",
+    "type": "income_statement"
+  },
+  "4930": {
+    "name": "Frndring av lager av halvfabrikat",
+    "type": "income_statement"
+  },
+  "4931": {
+    "name": "Frndring av lager av kpta halvfabrikat",
+    "type": "income_statement"
+  },
+  "4932": {
+    "name": "Frndring av lager av egentillverkade halvfabrikat",
+    "type": "income_statement"
+  },
+  "4940": {
+    "name": "Frndring av produkter i arbete",
+    "type": "income_statement"
+  },
+  "4944": {
+    "name": "Frndring av produkter i arbete, material och utlgg",
+    "type": "income_statement"
+  },
+  "4945": {
+    "name": "Frndring av produkter i arbete, omkostnader",
+    "type": "income_statement"
+  },
+  "4947": {
+    "name": "Frndring av produkter i arbete, personalkostnader",
+    "type": "income_statement"
+  },
+  "4950": {
+    "name": "Frndring av lager av frdiga varor",
+    "type": "income_statement"
+  },
+  "4960": {
+    "name": "Frndring av lager av handelsvaror",
+    "type": "income_statement"
+  },
+  "4970": {
+    "name": "Frndring av pgende arbeten, nedlagda kostnader",
+    "type": "income_statement"
+  },
+  "4974": {
+    "name": "Frndring av pgende arbeten, material och utlgg",
+    "type": "income_statement"
+  },
+  "4975": {
+    "name": "Frndring av pgende arbeten, omkostnader",
+    "type": "income_statement"
+  },
+  "4977": {
+    "name": "Frndring av pgende arbeten, personalkostnader",
+    "type": "income_statement"
+  },
+  "4980": {
+    "name": "Frndring av lager av vrdepapper",
+    "type": "income_statement"
+  },
+  "4981": {
+    "name": "Slda vrdepappers anskaffningsvrde",
+    "type": "income_statement"
+  },
+  "4987": {
+    "name": "Nedskrivning av vrdepapper",
+    "type": "income_statement"
+  },
+  "4988": {
+    "name": "terfring av nedskrivning av vrdepapper",
+    "type": "income_statement"
+  },
+  "4990": {
+    "name": "Frndring av lager och pgende arbeten (ofrdelad)",
+    "type": "income_statement"
+  },
+  "5000": {
+    "name": "Lokalkostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5010": {
+    "name": "Lokalhyra",
+    "type": "income_statement"
+  },
+  "5011": {
+    "name": "Hyra fr kontorslokaler",
+    "type": "income_statement"
+  },
+  "5012": {
+    "name": "Hyra fr garage",
+    "type": "income_statement"
+  },
+  "5013": {
+    "name": "Hyra fr lagerlokaler",
+    "type": "income_statement"
+  },
+  "5020": {
+    "name": "El fr belysning",
+    "type": "income_statement"
+  },
+  "5030": {
+    "name": "Vrme",
+    "type": "income_statement"
+  },
+  "5040": {
+    "name": "Vatten och avlopp",
+    "type": "income_statement"
+  },
+  "5050": {
+    "name": "Lokaltillbehr",
+    "type": "income_statement"
+  },
+  "5060": {
+    "name": "Stdning och renhllning",
+    "type": "income_statement"
+  },
+  "5061": {
+    "name": "Stdning",
+    "type": "income_statement"
+  },
+  "5062": {
+    "name": "Sophmtning",
+    "type": "income_statement"
+  },
+  "5063": {
+    "name": "Hyra fr sopcontainer",
+    "type": "income_statement"
+  },
+  "5064": {
+    "name": "Snrjning",
+    "type": "income_statement"
+  },
+  "5065": {
+    "name": "Trdgrdssktsel",
+    "type": "income_statement"
+  },
+  "5070": {
+    "name": "Reparation och underhll av lokaler",
+    "type": "income_statement"
+  },
+  "5090": {
+    "name": "vriga lokalkostnader",
+    "type": "income_statement"
+  },
+  "5098": {
+    "name": "vriga lokalkostnader, avdragsgilla",
+    "type": "income_statement"
+  },
+  "5099": {
+    "name": "vriga lokalkostnader, ej avdragsgilla",
+    "type": "income_statement"
+  },
+  "5100": {
+    "name": "Fastighetskostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5110": {
+    "name": "Tomtrttsavgld/arrende",
+    "type": "income_statement"
+  },
+  "5120": {
+    "name": "El fr belysning",
+    "type": "income_statement"
+  },
+  "5130": {
+    "name": "Vrme",
+    "type": "income_statement"
+  },
+  "5131": {
+    "name": "Uppvrmning",
+    "type": "income_statement"
+  },
+  "5132": {
+    "name": "Sotning",
+    "type": "income_statement"
+  },
+  "5140": {
+    "name": "Vatten och avlopp",
+    "type": "income_statement"
+  },
+  "5160": {
+    "name": "Stdning och renhllning",
+    "type": "income_statement"
+  },
+  "5161": {
+    "name": "Stdning",
+    "type": "income_statement"
+  },
+  "5162": {
+    "name": "Sophmtning",
+    "type": "income_statement"
+  },
+  "5163": {
+    "name": "Hyra fr sopcontainer",
+    "type": "income_statement"
+  },
+  "5164": {
+    "name": "Snrjning",
+    "type": "income_statement"
+  },
+  "5165": {
+    "name": "Trdgrdssktsel",
+    "type": "income_statement"
+  },
+  "5170": {
+    "name": "Reparation och underhll av fastighet",
+    "type": "income_statement"
+  },
+  "5190": {
+    "name": "vriga fastighetskostnader",
+    "type": "income_statement"
+  },
+  "5191": {
+    "name": "Fastighetsskatt/fastighetsavgift",
+    "type": "income_statement"
+  },
+  "5192": {
+    "name": "Fastighetsfrskringspremier",
+    "type": "income_statement"
+  },
+  "5193": {
+    "name": "Fastighetssktsel och frvaltning",
+    "type": "income_statement"
+  },
+  "5198": {
+    "name": "vriga fastighetskostnader, avdragsgilla",
+    "type": "income_statement"
+  },
+  "5199": {
+    "name": "vriga fastighetskostnader, ej avdragsgilla",
+    "type": "income_statement"
+  },
+  "5200": {
+    "name": "Hyra av anlggningstillgngar (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5210": {
+    "name": "Hyra av maskiner och andra tekniska anlggningar",
+    "type": "income_statement"
+  },
+  "5211": {
+    "name": "Korttidshyra av maskiner och andra tekniska anlggningar",
+    "type": "income_statement"
+  },
+  "5212": {
+    "name": "Leasing av maskiner och andra tekniska anlggningar",
+    "type": "income_statement"
+  },
+  "5220": {
+    "name": "Hyra av inventarier och verktyg",
+    "type": "income_statement"
+  },
+  "5221": {
+    "name": "Korttidshyra av inventarier och verktyg",
+    "type": "income_statement"
+  },
+  "5222": {
+    "name": "Leasing av inventarier och verktyg",
+    "type": "income_statement"
+  },
+  "5250": {
+    "name": "Hyra av datorer",
+    "type": "income_statement"
+  },
+  "5251": {
+    "name": "Korttidshyra av datorer",
+    "type": "income_statement"
+  },
+  "5252": {
+    "name": "Leasing av datorer",
+    "type": "income_statement"
+  },
+  "5290": {
+    "name": "vriga hyreskostnader fr anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "5300": {
+    "name": "Energikostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5310": {
+    "name": "El fr drift",
+    "type": "income_statement"
+  },
+  "5320": {
+    "name": "Gas",
+    "type": "income_statement"
+  },
+  "5330": {
+    "name": "Eldningsolja",
+    "type": "income_statement"
+  },
+  "5340": {
+    "name": "Stenkol och koks",
+    "type": "income_statement"
+  },
+  "5350": {
+    "name": "Torv, trkol, ved och annat trbrnsle",
+    "type": "income_statement"
+  },
+  "5360": {
+    "name": "Bensin, fotogen och motorbrnnolja",
+    "type": "income_statement"
+  },
+  "5370": {
+    "name": "Fjrrvrme, kyla och nga",
+    "type": "income_statement"
+  },
+  "5380": {
+    "name": "Vatten",
+    "type": "income_statement"
+  },
+  "5390": {
+    "name": "vriga energikostnader",
+    "type": "income_statement"
+  },
+  "5400": {
+    "name": "Frbrukningsinventarier och frbrukningsmaterial (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5410": {
+    "name": "Frbrukningsinventarier",
+    "type": "income_statement"
+  },
+  "5411": {
+    "name": "Frbrukningsinventarier med en livslngd p mer n ett r",
+    "type": "income_statement"
+  },
+  "5412": {
+    "name": "Frbrukningsinventarier med en livslngd p ett r eller mindre",
+    "type": "income_statement"
+  },
+  "5420": {
+    "name": "Programvaror",
+    "type": "income_statement"
+  },
+  "5430": {
+    "name": "Transportinventarier",
+    "type": "income_statement"
+  },
+  "5440": {
+    "name": "Frbrukningsemballage",
+    "type": "income_statement"
+  },
+  "5460": {
+    "name": "Frbrukningsmaterial",
+    "type": "income_statement"
+  },
+  "5480": {
+    "name": "Arbetsklder och skyddsmaterial",
+    "type": "income_statement"
+  },
+  "5490": {
+    "name": "vriga frbrukningsinventarier och frbrukningsmaterial",
+    "type": "income_statement"
+  },
+  "5491": {
+    "name": "vriga frbrukningsinventarier med en livslngd p mer n ett r",
+    "type": "income_statement"
+  },
+  "5492": {
+    "name": "vriga frbrukningsinventarier med en livslngd p ett r eller mindre",
+    "type": "income_statement"
+  },
+  "5493": {
+    "name": "vrigt frbrukningsmaterial",
+    "type": "income_statement"
+  },
+  "5500": {
+    "name": "Reparation och underhll (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5510": {
+    "name": "Reparation och underhll av maskiner och andra tekniska anlggningar",
+    "type": "income_statement"
+  },
+  "5520": {
+    "name": "Reparation och underhll av inventarier, verktyg och datorer m.m.",
+    "type": "income_statement"
+  },
+  "5530": {
+    "name": "Reparation och underhll av installationer",
+    "type": "income_statement"
+  },
+  "5550": {
+    "name": "Reparation och underhll av frbrukningsinventarier",
+    "type": "income_statement"
+  },
+  "5580": {
+    "name": "Underhll och tvtt av arbetsklder",
+    "type": "income_statement"
+  },
+  "5590": {
+    "name": "vriga kostnader fr reparation och underhll",
+    "type": "income_statement"
+  },
+  "5600": {
+    "name": "Kostnader fr transportmedel (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5610": {
+    "name": "Personbilskostnader",
+    "type": "income_statement"
+  },
+  "5611": {
+    "name": "Drivmedel fr personbilar",
+    "type": "income_statement"
+  },
+  "5612": {
+    "name": "Frskring och skatt fr personbilar",
+    "type": "income_statement"
+  },
+  "5613": {
+    "name": "Reparation och underhll av personbilar",
+    "type": "income_statement"
+  },
+  "5615": {
+    "name": "Leasing av personbilar",
+    "type": "income_statement"
+  },
+  "5616": {
+    "name": "Trngselskatt, avdragsgill",
+    "type": "income_statement"
+  },
+  "5619": {
+    "name": "vriga personbilskostnader",
+    "type": "income_statement"
+  },
+  "5620": {
+    "name": "Lastbilskostnader",
+    "type": "income_statement"
+  },
+  "5630": {
+    "name": "Truckkostnader",
+    "type": "income_statement"
+  },
+  "5640": {
+    "name": "Kostnader fr arbetsmaskiner",
+    "type": "income_statement"
+  },
+  "5650": {
+    "name": "Traktorkostnader",
+    "type": "income_statement"
+  },
+  "5660": {
+    "name": "Motorcykel-, moped- och skoterkostnader",
+    "type": "income_statement"
+  },
+  "5670": {
+    "name": "Bt-, flygplans- och helikopterkostnader",
+    "type": "income_statement"
+  },
+  "5690": {
+    "name": "vriga kostnader fr transportmedel",
+    "type": "income_statement"
+  },
+  "5700": {
+    "name": "Frakter och transporter (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5710": {
+    "name": "Frakter, transporter och frskringar vid varudistribution",
+    "type": "income_statement"
+  },
+  "5720": {
+    "name": "Tull- och speditionskostnader m.m.",
+    "type": "income_statement"
+  },
+  "5730": {
+    "name": "Arbetstransporter",
+    "type": "income_statement"
+  },
+  "5790": {
+    "name": "vriga kostnader fr frakter och transporter",
+    "type": "income_statement"
+  },
+  "5800": {
+    "name": "Resekostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5810": {
+    "name": "Biljetter",
+    "type": "income_statement"
+  },
+  "5820": {
+    "name": "Hyrbilskostnader",
+    "type": "income_statement"
+  },
+  "5830": {
+    "name": "Kost och logi",
+    "type": "income_statement"
+  },
+  "5831": {
+    "name": "Kost och logi i Sverige",
+    "type": "income_statement"
+  },
+  "5832": {
+    "name": "Kost och logi i utlandet",
+    "type": "income_statement"
+  },
+  "5841": {
+    "name": "Milersttning, avdragsgill (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5842": {
+    "name": "Milersttning, ej avdragsgill (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5843": {
+    "name": "Traktamente Sverige avdragsgillt (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5844": {
+    "name": "Traktamente Sverige ej avdragsgillt (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5845": {
+    "name": "Traktamente Utlandet avdragsgillt (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5846": {
+    "name": "Traktamente Utlandet ej avdragsgillt (gare enskild firma)",
+    "type": "income_statement"
+  },
+  "5890": {
+    "name": "vriga resekostnader",
+    "type": "income_statement"
+  },
+  "5900": {
+    "name": "Reklam och PR (gruppkonto)",
+    "type": "income_statement"
+  },
+  "5910": {
+    "name": "Annonsering",
+    "type": "income_statement"
+  },
+  "5920": {
+    "name": "Utomhus- och trafikreklam",
+    "type": "income_statement"
+  },
+  "5930": {
+    "name": "Reklamtrycksaker och direktreklam",
+    "type": "income_statement"
+  },
+  "5940": {
+    "name": "Utstllningar och mssor",
+    "type": "income_statement"
+  },
+  "5950": {
+    "name": "Butiksreklam och terfrsljarreklam",
+    "type": "income_statement"
+  },
+  "5960": {
+    "name": "Varuprover, reklamgvor, presentreklam och tvlingar",
+    "type": "income_statement"
+  },
+  "5970": {
+    "name": "Film-, radio-, TV- och Internetreklam",
+    "type": "income_statement"
+  },
+  "5980": {
+    "name": "PR, institutionell reklam och sponsring",
+    "type": "income_statement"
+  },
+  "5990": {
+    "name": "vriga kostnader fr reklam och PR",
+    "type": "income_statement"
+  },
+  "6000": {
+    "name": "vriga frsljningskostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6010": {
+    "name": "Kataloger, prislistor m.m.",
+    "type": "income_statement"
+  },
+  "6020": {
+    "name": "Egna facktidskrifter",
+    "type": "income_statement"
+  },
+  "6030": {
+    "name": "Speciella orderkostnader",
+    "type": "income_statement"
+  },
+  "6040": {
+    "name": "Kontokortsavgifter",
+    "type": "income_statement"
+  },
+  "6050": {
+    "name": "Frsljningsprovisioner",
+    "type": "income_statement"
+  },
+  "6055": {
+    "name": "Franchisekostnader o.dyl.",
+    "type": "income_statement"
+  },
+  "6060": {
+    "name": "Kreditfrsljningskostnader",
+    "type": "income_statement"
+  },
+  "6061": {
+    "name": "Kreditupplysning",
+    "type": "income_statement"
+  },
+  "6062": {
+    "name": "Inkasso och KFM-avgifter",
+    "type": "income_statement"
+  },
+  "6063": {
+    "name": "Kreditfrskringspremier",
+    "type": "income_statement"
+  },
+  "6064": {
+    "name": "Factoringavgifter",
+    "type": "income_statement"
+  },
+  "6069": {
+    "name": "vriga kreditfrsljningskostnader",
+    "type": "income_statement"
+  },
+  "6070": {
+    "name": "Representation",
+    "type": "income_statement"
+  },
+  "6071": {
+    "name": "Representation, avdragsgill",
+    "type": "income_statement"
+  },
+  "6072": {
+    "name": "Representation, ej avdragsgill",
+    "type": "income_statement"
+  },
+  "6080": {
+    "name": "Bankgarantier",
+    "type": "income_statement"
+  },
+  "6090": {
+    "name": "vriga frsljningskostnader",
+    "type": "income_statement"
+  },
+  "6100": {
+    "name": "Kontorsmateriel och trycksaker (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6110": {
+    "name": "Kontorsmateriel",
+    "type": "income_statement"
+  },
+  "6150": {
+    "name": "Trycksaker",
+    "type": "income_statement"
+  },
+  "6200": {
+    "name": "Tele och post (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6210": {
+    "name": "Telekommunikation",
+    "type": "income_statement"
+  },
+  "6211": {
+    "name": "Fast telefoni",
+    "type": "income_statement"
+  },
+  "6212": {
+    "name": "Mobiltelefon",
+    "type": "income_statement"
+  },
+  "6213": {
+    "name": "Mobilskning",
+    "type": "income_statement"
+  },
+  "6214": {
+    "name": "Fax",
+    "type": "income_statement"
+  },
+  "6215": {
+    "name": "Telex",
+    "type": "income_statement"
+  },
+  "6230": {
+    "name": "Datakommunikation",
+    "type": "income_statement"
+  },
+  "6250": {
+    "name": "Postbefordran",
+    "type": "income_statement"
+  },
+  "6300": {
+    "name": "Fretagsfrskringar och vriga riskkostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6310": {
+    "name": "Fretagsfrskringar",
+    "type": "income_statement"
+  },
+  "6320": {
+    "name": "Sjlvrisker vid skada",
+    "type": "income_statement"
+  },
+  "6330": {
+    "name": "Frluster i pgende arbeten",
+    "type": "income_statement"
+  },
+  "6340": {
+    "name": "Lmnade skadestnd",
+    "type": "income_statement"
+  },
+  "6341": {
+    "name": "Lmnade skadestnd, avdragsgilla",
+    "type": "income_statement"
+  },
+  "6342": {
+    "name": "Lmnade skadestnd, ej avdragsgilla",
+    "type": "income_statement"
+  },
+  "6350": {
+    "name": "Frluster p kundfordringar",
+    "type": "income_statement"
+  },
+  "6351": {
+    "name": "Konstaterade frluster p kundfordringar",
+    "type": "income_statement"
+  },
+  "6352": {
+    "name": "Befarade frluster p kundfordringar",
+    "type": "income_statement"
+  },
+  "6360": {
+    "name": "Garantikostnader",
+    "type": "income_statement"
+  },
+  "6361": {
+    "name": "Frndring av garantiavsttning",
+    "type": "income_statement"
+  },
+  "6362": {
+    "name": "Faktiska garantikostnader",
+    "type": "income_statement"
+  },
+  "6370": {
+    "name": "Kostnader fr bevakning och larm",
+    "type": "income_statement"
+  },
+  "6380": {
+    "name": "Frluster p vriga kortfristiga fordringar",
+    "type": "income_statement"
+  },
+  "6390": {
+    "name": "vriga riskkostnader",
+    "type": "income_statement"
+  },
+  "6400": {
+    "name": "Frvaltningskostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6410": {
+    "name": "Styrelsearvoden som inte r ln",
+    "type": "income_statement"
+  },
+  "6420": {
+    "name": "Ersttningar till revisor",
+    "type": "income_statement"
+  },
+  "6421": {
+    "name": "Revision",
+    "type": "income_statement"
+  },
+  "6422": {
+    "name": "Revisonsverksamhet utver revision",
+    "type": "income_statement"
+  },
+  "6423": {
+    "name": "Skatterdgivning - revisor",
+    "type": "income_statement"
+  },
+  "6424": {
+    "name": "vriga tjnster - revisor",
+    "type": "income_statement"
+  },
+  "6430": {
+    "name": "Management fees",
+    "type": "income_statement"
+  },
+  "6440": {
+    "name": "rsredovisning och delrsrapporter",
+    "type": "income_statement"
+  },
+  "6450": {
+    "name": "Bolagsstmma/rs- eller freningsstmma",
+    "type": "income_statement"
+  },
+  "6490": {
+    "name": "vriga frvaltningskostnader",
+    "type": "income_statement"
+  },
+  "6500": {
+    "name": "vriga externa tjnster (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6510": {
+    "name": "Mtningskostnader",
+    "type": "income_statement"
+  },
+  "6520": {
+    "name": "Ritnings- och kopieringskostnader",
+    "type": "income_statement"
+  },
+  "6530": {
+    "name": "Redovisningstjnster",
+    "type": "income_statement"
+  },
+  "6540": {
+    "name": "IT-tjnster",
+    "type": "income_statement"
+  },
+  "6550": {
+    "name": "Konsultarvoden",
+    "type": "income_statement"
+  },
+  "6560": {
+    "name": "Serviceavgifter till branschorganisationer",
+    "type": "income_statement"
+  },
+  "6570": {
+    "name": "Bankkostnader",
+    "type": "income_statement"
+  },
+  "6580": {
+    "name": "Advokat- och rttegngskostnader",
+    "type": "income_statement"
+  },
+  "6590": {
+    "name": "vriga externa tjnster",
+    "type": "income_statement"
+  },
+  "6800": {
+    "name": "Inhyrd personal (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6810": {
+    "name": "Inhyrd produktionspersonal",
+    "type": "income_statement"
+  },
+  "6820": {
+    "name": "Inhyrd lagerpersonal",
+    "type": "income_statement"
+  },
+  "6830": {
+    "name": "Inhyrd transportpersonal",
+    "type": "income_statement"
+  },
+  "6840": {
+    "name": "Inhyrd kontors- och ekonomipersonal",
+    "type": "income_statement"
+  },
+  "6850": {
+    "name": "Inhyrd IT-personal",
+    "type": "income_statement"
+  },
+  "6860": {
+    "name": "Inhyrd marknads- och frsljningspersonal",
+    "type": "income_statement"
+  },
+  "6870": {
+    "name": "Inhyrd restaurang- och butikspersonal",
+    "type": "income_statement"
+  },
+  "6880": {
+    "name": "Inhyrda fretagsledare",
+    "type": "income_statement"
+  },
+  "6890": {
+    "name": "vrig inhyrd personal",
+    "type": "income_statement"
+  },
+  "6900": {
+    "name": "vriga externa kostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "6910": {
+    "name": "Licensavgifter och royalties",
+    "type": "income_statement"
+  },
+  "6920": {
+    "name": "Kostnader fr egna patent",
+    "type": "income_statement"
+  },
+  "6930": {
+    "name": "Kostnader fr varumrken m.m.",
+    "type": "income_statement"
+  },
+  "6940": {
+    "name": "Kontroll-, provnings- och stmpelavgifter",
+    "type": "income_statement"
+  },
+  "6950": {
+    "name": "Tillsynsavgifter myndigheter",
+    "type": "income_statement"
+  },
+  "6970": {
+    "name": "Tidningar, tidskrifter och facklitteratur",
+    "type": "income_statement"
+  },
+  "6980": {
+    "name": "Freningsavgifter",
+    "type": "income_statement"
+  },
+  "6981": {
+    "name": "Freningsavgifter, avdragsgilla",
+    "type": "income_statement"
+  },
+  "6982": {
+    "name": "Freningsavgifter, ej avdragsgilla",
+    "type": "income_statement"
+  },
+  "6990": {
+    "name": "vriga externa kostnader",
+    "type": "income_statement"
+  },
+  "6991": {
+    "name": "vriga externa kostnader, avdragsgilla",
+    "type": "income_statement"
+  },
+  "6992": {
+    "name": "vriga externa kostnader, ej avdragsgilla",
+    "type": "income_statement"
+  },
+  "6993": {
+    "name": "Lmnade bidrag och gvor",
+    "type": "income_statement"
+  },
+  "6996": {
+    "name": "Betald utlndsk inkomstskatt",
+    "type": "income_statement"
+  },
+  "6997": {
+    "name": "Obetald utlndsk inkomstskatt",
+    "type": "income_statement"
+  },
+  "6998": {
+    "name": "Utlndsk moms",
+    "type": "income_statement"
+  },
+  "6999": {
+    "name": "Ingende moms, blandad verksamhet",
+    "type": "income_statement"
+  },
+  "7000": {
+    "name": "Lner till kollektivanstllda (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7010": {
+    "name": "Lner till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7011": {
+    "name": "Lner till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7012": {
+    "name": "Vinstandelar till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7013": {
+    "name": "Lner till kollektivanstllda under 26 r",
+    "type": "income_statement"
+  },
+  "7014": {
+    "name": "Lner till kollektivanstllda (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7015": {
+    "name": "Lner till kollektivanstllda (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7016": {
+    "name": "Vinstandelar till kollektivanstllda (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7017": {
+    "name": "Avgngsvederlag till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7018": {
+    "name": "Bruttolneavdrag, kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7019": {
+    "name": "Upplupna lner och vinstandelar till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7030": {
+    "name": "Lner till kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7031": {
+    "name": "Lner till kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7032": {
+    "name": "Vinstandelar till kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7033": {
+    "name": "Lner till kollektivanstllda under 26 r (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7034": {
+    "name": "Lner till kollektivanstllda (nya pensionssystemet) (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7035": {
+    "name": "Lner till kollektivanstllda (avgiftsbefriade) (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7036": {
+    "name": "Vinstandelar till kollektivanstllda (avgiftsbefriade) (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7037": {
+    "name": "Avgngsvederlag till kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7038": {
+    "name": "Bruttolneavdrag, kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7039": {
+    "name": "Upplupna lner och vinstandelar till kollektivanstllda (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7080": {
+    "name": "Lner till kollektivanstllda fr ej arbetad tid",
+    "type": "income_statement"
+  },
+  "7081": {
+    "name": "Sjuklner till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7082": {
+    "name": "Semesterlner till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7083": {
+    "name": "Frldraersttning till kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7090": {
+    "name": "Frndring av semesterlneskuld",
+    "type": "income_statement"
+  },
+  "7200": {
+    "name": "Lner till tjnstemn och fretagsledare (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7210": {
+    "name": "Lner till tjnstemn",
+    "type": "income_statement"
+  },
+  "7211": {
+    "name": "Lner till tjnstemn",
+    "type": "income_statement"
+  },
+  "7212": {
+    "name": "Vinstandelar till tjnstemn",
+    "type": "income_statement"
+  },
+  "7213": {
+    "name": "Lner till tjnstemn under 26 r",
+    "type": "income_statement"
+  },
+  "7214": {
+    "name": "Lner till tjnstemn (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7215": {
+    "name": "Lner till tjnstemn (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7216": {
+    "name": "Vinstandelar till tjnstemn (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7217": {
+    "name": "Avgngsvederlag till tjnstemn",
+    "type": "income_statement"
+  },
+  "7218": {
+    "name": "Bruttolneavdrag, tjnstemn",
+    "type": "income_statement"
+  },
+  "7219": {
+    "name": "Upplupna lner och vinstandelar till tjnstemn",
+    "type": "income_statement"
+  },
+  "7220": {
+    "name": "Lner till fretagsledare",
+    "type": "income_statement"
+  },
+  "7221": {
+    "name": "Lner till fretagsledare",
+    "type": "income_statement"
+  },
+  "7222": {
+    "name": "Tantiem till fretagsledare",
+    "type": "income_statement"
+  },
+  "7223": {
+    "name": "Lner till fretagsledare under 26 r",
+    "type": "income_statement"
+  },
+  "7224": {
+    "name": "Lner till fretagsledare (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7225": {
+    "name": "Lner till fretagsledare (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7227": {
+    "name": "Avgngsvederlag till fretagsledare",
+    "type": "income_statement"
+  },
+  "7228": {
+    "name": "Bruttolneavdrag, fretagsledare",
+    "type": "income_statement"
+  },
+  "7229": {
+    "name": "Upplupna lner och tantiem till fretagsledare",
+    "type": "income_statement"
+  },
+  "7230": {
+    "name": "Lner till tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7231": {
+    "name": "Lner till tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7232": {
+    "name": "Vinstandelar till tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7233": {
+    "name": "Lner till tjnstemn och ftgsledare under 26 r (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7234": {
+    "name": "Lner till tjnstemn och ftgsledare (utlandsanstllda) (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7235": {
+    "name": "Lner till tjnstemn och ftgsledare (utlandsanstllda) (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7236": {
+    "name": "Vinstandelar till tjnstemn och ftgsledare (utlandsanstllda) (avgiftsbefriade)",
+    "type": "income_statement"
+  },
+  "7237": {
+    "name": "Avgngsvederlag till tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7238": {
+    "name": "Bruttolneavdrag, tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7239": {
+    "name": "Upplupna lner och vinstandelar till tjnstemn och ftgsledare (utlandsanstllda)",
+    "type": "income_statement"
+  },
+  "7240": {
+    "name": "Styrelsearvoden",
+    "type": "income_statement"
+  },
+  "7280": {
+    "name": "Lner till tjnstemn och fretagsledare fr ej arbetad tid",
+    "type": "income_statement"
+  },
+  "7281": {
+    "name": "Sjuklner till tjnstemn",
+    "type": "income_statement"
+  },
+  "7282": {
+    "name": "Sjuklner till fretagsledare",
+    "type": "income_statement"
+  },
+  "7283": {
+    "name": "Frldraersttning till tjnstemn",
+    "type": "income_statement"
+  },
+  "7284": {
+    "name": "Frldraersttning till fretagsledare",
+    "type": "income_statement"
+  },
+  "7285": {
+    "name": "Semesterlner till tjnstemn",
+    "type": "income_statement"
+  },
+  "7286": {
+    "name": "Semesterlner till fretagsledare",
+    "type": "income_statement"
+  },
+  "7288": {
+    "name": "vriga lner till tjnstemn fr ej arbetad tid",
+    "type": "income_statement"
+  },
+  "7289": {
+    "name": "vriga lner till fretagsledare fr ej arbetad tid",
+    "type": "income_statement"
+  },
+  "7290": {
+    "name": "Frndring av semesterlneskuld",
+    "type": "income_statement"
+  },
+  "7291": {
+    "name": "Frndring av semesterlneskuld till tjnstemn",
+    "type": "income_statement"
+  },
+  "7292": {
+    "name": "Frndring av semesterlneskuld till fretagsledare",
+    "type": "income_statement"
+  },
+  "7300": {
+    "name": "Kostnadsersttningar och frmner (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7310": {
+    "name": "Kontanta extraersttningar",
+    "type": "income_statement"
+  },
+  "7311": {
+    "name": "Ersttningar fr sammantrden m.m.",
+    "type": "income_statement"
+  },
+  "7312": {
+    "name": "Ersttningar fr frslagsverksamhet och uppfinningar",
+    "type": "income_statement"
+  },
+  "7313": {
+    "name": "Ersttningar fr/bidrag till bostadskostnader",
+    "type": "income_statement"
+  },
+  "7314": {
+    "name": "Ersttningar fr/bidrag till mltidskostnader",
+    "type": "income_statement"
+  },
+  "7315": {
+    "name": "Ersttningar fr/bidrag till resor till och frn arbetsplatsen",
+    "type": "income_statement"
+  },
+  "7316": {
+    "name": "Ersttningar fr/bidrag till arbetsklder",
+    "type": "income_statement"
+  },
+  "7317": {
+    "name": "Ersttningar fr/bidrag till arbetsmaterial och arbetsverktyg",
+    "type": "income_statement"
+  },
+  "7318": {
+    "name": "Felrkningspengar",
+    "type": "income_statement"
+  },
+  "7319": {
+    "name": "vriga kontanta extraersttningar",
+    "type": "income_statement"
+  },
+  "7320": {
+    "name": "Traktamenten vid tjnsteresa",
+    "type": "income_statement"
+  },
+  "7321": {
+    "name": "Skattefria traktamenten, Sverige",
+    "type": "income_statement"
+  },
+  "7322": {
+    "name": "Skattepliktiga traktamenten, Sverige",
+    "type": "income_statement"
+  },
+  "7323": {
+    "name": "Skattefria traktamenten, utlandet",
+    "type": "income_statement"
+  },
+  "7324": {
+    "name": "Skattepliktiga traktamenten, utlandet",
+    "type": "income_statement"
+  },
+  "7330": {
+    "name": "Bilersttningar",
+    "type": "income_statement"
+  },
+  "7331": {
+    "name": "Skattefria bilersttningar",
+    "type": "income_statement"
+  },
+  "7332": {
+    "name": "Skattepliktiga bilersttningar",
+    "type": "income_statement"
+  },
+  "7333": {
+    "name": "Ersttning fr trngselskatt, skattefri",
+    "type": "income_statement"
+  },
+  "7350": {
+    "name": "Ersttningar fr freskrivna arbetsklder",
+    "type": "income_statement"
+  },
+  "7370": {
+    "name": "Representationsersttningar",
+    "type": "income_statement"
+  },
+  "7380": {
+    "name": "Kostnader fr frmner till anstllda",
+    "type": "income_statement"
+  },
+  "7381": {
+    "name": "Kostnader fr fri bostad",
+    "type": "income_statement"
+  },
+  "7382": {
+    "name": "Kostnader fr fria eller subventionerade mltider",
+    "type": "income_statement"
+  },
+  "7383": {
+    "name": "Kostnader fr fria resor till och frn arbetsplatsen",
+    "type": "income_statement"
+  },
+  "7384": {
+    "name": "Kostnader fr fria eller subventionerade arbetsklder",
+    "type": "income_statement"
+  },
+  "7385": {
+    "name": "Kostnader fr fri bil",
+    "type": "income_statement"
+  },
+  "7386": {
+    "name": "Subventionerad rnta",
+    "type": "income_statement"
+  },
+  "7387": {
+    "name": "Kostnader fr lnedatorer",
+    "type": "income_statement"
+  },
+  "7388": {
+    "name": "Anstlldas ersttning fr erhllna frmner",
+    "type": "income_statement"
+  },
+  "7389": {
+    "name": "vriga kostnader fr frmner",
+    "type": "income_statement"
+  },
+  "7390": {
+    "name": "vriga kostnadsersttningar och frmner",
+    "type": "income_statement"
+  },
+  "7391": {
+    "name": "Kostnad fr trngselskattefrmn",
+    "type": "income_statement"
+  },
+  "7392": {
+    "name": "Kostnad fr frmn av hushllsnra tjnster",
+    "type": "income_statement"
+  },
+  "7399": {
+    "name": "Motkonto skattepliktiga frmner",
+    "type": "income_statement"
+  },
+  "7400": {
+    "name": "Pensionskostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7410": {
+    "name": "Pensionsfrskringspremier",
+    "type": "income_statement"
+  },
+  "7411": {
+    "name": "Premier fr kollektiva pensionsfrskringar",
+    "type": "income_statement"
+  },
+  "7412": {
+    "name": "Premier fr individuella pensionsfrskringar",
+    "type": "income_statement"
+  },
+  "7418": {
+    "name": "terbring frn frskringsfretag",
+    "type": "income_statement"
+  },
+  "7420": {
+    "name": "Frndring av pensionsskuld",
+    "type": "income_statement"
+  },
+  "7421": {
+    "name": "Direktpension, ej avdragsgill",
+    "type": "income_statement"
+  },
+  "7430": {
+    "name": "Avdrag fr rntedel i pensionskostnad",
+    "type": "income_statement"
+  },
+  "7440": {
+    "name": "Frndring av pensionsstiftelsekapital",
+    "type": "income_statement"
+  },
+  "7441": {
+    "name": "Avsttning till pensionsstiftelse",
+    "type": "income_statement"
+  },
+  "7448": {
+    "name": "Gottgrelse frn pensionsstiftelse",
+    "type": "income_statement"
+  },
+  "7460": {
+    "name": "Pensionsutbetalningar",
+    "type": "income_statement"
+  },
+  "7461": {
+    "name": "Pensionsutbetalningar till f.d. kollektivanstllda",
+    "type": "income_statement"
+  },
+  "7462": {
+    "name": "Pensionsutbetalningar till f.d. tjnstemn",
+    "type": "income_statement"
+  },
+  "7463": {
+    "name": "Pensionsutbetalningar till f.d. fretagsledare",
+    "type": "income_statement"
+  },
+  "7470": {
+    "name": "Frvaltnings- och kreditfrskringsavgifter",
+    "type": "income_statement"
+  },
+  "7490": {
+    "name": "vriga pensionskostnader",
+    "type": "income_statement"
+  },
+  "7500": {
+    "name": "Sociala och andra avgifter enligt lag och avtal (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7510": {
+    "name": "Lagstadgade sociala avgifter",
+    "type": "income_statement"
+  },
+  "7511": {
+    "name": "Sociala avgifter fr lner och ersttningar",
+    "type": "income_statement"
+  },
+  "7512": {
+    "name": "Sociala avgifter fr frmnsvrden",
+    "type": "income_statement"
+  },
+  "7515": {
+    "name": "Sociala avgifter p skattepliktiga kostnadsersttningar",
+    "type": "income_statement"
+  },
+  "7516": {
+    "name": "Sociala avgifter p arvoden",
+    "type": "income_statement"
+  },
+  "7518": {
+    "name": "Sociala avgifter p bruttolneavdrag m.m.",
+    "type": "income_statement"
+  },
+  "7519": {
+    "name": "Sociala avgifter fr semester- och lneskulder",
+    "type": "income_statement"
+  },
+  "7520": {
+    "name": "Arbetsgivaravgifter (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7521": {
+    "name": "Arbetsgivaravgifter fr lner och ersttningar (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7522": {
+    "name": "Arbetsgivaravgifter fr frmnsvrden (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7525": {
+    "name": "Arbetsgivaravgifter p skattepliktiga kostnadsersttningar (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7526": {
+    "name": "Arbetsgivaravgifter p arvoden (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7528": {
+    "name": "Arbetsgivaravgifter p bruttolneavdrag m.m. (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7529": {
+    "name": "Arbetsgivaravgifter fr semester- och lneskulder (nya pensionssystemet)",
+    "type": "income_statement"
+  },
+  "7530": {
+    "name": "Srskild lneskatt",
+    "type": "income_statement"
+  },
+  "7531": {
+    "name": "Srskild lneskatt fr vissa frskringsersttningar m.m.",
+    "type": "income_statement"
+  },
+  "7532": {
+    "name": "Srskild lneskatt pensionskostnader, deklarationspost",
+    "type": "income_statement"
+  },
+  "7533": {
+    "name": "Srskild lneskatt fr pensionskostnader",
+    "type": "income_statement"
+  },
+  "7550": {
+    "name": "Avkastningsskatt p pensionsmedel",
+    "type": "income_statement"
+  },
+  "7560": {
+    "name": "Arbetsgivaravgifter under 26 r",
+    "type": "income_statement"
+  },
+  "7570": {
+    "name": "Premier fr arbetsmarknadsfrskringar",
+    "type": "income_statement"
+  },
+  "7571": {
+    "name": "Arbetsmarknadsfrskringar",
+    "type": "income_statement"
+  },
+  "7572": {
+    "name": "Arbetsmarknadsfrskringar pensionsfrskringspremier, deklarationspost",
+    "type": "income_statement"
+  },
+  "7580": {
+    "name": "Gruppfrskringspremier",
+    "type": "income_statement"
+  },
+  "7581": {
+    "name": "Grupplivfrskringspremier",
+    "type": "income_statement"
+  },
+  "7582": {
+    "name": "Gruppsjukfrskringspremier",
+    "type": "income_statement"
+  },
+  "7583": {
+    "name": "Gruppolycksfallsfrskringspremier",
+    "type": "income_statement"
+  },
+  "7589": {
+    "name": "vriga gruppfrskringspremier",
+    "type": "income_statement"
+  },
+  "7590": {
+    "name": "vriga sociala och andra avgifter enligt lag och avtal",
+    "type": "income_statement"
+  },
+  "7600": {
+    "name": "vriga personalkostnader (gruppkonto)",
+    "type": "income_statement"
+  },
+  "7610": {
+    "name": "Utbildning",
+    "type": "income_statement"
+  },
+  "7620": {
+    "name": "Sjuk- och hlsovrd",
+    "type": "income_statement"
+  },
+  "7621": {
+    "name": "Sjuk- och hlsovrd, avdragsgill",
+    "type": "income_statement"
+  },
+  "7622": {
+    "name": "Sjuk- och hlsovrd, ej avdragsgill",
+    "type": "income_statement"
+  },
+  "7623": {
+    "name": "Sjukvrdsfrskring, ej avdragsgill",
+    "type": "income_statement"
+  },
+  "7630": {
+    "name": "Personalrepresentation",
+    "type": "income_statement"
+  },
+  "7631": {
+    "name": "Personalrepresentation, avdragsgill",
+    "type": "income_statement"
+  },
+  "7632": {
+    "name": "Personalrepresentation, ej avdragsgill",
+    "type": "income_statement"
+  },
+  "7650": {
+    "name": "Sjuklnefrskring",
+    "type": "income_statement"
+  },
+  "7670": {
+    "name": "Frndring av personalstiftelsekapital",
+    "type": "income_statement"
+  },
+  "7671": {
+    "name": "Avsttning till personalstiftelse",
+    "type": "income_statement"
+  },
+  "7678": {
+    "name": "Gottgrelse frn personalstiftelse",
+    "type": "income_statement"
+  },
+  "7690": {
+    "name": "vriga personalkostnader",
+    "type": "income_statement"
+  },
+  "7691": {
+    "name": "Personalrekrytering",
+    "type": "income_statement"
+  },
+  "7692": {
+    "name": "Begravningshjlp",
+    "type": "income_statement"
+  },
+  "7693": {
+    "name": "Fritidsverksamhet",
+    "type": "income_statement"
+  },
+  "7699": {
+    "name": "vriga personalkostnader",
+    "type": "income_statement"
+  },
+  "7710": {
+    "name": "Nedskrivningar av immateriella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7720": {
+    "name": "Nedskrivningar av byggnader och mark",
+    "type": "income_statement"
+  },
+  "7730": {
+    "name": "Nedskrivningar av maskiner och inventarier",
+    "type": "income_statement"
+  },
+  "7740": {
+    "name": "Nedskrivningar av vissa omsttningstillgngar",
+    "type": "income_statement"
+  },
+  "7760": {
+    "name": "terfring av nedskrivningar av immateriella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7770": {
+    "name": "terfring av nedskrivningar av byggnader och mark",
+    "type": "income_statement"
+  },
+  "7780": {
+    "name": "terfring av nedskrivningar av maskiner och inventarier",
+    "type": "income_statement"
+  },
+  "7790": {
+    "name": "terfring av nedskrivningar av vissa omsttningstillgngar",
+    "type": "income_statement"
+  },
+  "7810": {
+    "name": "Avskrivningar p immateriella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7811": {
+    "name": "Avskrivningar p balanserade utgifter",
+    "type": "income_statement"
+  },
+  "7812": {
+    "name": "Avskrivningar p koncessioner m.m.",
+    "type": "income_statement"
+  },
+  "7813": {
+    "name": "Avskrivningar p patent",
+    "type": "income_statement"
+  },
+  "7814": {
+    "name": "Avskrivningar p licenser",
+    "type": "income_statement"
+  },
+  "7815": {
+    "name": "Avskrivningar p varumrken",
+    "type": "income_statement"
+  },
+  "7816": {
+    "name": "Avskrivningar p hyresrtter",
+    "type": "income_statement"
+  },
+  "7817": {
+    "name": "Avskrivningar p goodwill",
+    "type": "income_statement"
+  },
+  "7819": {
+    "name": "Avskrivningar p vriga immateriella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7820": {
+    "name": "Avskrivningar p byggnader och markanlggningar",
+    "type": "income_statement"
+  },
+  "7821": {
+    "name": "Avskrivningar p byggnader",
+    "type": "income_statement"
+  },
+  "7824": {
+    "name": "Avskrivningar p markanlggningar",
+    "type": "income_statement"
+  },
+  "7829": {
+    "name": "Avskrivningar p vriga byggnader",
+    "type": "income_statement"
+  },
+  "7830": {
+    "name": "Avskrivningar p maskiner och inventarier",
+    "type": "income_statement"
+  },
+  "7831": {
+    "name": "Avskrivningar p maskiner och andra tekniska anlggningar",
+    "type": "income_statement"
+  },
+  "7832": {
+    "name": "Avskrivningar p inventarier och verktyg",
+    "type": "income_statement"
+  },
+  "7833": {
+    "name": "Avskrivningar p installationer",
+    "type": "income_statement"
+  },
+  "7834": {
+    "name": "Avskrivningar p bilar och andra transportmedel",
+    "type": "income_statement"
+  },
+  "7835": {
+    "name": "Avskrivningar p datorer",
+    "type": "income_statement"
+  },
+  "7836": {
+    "name": "Avskrivningar p leasade tillgngar",
+    "type": "income_statement"
+  },
+  "7839": {
+    "name": "Avskrivningar p vriga maskiner och inventarier",
+    "type": "income_statement"
+  },
+  "7840": {
+    "name": "Avskrivningar p frbttringsutgifter p annans fastighet",
+    "type": "income_statement"
+  },
+  "7940": {
+    "name": "Orealiserade positiva/negativa vrdefrndringar p skringsinstrument",
+    "type": "income_statement"
+  },
+  "7960": {
+    "name": "Valutakursfrluster p fordringar och skulder av rrelsekaraktr",
+    "type": "income_statement"
+  },
+  "7970": {
+    "name": "Frlust vid avyttring av immateriella och materiella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7971": {
+    "name": "Frlust vid avyttring av immateriella anlggningstillgngar",
+    "type": "income_statement"
+  },
+  "7972": {
+    "name": "Frlust vid avyttring av byggnader och mark",
+    "type": "income_statement"
+  },
+  "7973": {
+    "name": "Frlust vid avyttring av maskiner och inventarier",
+    "type": "income_statement"
+  },
+  "7990": {
+    "name": "vriga rrelsekostnader",
+    "type": "income_statement"
+  },
+  "8010": {
+    "name": "Utdelning p andelar i koncernfretag",
+    "type": "other"
+  },
+  "8012": {
+    "name": "Utdelning p andelar i dotterfretag",
+    "type": "other"
+  },
+  "8013": {
+    "name": "Utdelning p andelar i andra koncernfretag",
+    "type": "other"
+  },
+  "8014": {
+    "name": "Koncernbidrag",
+    "type": "other"
+  },
+  "8016": {
+    "name": "Insatsemission, koncernfretag",
+    "type": "other"
+  },
+  "8019": {
+    "name": "vriga utdelningar p andelar i koncernfretag",
+    "type": "other"
+  },
+  "8020": {
+    "name": "Resultat vid frsljning av andelar i koncernfretag",
+    "type": "other"
+  },
+  "8022": {
+    "name": "Resultat vid frsljning av andelar i dotterfretag",
+    "type": "other"
+  },
+  "8023": {
+    "name": "Resultat vid frsljning av andelar i andra koncernfretag",
+    "type": "other"
+  },
+  "8030": {
+    "name": "Resultatandelar frn handelsbolag (dotterfretag)",
+    "type": "other"
+  },
+  "8070": {
+    "name": "Nedskrivningar av andelar i och lngfristiga fordringar hos koncernfretag",
+    "type": "other"
+  },
+  "8072": {
+    "name": "Nedskrivningar av andelar i dotterfretag",
+    "type": "other"
+  },
+  "8073": {
+    "name": "Nedskrivningar av andelar i andra koncernfretag",
+    "type": "other"
+  },
+  "8076": {
+    "name": "Nedskrivningar av lngfristiga fordringar hos moderfretag",
+    "type": "other"
+  },
+  "8077": {
+    "name": "Nedskrivningar av lngfristiga fordringar hos dotterfretag",
+    "type": "other"
+  },
+  "8078": {
+    "name": "Nedskrivningar av lngfristiga fordringar hos andra koncernfretag",
+    "type": "other"
+  },
+  "8080": {
+    "name": "terfringar av nedskrivningar av andelar i och lngfristiga fordringar hos koncernfretag",
+    "type": "other"
+  },
+  "8082": {
+    "name": "terfringar av nedskrivningar av andelar i dotterfretag",
+    "type": "other"
+  },
+  "8083": {
+    "name": "terfringar av nedskrivningar av andelar i andra koncernfretag",
+    "type": "other"
+  },
+  "8086": {
+    "name": "terfringar av nedskrivningar av lngfristiga fordringar hos moderfretag",
+    "type": "other"
+  },
+  "8087": {
+    "name": "terfringar av nedskrivningar av lngfristiga fordringar hos dotterfretag",
+    "type": "other"
+  },
+  "8088": {
+    "name": "terfringar av nedskrivningar av lngfristiga fordringar hos andra koncernfretag",
+    "type": "other"
+  },
+  "8110": {
+    "name": "Utdelning p andelar i intressefretag",
+    "type": "other"
+  },
+  "8112": {
+    "name": "Utdelningar frn intressefretag",
+    "type": "other"
+  },
+  "8116": {
+    "name": "Insatsemission, intressefretag",
+    "type": "other"
+  },
+  "8120": {
+    "name": "Resultat vid frsljning av andelar i intressefretag",
+    "type": "other"
+  },
+  "8130": {
+    "name": "Resultatandelar frn handelsbolag (intressefretag)",
+    "type": "other"
+  },
+  "8170": {
+    "name": "Nedskrivningar av andelar i och lngfristiga fordringar hos intressefretag",
+    "type": "other"
+  },
+  "8171": {
+    "name": "Nedskrivningar av andelar i intressefretag",
+    "type": "other"
+  },
+  "8172": {
+    "name": "Nedskrivningar av lngfristiga fordringar hos intressefretag",
+    "type": "other"
+  },
+  "8180": {
+    "name": "terfringar av nedskrivningar av andelar i och lngfristiga fordringar hos intressefretag",
+    "type": "other"
+  },
+  "8181": {
+    "name": "terfringar av nedskrivningar av andelar i intressefretag",
+    "type": "other"
+  },
+  "8182": {
+    "name": "terfringar av nedskrivningar av lngfristiga fordringar hos intressefretag",
+    "type": "other"
+  },
+  "8210": {
+    "name": "Utdelningar p andelar i andra fretag",
+    "type": "other"
+  },
+  "8212": {
+    "name": "Utdelningar, vriga fretag",
+    "type": "other"
+  },
+  "8216": {
+    "name": "Insatsemissioner, vriga fretag",
+    "type": "other"
+  },
+  "8220": {
+    "name": "Resultat vid frsljning av vrdepapper i och lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8221": {
+    "name": "Resultat vid frsljning av andelar i andra fretag",
+    "type": "other"
+  },
+  "8222": {
+    "name": "Resultat vid frsljning av lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8223": {
+    "name": "Resultat vid frsljning av derivat (lngfristiga vrdepappersinnehav)",
+    "type": "other"
+  },
+  "8228": {
+    "name": "Vrdefrndring kapitalfrskring, skattemssig justering",
+    "type": "other"
+  },
+  "8230": {
+    "name": "Valutakursdifferenser p lngfristiga fordringar",
+    "type": "other"
+  },
+  "8231": {
+    "name": "Valutakursvinster p lngfristiga fordringar",
+    "type": "other"
+  },
+  "8236": {
+    "name": "Valutakursfrluster p lngfristiga fordringar",
+    "type": "other"
+  },
+  "8240": {
+    "name": "Resultatandelar frn handelsbolag (andra fretag)",
+    "type": "other"
+  },
+  "8250": {
+    "name": "Rnteintkter frn lngfristiga fordringar hos och vrdepapper i andra fretag",
+    "type": "other"
+  },
+  "8251": {
+    "name": "Rnteintkter frn lngfristiga fordringar",
+    "type": "other"
+  },
+  "8252": {
+    "name": "Rnteintkter frn vriga vrdepapper",
+    "type": "other"
+  },
+  "8254": {
+    "name": "Skattefria rnteintkter, lngfristiga tillgngar",
+    "type": "other"
+  },
+  "8260": {
+    "name": "Rnteintkter frn lngfristiga fordringar hos koncernfretag",
+    "type": "other"
+  },
+  "8261": {
+    "name": "Rnteintkter frn lngfristiga fordringar hos moderfretag",
+    "type": "other"
+  },
+  "8262": {
+    "name": "Rnteintkter frn lngfristiga fordringar hos dotterfretag",
+    "type": "other"
+  },
+  "8263": {
+    "name": "Rnteintkter frn lngfristiga fordringar hos andra koncernfretag",
+    "type": "other"
+  },
+  "8270": {
+    "name": "Nedskrivningar av innehav av andelar i och lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8271": {
+    "name": "Nedskrivningar av andelar i andra fretag",
+    "type": "other"
+  },
+  "8272": {
+    "name": "Nedskrivningar av lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8273": {
+    "name": "Nedskrivningar av vriga vrdepapper hos andra fretag",
+    "type": "other"
+  },
+  "8280": {
+    "name": "terfringar av nedskrivningar av andelar i och lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8281": {
+    "name": "terfringar av nedskrivningar av andelar i andra fretag",
+    "type": "other"
+  },
+  "8282": {
+    "name": "terfringar av nedskrivningar av lngfristiga fordringar hos andra fretag",
+    "type": "other"
+  },
+  "8283": {
+    "name": "terfringar av nedskrivningar av vriga vrdepapper i andra fretag",
+    "type": "other"
+  },
+  "8290": {
+    "name": "Vrdering till verkligt vrde, anlggningstillgngar",
+    "type": "other"
+  },
+  "8291": {
+    "name": "Orealiserade vrdefrndringar p anlggningstillgngar",
+    "type": "other"
+  },
+  "8295": {
+    "name": "Orealiserade vrdefrndringar p derivatinstrument",
+    "type": "other"
+  },
+  "8301": {
+    "name": "*Rnteintkt ej skattepl",
+    "type": "other"
+  },
+  "8310": {
+    "name": "Rnteintkter frn omsttningstillgngar",
+    "type": "other"
+  },
+  "8311": {
+    "name": "Rnteintkter frn bank",
+    "type": "other"
+  },
+  "8312": {
+    "name": "Rnteintkter frn kortfristiga placeringar",
+    "type": "other"
+  },
+  "8313": {
+    "name": "Rnteintkter frn kortfristiga fordringar",
+    "type": "other"
+  },
+  "8314": {
+    "name": "Skattefria rnteintkter",
+    "type": "other"
+  },
+  "8317": {
+    "name": "Rnteintkter fr dold rntekompensation",
+    "type": "other"
+  },
+  "8319": {
+    "name": "vriga rnteintkter frn omsttningstillgngar",
+    "type": "other"
+  },
+  "8320": {
+    "name": "Vrdering till verkligt vrde, omsttningstillgngar",
+    "type": "other"
+  },
+  "8321": {
+    "name": "Orealiserade vrdefrndringar p omsttningstillgngar",
+    "type": "other"
+  },
+  "8325": {
+    "name": "Orealiserade vrdefrndringar p derivatinstrument (oms.-tillg.)",
+    "type": "other"
+  },
+  "8330": {
+    "name": "Valutakursdifferenser p kortfristiga fordringar och placeringar",
+    "type": "other"
+  },
+  "8331": {
+    "name": "Valutakursvinster p kortfristiga fordringar och placeringar",
+    "type": "other"
+  },
+  "8336": {
+    "name": "Valutakursfrluster p kortfristiga fordringar och placeringar",
+    "type": "other"
+  },
+  "8340": {
+    "name": "Utdelningar p kortfristiga placeringar",
+    "type": "other"
+  },
+  "8350": {
+    "name": "Resultat vid frsljning av kortfristiga placeringar",
+    "type": "other"
+  },
+  "8360": {
+    "name": "vriga rnteintkter frn koncernfretag",
+    "type": "other"
+  },
+  "8361": {
+    "name": "vriga rnteintkter frn moderfretag",
+    "type": "other"
+  },
+  "8362": {
+    "name": "vriga rnteintkter frn dotterfretag",
+    "type": "other"
+  },
+  "8363": {
+    "name": "vriga rnteintkter frn andra koncernfretag",
+    "type": "other"
+  },
+  "8370": {
+    "name": "Nedskrivningar av kortfristiga placeringar",
+    "type": "other"
+  },
+  "8380": {
+    "name": "terfringar av nedskrivningar av kortfristiga placeringar",
+    "type": "other"
+  },
+  "8390": {
+    "name": "vriga finansiella intkter",
+    "type": "other"
+  },
+  "8398": {
+    "name": "Vrdefrndring kortfristig placering, skattemssig justering",
+    "type": "other"
+  },
+  "8400": {
+    "name": "Rntekostnader (gruppkonto)",
+    "type": "other"
+  },
+  "8410": {
+    "name": "Rntekostnader fr lngfristiga skulder",
+    "type": "other"
+  },
+  "8411": {
+    "name": "Rntekostnader fr obligations-, frlags- och konvertibla ln",
+    "type": "other"
+  },
+  "8412": {
+    "name": "Rntedel i rets pensionskostnad",
+    "type": "other"
+  },
+  "8413": {
+    "name": "Rntekostnader fr checkrkningskredit",
+    "type": "other"
+  },
+  "8414": {
+    "name": "Rntekostnader fr byggnadskreditiv",
+    "type": "other"
+  },
+  "8415": {
+    "name": "Rntekostnader fr andra skulder till kreditinstitut",
+    "type": "other"
+  },
+  "8417": {
+    "name": "Rntekostnader fr dold rntekompensation m.m.",
+    "type": "other"
+  },
+  "8418": {
+    "name": "Avdragspost fr rntesubventioner",
+    "type": "other"
+  },
+  "8419": {
+    "name": "vriga rntekostnader fr lngfristiga skulder",
+    "type": "other"
+  },
+  "8420": {
+    "name": "Rntekostnader fr kortfristiga skulder",
+    "type": "other"
+  },
+  "8421": {
+    "name": "Rntekostnader till kreditinstitut",
+    "type": "other"
+  },
+  "8422": {
+    "name": "Drjsmlsrntor fr leverantrsskulder",
+    "type": "other"
+  },
+  "8423": {
+    "name": "Rntekostnader fr skatter och avgifter",
+    "type": "other"
+  },
+  "8429": {
+    "name": "vriga rntekostnader fr kortfristiga skulder",
+    "type": "other"
+  },
+  "8430": {
+    "name": "Valutakursdifferenser p skulder",
+    "type": "other"
+  },
+  "8431": {
+    "name": "Valutakursvinster p skulder",
+    "type": "other"
+  },
+  "8436": {
+    "name": "Valutakursfrluster p skulder",
+    "type": "other"
+  },
+  "8440": {
+    "name": "Erhllna rntebidrag",
+    "type": "other"
+  },
+  "8450": {
+    "name": "Orealiserade vrdefrndringar p skulder",
+    "type": "other"
+  },
+  "8451": {
+    "name": "Orealiserade vrdefrndringar p skulder",
+    "type": "other"
+  },
+  "8455": {
+    "name": "Orealiserade vrdefrndringar p skringsinstrument",
+    "type": "other"
+  },
+  "8460": {
+    "name": "Rntekostnader till koncernfretag",
+    "type": "other"
+  },
+  "8461": {
+    "name": "Rntekostnader till moderfretag",
+    "type": "other"
+  },
+  "8462": {
+    "name": "Rntekostnader till dotterfretag",
+    "type": "other"
+  },
+  "8463": {
+    "name": "Rntekostnader till andra koncernfretag",
+    "type": "other"
+  },
+  "8480": {
+    "name": "Aktiverade rnteutgifter",
+    "type": "other"
+  },
+  "8490": {
+    "name": "vriga skuldrelaterade poster",
+    "type": "other"
+  },
+  "8491": {
+    "name": "Erhllet ackord p skulder till kreditinstitut m.m.",
+    "type": "other"
+  },
+  "8710": {
+    "name": "Extraordinra intkter",
+    "type": "other"
+  },
+  "8750": {
+    "name": "Extraordinra kostnader",
+    "type": "other"
+  },
+  "8810": {
+    "name": "Frndring av periodiseringsfond",
+    "type": "other"
+  },
+  "8811": {
+    "name": "Avsttning till periodiseringsfond",
+    "type": "other"
+  },
+  "8819": {
+    "name": "terfring frn periodiseringsfond",
+    "type": "other"
+  },
+  "8820": {
+    "name": "Mottagna koncernbidrag",
+    "type": "other"
+  },
+  "8830": {
+    "name": "Lmnade koncernbidrag",
+    "type": "other"
+  },
+  "8840": {
+    "name": "Lmnade gottgrelser",
+    "type": "other"
+  },
+  "8850": {
+    "name": "Frndring av veravskrivningar",
+    "type": "other"
+  },
+  "8851": {
+    "name": "Frndring av veravskrivningar, immateriella anlggningstillgngar",
+    "type": "other"
+  },
+  "8852": {
+    "name": "Frndring av veravskrivningar, byggnader och markanlggningar",
+    "type": "other"
+  },
+  "8853": {
+    "name": "Frndring av veravskrivningar, maskiner och inventarier",
+    "type": "other"
+  },
+  "8860": {
+    "name": "Frndring av ersttningsfond",
+    "type": "other"
+  },
+  "8861": {
+    "name": "Avsttning till ersttningsfond fr inventarier",
+    "type": "other"
+  },
+  "8862": {
+    "name": "Avsttning till ersttningsfond fr byggnader och markanlggningar",
+    "type": "other"
+  },
+  "8863": {
+    "name": "Avsttning till ersttningsfond fr mark",
+    "type": "other"
+  },
+  "8864": {
+    "name": "Avsttning till ersttningsfond fr djurlager i jordbruk och rensktsel",
+    "type": "other"
+  },
+  "8865": {
+    "name": "Iansprktagande av ersttningsfond fr avskrivningar",
+    "type": "other"
+  },
+  "8866": {
+    "name": "Iansprktagande av ersttningsfond fr annat n avskrivningar",
+    "type": "other"
+  },
+  "8869": {
+    "name": "terfring frn ersttningsfond",
+    "type": "other"
+  },
+  "8880": {
+    "name": "Frndring av obeskattade intkter",
+    "type": "other"
+  },
+  "8881": {
+    "name": "Avsttning till upphovsmannakonto",
+    "type": "other"
+  },
+  "8882": {
+    "name": "terfring frn upphovsmannakonto",
+    "type": "other"
+  },
+  "8885": {
+    "name": "Avsttning till skogskonto",
+    "type": "other"
+  },
+  "8886": {
+    "name": "terfring frn skogskonto",
+    "type": "other"
+  },
+  "8890": {
+    "name": "vriga bokslutsdispositioner",
+    "type": "other"
+  },
+  "8891": {
+    "name": "Frndring av skillnad mellan bokfrd och faktisk pensionsskuld",
+    "type": "other"
+  },
+  "8892": {
+    "name": "Nedskrivningar av konsolideringskaraktr av anlggningstillgngar",
+    "type": "other"
+  },
+  "8896": {
+    "name": "Frndring av lagerreserv",
+    "type": "other"
+  },
+  "8899": {
+    "name": "vriga bokslutsdispositioner",
+    "type": "other"
+  },
+  "8910": {
+    "name": "Skatt som belastar rets resultat",
+    "type": "other"
+  },
+  "8920": {
+    "name": "Skatt p grund av ndrad beskattning",
+    "type": "other"
+  },
+  "8930": {
+    "name": "Restituerad skatt",
+    "type": "other"
+  },
+  "8940": {
+    "name": "Uppskjuten skatt",
+    "type": "other"
+  },
+  "8980": {
+    "name": "vriga skatter",
+    "type": "other"
+  },
+  "8990": {
+    "name": "Resultat",
+    "type": "other"
+  },
+  "8999": {
+    "name": "rets resultat",
+    "type": "other"
+  }
+}

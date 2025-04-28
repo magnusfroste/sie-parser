@@ -1,0 +1,896 @@
+[
+  {
+    "series": "V",
+    "number": "1",
+    "date": "20220101",
+    "text": "Fregende rs resultat",
+    "transactions": [
+      {
+        "account": "2098",
+        "amount": 0.0,
+        "date": "20220101",
+        "text": "5769.50"
+      },
+      {
+        "account": "2099",
+        "amount": 0.0,
+        "date": "20220101",
+        "text": "-5769.50"
+      }
+    ],
+    "original_number": "1"
+  },
+  {
+    "series": "V",
+    "number": "2",
+    "date": "20220103",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220103",
+        "text": "-100.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220103",
+        "text": "100.00"
+      }
+    ],
+    "original_number": "2"
+  },
+  {
+    "series": "V",
+    "number": "3",
+    "date": "20220113",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220113",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220113",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220113",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220113",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "3"
+  },
+  {
+    "series": "V",
+    "number": "4",
+    "date": "20220202",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220202",
+        "text": "-100.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220202",
+        "text": "100.00"
+      }
+    ],
+    "original_number": "4"
+  },
+  {
+    "series": "V",
+    "number": "5",
+    "date": "20220203",
+    "text": "Sk5566161658",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220203",
+        "text": "-1142.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220203",
+        "text": "1142.00"
+      },
+      {
+        "account": "1650",
+        "amount": 0.0,
+        "date": "20220203",
+        "text": "-1142.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220203",
+        "text": "1142.00"
+      }
+    ],
+    "original_number": "5"
+  },
+  {
+    "series": "V",
+    "number": "6",
+    "date": "20220210",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220210",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220210",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220210",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220210",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "6"
+  },
+  {
+    "series": "V",
+    "number": "7",
+    "date": "20220303",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220303",
+        "text": "-100.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220303",
+        "text": "100.00"
+      }
+    ],
+    "original_number": "7"
+  },
+  {
+    "series": "V",
+    "number": "8",
+    "date": "20220310",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220310",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220310",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220310",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220310",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "8"
+  },
+  {
+    "series": "V",
+    "number": "9",
+    "date": "20220331",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220331",
+        "text": "-100.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220331",
+        "text": "100.00"
+      }
+    ],
+    "original_number": "9"
+  },
+  {
+    "series": "V",
+    "number": "10",
+    "date": "20220401",
+    "text": "Vinstdisposition",
+    "transactions": [
+      {
+        "account": "2091",
+        "amount": 0.0,
+        "date": "20220401",
+        "text": "5769.50"
+      },
+      {
+        "account": "2098",
+        "amount": 0.0,
+        "date": "20220401",
+        "text": "-5769.50"
+      }
+    ],
+    "original_number": "10"
+  },
+  {
+    "series": "V",
+    "number": "11",
+    "date": "20220408",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220408",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220408",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220408",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220408",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "11"
+  },
+  {
+    "series": "V",
+    "number": "12",
+    "date": "20220505",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220505",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220505",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "12"
+  },
+  {
+    "series": "V",
+    "number": "13",
+    "date": "20220509",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220509",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220509",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220509",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220509",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "13"
+  },
+  {
+    "series": "V",
+    "number": "14",
+    "date": "20220531",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220531",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220531",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "14"
+  },
+  {
+    "series": "V",
+    "number": "15",
+    "date": "20220610",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220610",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220610",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220610",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220610",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "15"
+  },
+  {
+    "series": "V",
+    "number": "16",
+    "date": "20220701",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220701",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220701",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "16"
+  },
+  {
+    "series": "V",
+    "number": "17",
+    "date": "20220708",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220708",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220708",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220708",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220708",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "17"
+  },
+  {
+    "series": "V",
+    "number": "18",
+    "date": "20220722",
+    "text": "Fondfrsljning",
+    "transactions": [
+      {
+        "account": "1351",
+        "amount": 0.0,
+        "date": "20220722",
+        "text": "-9999.98"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220722",
+        "text": "9732.41"
+      },
+      {
+        "account": "8350",
+        "amount": 0.0,
+        "date": "20220722",
+        "text": "267.57"
+      }
+    ],
+    "original_number": "18"
+  },
+  {
+    "series": "V",
+    "number": "19",
+    "date": "20220801",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220801",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220801",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "19"
+  },
+  {
+    "series": "V",
+    "number": "20",
+    "date": "20220815",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220815",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220815",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220815",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220815",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "20"
+  },
+  {
+    "series": "V",
+    "number": "21",
+    "date": "20220831",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220831",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20220831",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "21"
+  },
+  {
+    "series": "V",
+    "number": "22",
+    "date": "20220908",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220908",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20220908",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20220908",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20220908",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "22"
+  },
+  {
+    "series": "V",
+    "number": "23",
+    "date": "20221003",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221003",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20221003",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "23"
+  },
+  {
+    "series": "V",
+    "number": "24",
+    "date": "20221010",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221010",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221010",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221010",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20221010",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "24"
+  },
+  {
+    "series": "V",
+    "number": "25",
+    "date": "20221102",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221102",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20221102",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "25"
+  },
+  {
+    "series": "V",
+    "number": "26",
+    "date": "20221110",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221110",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221110",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221110",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20221110",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "26"
+  },
+  {
+    "series": "V",
+    "number": "27",
+    "date": "20221201",
+    "text": "Banktjnster",
+    "transactions": [
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221201",
+        "text": "-120.00"
+      },
+      {
+        "account": "6570",
+        "amount": 0.0,
+        "date": "20221201",
+        "text": "120.00"
+      }
+    ],
+    "original_number": "27"
+  },
+  {
+    "series": "V",
+    "number": "28",
+    "date": "20221206",
+    "text": "Sk5566161658",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221206",
+        "text": "11364.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221206",
+        "text": "-11364.00"
+      },
+      {
+        "account": "1640",
+        "amount": 0.0,
+        "date": "20221206",
+        "text": "-10417.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221206",
+        "text": "11364.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20221206",
+        "text": "-947.00"
+      }
+    ],
+    "original_number": "28"
+  },
+  {
+    "series": "V",
+    "number": "29",
+    "date": "20221208",
+    "text": "Skatteverket",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221208",
+        "text": "947.00"
+      },
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221208",
+        "text": "-947.00"
+      },
+      {
+        "account": "1930",
+        "amount": 0.0,
+        "date": "20221208",
+        "text": "-947.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20221208",
+        "text": "947.00"
+      }
+    ],
+    "original_number": "29"
+  },
+  {
+    "series": "V",
+    "number": "30",
+    "date": "20221231",
+    "text": "Skattekonto",
+    "transactions": [
+      {
+        "account": "1630",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "12.00"
+      },
+      {
+        "account": "8314",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "-12.00"
+      }
+    ],
+    "original_number": "30"
+  },
+  {
+    "series": "V",
+    "number": "31",
+    "date": "20221231",
+    "text": "rets resultat",
+    "transactions": [
+      {
+        "account": "2099",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "1615.57"
+      },
+      {
+        "account": "8999",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "-1615.57"
+      }
+    ],
+    "original_number": "31"
+  },
+  {
+    "series": "V",
+    "number": "32",
+    "date": "20221231",
+    "text": "Annullering av V31: rets resultat",
+    "transactions": [
+      {
+        "account": "2099",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "-1615.57"
+      },
+      {
+        "account": "8999",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "1615.57"
+      }
+    ],
+    "original_number": "32"
+  },
+  {
+    "series": "V",
+    "number": "33",
+    "date": "20221231",
+    "text": "Skattefordran",
+    "transactions": [
+      {
+        "account": "1640",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "10417.00"
+      },
+      {
+        "account": "2510",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "-10417.00"
+      }
+    ],
+    "original_number": "33"
+  },
+  {
+    "series": "V",
+    "number": "34",
+    "date": "20221231",
+    "text": "rets resultat",
+    "transactions": [
+      {
+        "account": "2099",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "1615.57"
+      },
+      {
+        "account": "8999",
+        "amount": 0.0,
+        "date": "20221231",
+        "text": "-1615.57"
+      }
+    ],
+    "original_number": "34"
+  }
+]
