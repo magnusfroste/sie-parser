@@ -33,7 +33,7 @@
                 <div class="tabs">
                     <button class="tab-btn active" data-tab="summary">Summary</button>
                     <button class="tab-btn" data-tab="balance">Balance Sheet</button>
-                    <button class="tab-btn" data-tab="income">Income Statement</button>
+                    <button class="tab-btn" data-tab="income">P&L Report</button>
                     <button class="tab-btn" data-tab="opening">Opening Balance</button>
                     <button class="tab-btn" data-tab="ledger">Ledger</button>
                     <button class="tab-btn" data-tab="transactions">Transactions</button>
@@ -78,13 +78,7 @@
                     </div>
                     
                     <div id="balance-tab" class="tab-pane">
-                        <div class="filter-controls">
-                            <label class="toggle-checkbox">
-                                <input type="checkbox" id="balance-show-non-zero" checked>
-                                <span class="checkbox-text">Show only accounts with values</span>
-                            </label>
-                        </div>
-                        <div id="balance-sheet-content">
+                        <div id="balance-sheet-tab">
                             <!-- Balance sheet content will be populated here -->
                         </div>
                     </div>

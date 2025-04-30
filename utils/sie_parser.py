@@ -170,7 +170,9 @@ class SIEParser:
                 # Remove the quotes and add to values
                 values.append(quoted_value[1:-1] if quoted_value.endswith('"') else quoted_value[1:])
             elif parts[i]:  # Skip empty parts
-                values.append(parts[i])
+                # Clean up the value - remove any non-standard characters that might affect parsing
+                clean_value = parts[i].strip()
+                values.append(clean_value)
             
             i += 1
         
@@ -363,82 +365,86 @@ class SIEParser:
                     trans_text = parts[4]
                     
         elif program_name == "fortnox":
-            # Fortnox specific parsing
+            # Fortnox specific parsing based on the provided example
             if len(parts) >= 2:
                 account = parts[1]
-            if len(parts) >= 3:
+            
+            # Check for empty object notation {} which is common in Fortnox files
+            # Skip the empty object if present
+            amount_index = 2
+            for i in range(2, len(parts)):
+                if parts[i] == '{}':
+                    amount_index = i + 1
+                    break
+            
+            # Parse amount from the correct position (usually after {})
+            if amount_index < len(parts):
                 try:
-                    amount = float(parts[2])
-                except ValueError:
-                    amount = 0.0
-            if len(parts) >= 4:
-                trans_date = parts[3]
-            if len(parts) >= 5:
-                trans_text = parts[4]
+                    # Handle both dot and comma as decimal separators
+                    amount_str = parts[amount_index].replace(',', '.')
+                    amount = float(amount_str)
+                    print(f"Fortnox transaction amount parsed: {amount} for account {account}")
+                except (ValueError, TypeError):
+                    # Try to find any numeric value in the string
+                    import re
+                    numeric_match = re.search(r'-?\d+\.?\d*', parts[amount_index])
+                    if numeric_match:
+                        try:
+                            amount = float(numeric_match.group())
+                            print(f"Extracted numeric amount from Fortnox transaction: {amount}")
+                        except ValueError:
+                            amount = 0.0
+                            print(f"Failed to parse extracted amount for Fortnox transaction")
+                    else:
+                        amount = 0.0
+                        print(f"No numeric value found in Fortnox transaction: {parts[amount_index]}")
+            
+            # Look for text in quoted strings
+            for i in range(amount_index + 1, len(parts)):
+                if parts[i].startswith('"') and parts[i].endswith('"'):
+                    trans_text = parts[i][1:-1]  # Remove quotes
+                    break
+                elif parts[i].startswith('"'):
+                    # Start of a multi-part quoted string
+                    text_parts = [parts[i][1:]]  # Remove opening quote
+                    j = i + 1
+                    while j < len(parts) and not parts[j].endswith('"'):
+                        text_parts.append(parts[j])
+                        j += 1
+                    if j < len(parts):
+                        text_parts.append(parts[j][:-1])  # Remove closing quote
+                    trans_text = ' '.join(text_parts)
+                    break
+            
+            # Look for date in YYYYMMDD format
+            for i in range(2, len(parts)):
+                if len(parts[i]) == 8 and parts[i].isdigit():
+                    trans_date = parts[i]
+                    break
+            
+            # Debug output for Fortnox transactions
+            print(f"Parsed Fortnox transaction: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}")
                 
         elif program_name == "bokio":
             # Bokio specific parsing
             if len(parts) >= 2:
                 account = parts[1]
             if len(parts) >= 3:
-                # In Bokio, the amount is often in the first position (verification number)
-                # or in the second position (date)
-                if current_ver and hasattr(current_ver, 'number'):
-                    try:
-                        # Try to convert verification number to float
-                        ver_amount = float(current_ver.number)
-                        if ver_amount != 0:
-                            amount = ver_amount
-                            # Store the original verification number in a new field
-                            if not hasattr(current_ver, 'original_number') or not current_ver.original_number:
-                                current_ver.original_number = current_ver.number
-                            # Use a standard verification format (V1, V2, etc.)
-                            if not current_ver.series:
-                                current_ver.series = 'V'
-                            # Extract verification number from the original verification data
-                            if not current_ver.number or current_ver.number == str(ver_amount):
-                                # If the number is just the amount, use the index in the file
-                                ver_index = len(self.data['verifications']) + 1
-                                current_ver.number = str(ver_index)
-                    except (ValueError, TypeError):
-                        pass
+                # In Bokio, the amount is in position 2 (not in the date field)
+                try:
+                    amount = float(parts[2])
+                except ValueError:
+                    amount = 0.0
                 
-                # If amount is still 0, check the date field
-                if amount == 0 and current_ver and hasattr(current_ver, 'date'):
-                    try:
-                        # Try to convert date to float if it's not a valid date format
-                        if not (len(current_ver.date) == 8 and current_ver.date.isdigit()):
-                            date_amount = float(current_ver.date.replace('-', '.'))
-                            if date_amount != 0:
-                                amount = date_amount
-                                # Store the original date in a new field
-                                if not hasattr(current_ver, 'original_date') or not current_ver.original_date:
-                                    current_ver.original_date = current_ver.date
-                                # Use transaction date instead
-                                if len(parts) >= 4 and len(parts[3]) == 8 and parts[3].isdigit():
-                                    current_ver.date = parts[3]
-                                else:
-                                    # Use a default date if none available
-                                    current_ver.date = self.data['metadata'].get('date', '')
-                        else:
-                            # Try to parse the amount from position 2
-                            try:
-                                amount = float(parts[2])
-                            except ValueError:
-                                amount = 0.0
-                    except (ValueError, TypeError):
-                        # If conversion fails, try the standard position
-                        try:
-                            amount = float(parts[2])
-                        except ValueError:
-                            amount = 0.0
-                else:
-                    # Try standard position if other methods failed
-                    try:
-                        amount = float(parts[2])
-                    except ValueError:
-                        amount = 0.0
+                # Don't use verification number or date for amount
+                if current_ver:
+                    # Store the original verification number and date
+                    if not hasattr(current_ver, 'original_number') or not current_ver.original_number:
+                        current_ver.original_number = current_ver.number
+                    if not hasattr(current_ver, 'original_date') or not current_ver.original_date:
+                        current_ver.original_date = current_ver.date
             
+            # Handle date properly - don't use it for amount
             if len(parts) >= 4:
                 # Check if this is a date (YYYYMMDD format)
                 if len(parts[3]) == 8 and parts[3].isdigit():
@@ -448,7 +454,7 @@ class SIEParser:
             if len(parts) >= 5:
                 if not trans_text:
                     trans_text = parts[4]
-                
+        
         else:
             # Generic parsing with smart detection for unknown programs
             if len(parts) >= 2:
@@ -499,6 +505,9 @@ class SIEParser:
                 pass
         
         transaction = Transaction(account, amount, trans_date, trans_text)
+        
+        # Debug output for transaction creation
+        print(f"Created transaction: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}")
         
         # Initialize transactions list if it doesn't exist
         if not hasattr(current_ver, 'transactions'):
