@@ -19,6 +19,7 @@ class Account:
     name: str
     type: str = ""  # Asset, Liability, Equity, Income, Expense
     balance: float = 0.0
+    transactions_amount: float = 0.0
     
     def to_dict(self):
         return asdict(self)
@@ -66,6 +67,8 @@ class BalanceEntry:
     account: str
     amount: float
     year: str = ""
+    had_transactions: bool = False
+    transaction_amount: float = 0.0
     
     def to_dict(self):
         return asdict(self)
@@ -290,25 +293,55 @@ class SIEDataModel:
         """
         Calculate current balances for all accounts based on opening balances and transactions.
         """
-        # Start with opening balances
+        # Get the current financial year
         current_year = self.metadata.financial_year_start[:4]
         
-        # Initialize all accounts with zero balance
+        # Initialize all accounts with zero balance and zero transactions
         for acc_num, account in self.accounts.items():
             account.balance = 0.0
+            account.transactions_amount = 0.0  # Track transactions separately
         
-        # Add opening balances
-        if current_year in self.opening_balances:
-            for acc_num, balance_entry in self.opening_balances[current_year].items():
+        # Find the correct opening balance year key
+        # In SIE files, opening balances are typically stored with negative year offsets
+        opening_balance_year = None
+        for year_key in self.opening_balances.keys():
+            # Use the first year key found (typically -12, -11, etc.)
+            opening_balance_year = year_key
+            break
+        
+        # Add opening balances using the first available year key
+        if opening_balance_year and opening_balance_year in self.opening_balances:
+            for acc_num, balance_entry in self.opening_balances[opening_balance_year].items():
                 if acc_num in self.accounts:
                     self.accounts[acc_num].balance = balance_entry.amount
         
-        # Add transaction amounts
+        # Track accounts with transactions
+        accounts_with_transactions = set()
+        
+        # Add transaction amounts - only for the current year
         for verification in self.verifications:
-            for transaction in verification.transactions:
-                acc_num = transaction.account
-                if acc_num in self.accounts:
-                    self.accounts[acc_num].balance += transaction.amount
+            # Check if the verification is for the current year
+            if verification.date and verification.date.startswith(current_year):
+                for transaction in verification.transactions:
+                    acc_num = transaction.account
+                    if acc_num in self.accounts:
+                        self.accounts[acc_num].balance += transaction.amount
+                        self.accounts[acc_num].transactions_amount += transaction.amount
+                        accounts_with_transactions.add(acc_num)
+                    
+        # Store closing balances and transaction info
+        if current_year not in self.closing_balances:
+            self.closing_balances[current_year] = {}
+            
+        for acc_num, account in self.accounts.items():
+            if account.balance != 0:
+                # Create a balance entry for the closing balance
+                balance_entry = BalanceEntry(account=acc_num, amount=account.balance, year=current_year)
+                # Add a flag to indicate if this account had transactions
+                balance_entry.had_transactions = acc_num in accounts_with_transactions
+                # Add the transaction amount for this account
+                balance_entry.transaction_amount = getattr(account, 'transactions_amount', 0.0)
+                self.closing_balances[current_year][acc_num] = balance_entry
     
     def get_balance_sheet(self) -> Dict[str, Any]:
         """
