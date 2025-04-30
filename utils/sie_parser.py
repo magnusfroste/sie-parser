@@ -1,6 +1,7 @@
 import codecs
 import re
 from datetime import datetime
+from utils.data_model import SIEDataModel, Transaction, Verification
 
 class SIEParser:
     """
@@ -22,6 +23,7 @@ class SIEParser:
             'name': None,
             'version': None
         }
+        self.data_model = SIEDataModel()
     
     def parse(self):
         """Parse the SIE file and return structured data."""
@@ -50,10 +52,14 @@ class SIEParser:
                         self._parse_fnamn(line)
                     elif line.startswith('#ORGNR'):
                         self._parse_orgnr(line)
-                    elif line.startswith('#RAR'):
-                        self._parse_rar(line)
+                    elif line.startswith('#ADRESS'):
+                        self._parse_adress(line)
+                    elif line.startswith('#KPTYP'):
+                        self._parse_kptyp(line)
                     elif line.startswith('#KONTO'):
                         self._parse_konto(line)
+                    elif line.startswith('#SRU'):
+                        self._parse_sru(line)
                     elif line.startswith('#IB'):
                         self._parse_ib(line)
                     elif line.startswith('#UB'):
@@ -61,18 +67,82 @@ class SIEParser:
                     elif line.startswith('#RES'):
                         self._parse_res(line)
                     elif line.startswith('#VER'):
+                        # Start a new verification
+                        if current_ver:
+                            self.data['verifications'].append(current_ver)
                         current_ver = self._parse_ver(line)
-                        self.data['verifications'].append(current_ver)
-                    elif line.startswith('#TRANS') and current_ver is not None:
+                    elif line.startswith('#TRANS') and current_ver:
+                        # Add transaction to current verification
                         self._parse_trans(line, current_ver)
+                    elif line.startswith('#RTRANS') and current_ver:
+                        # Add reversed transaction to current verification
+                        self._parse_rtrans(line, current_ver)
+                    elif line.startswith('#BTRANS') and current_ver:
+                        # Add budget transaction
+                        self._parse_btrans(line)
+                    elif line.startswith('{'):
+                        # Start of verification block, already handled
+                        pass
+                    elif line.startswith('}'):
+                        # End of verification block
+                        if current_ver:
+                            self.data['verifications'].append(current_ver)
+                            current_ver = None
                 
-                # Process and organize the data
-                self._process_data()
+                # Add the last verification if not already added
+                if current_ver:
+                    self.data['verifications'].append(current_ver)
                 
-                return self.data
+                try:
+                    # Calculate account balances
+                    print("Calculating account balances...")
+                    self._calculate_account_balances()
+                    print("Account balances calculated successfully")
+                    
+                    # Process data
+                    print("Processing data...")
+                    self._process_data()
+                    print("Data processed successfully")
+                    
+                    # Convert to standardized data model
+                    print("Converting to standardized data model...")
+                    print(f"Verification count: {len(self.data['verifications'])}")
+                    if len(self.data['verifications']) > 0:
+                        print(f"First verification type: {type(self.data['verifications'][0])}")
+                        print(f"First verification attributes: {dir(self.data['verifications'][0])}")
+                        if hasattr(self.data['verifications'][0], 'transactions'):
+                            print(f"First verification transactions type: {type(self.data['verifications'][0].transactions)}")
+                            print(f"First verification transactions count: {len(self.data['verifications'][0].transactions)}")
+                            if len(self.data['verifications'][0].transactions) > 0:
+                                print(f"First transaction type: {type(self.data['verifications'][0].transactions[0])}")
+                                print(f"First transaction attributes: {dir(self.data['verifications'][0].transactions[0])}")
+                    
+                    # Create a deep copy of the data to avoid modifying the original
+                    import copy
+                    data_copy = copy.deepcopy(self.data)
+                    
+                    # Convert verifications to dictionaries before passing to data model
+                    for i, ver in enumerate(data_copy['verifications']):
+                        if hasattr(ver, 'to_dict'):
+                            data_copy['verifications'][i] = ver.to_dict()
+                        elif hasattr(ver, '__dict__'):
+                            data_copy['verifications'][i] = ver.__dict__
+                    
+                    self.data_model = SIEDataModel().from_parser_data(data_copy)
+                    print("Conversion to data model successful")
+                    
+                    return self.data_model.to_dict()
+                except Exception as e:
+                    import traceback
+                    print(f"Error in data processing: {e}")
+                    print(traceback.format_exc())
+                    return None
                 
         except Exception as e:
-            raise Exception(f"Error parsing SIE file: {str(e)}")
+            print(f"Error parsing SIE file: {e}")
+            import traceback
+            print(traceback.format_exc())
+            return None
     
     def _extract_quoted_string(self, text):
         """Extract string enclosed in quotes."""
@@ -246,13 +316,20 @@ class SIEParser:
         if len(parts) >= 5:
             ver_text = parts[4]
         
-        return {
-            'series': series,
-            'number': ver_number,
-            'date': ver_date,
-            'text': ver_text,
-            'transactions': []
-        }
+        print(f"Creating verification: series={series}, number={ver_number}, date={ver_date}, text={ver_text}")
+        
+        # Create a Verification object with keyword arguments
+        verification = Verification(
+            series=series,
+            number=ver_number,
+            date=ver_date,
+            text=ver_text
+        )
+        
+        # Initialize the transactions list
+        verification.transactions = []
+        
+        return verification
     
     def _parse_trans(self, line, current_ver):
         """Parse #TRANS section (transaction)."""
@@ -306,43 +383,43 @@ class SIEParser:
             if len(parts) >= 3:
                 # In Bokio, the amount is often in the first position (verification number)
                 # or in the second position (date)
-                if current_ver and 'number' in current_ver:
+                if current_ver and hasattr(current_ver, 'number'):
                     try:
                         # Try to convert verification number to float
-                        ver_amount = float(current_ver['number'])
+                        ver_amount = float(current_ver.number)
                         if ver_amount != 0:
                             amount = ver_amount
                             # Store the original verification number in a new field
-                            if 'original_number' not in current_ver:
-                                current_ver['original_number'] = current_ver['number']
+                            if not hasattr(current_ver, 'original_number') or not current_ver.original_number:
+                                current_ver.original_number = current_ver.number
                             # Use a standard verification format (V1, V2, etc.)
-                            if not current_ver.get('series'):
-                                current_ver['series'] = 'V'
+                            if not current_ver.series:
+                                current_ver.series = 'V'
                             # Extract verification number from the original verification data
-                            if not current_ver['number'] or current_ver['number'] == str(ver_amount):
+                            if not current_ver.number or current_ver.number == str(ver_amount):
                                 # If the number is just the amount, use the index in the file
                                 ver_index = len(self.data['verifications']) + 1
-                                current_ver['number'] = str(ver_index)
+                                current_ver.number = str(ver_index)
                     except (ValueError, TypeError):
                         pass
                 
                 # If amount is still 0, check the date field
-                if amount == 0 and current_ver and 'date' in current_ver:
+                if amount == 0 and current_ver and hasattr(current_ver, 'date'):
                     try:
                         # Try to convert date to float if it's not a valid date format
-                        if not (len(current_ver['date']) == 8 and current_ver['date'].isdigit()):
-                            date_amount = float(current_ver['date'].replace('-', '.'))
+                        if not (len(current_ver.date) == 8 and current_ver.date.isdigit()):
+                            date_amount = float(current_ver.date.replace('-', '.'))
                             if date_amount != 0:
                                 amount = date_amount
                                 # Store the original date in a new field
-                                if 'original_date' not in current_ver:
-                                    current_ver['original_date'] = current_ver['date']
+                                if not hasattr(current_ver, 'original_date') or not current_ver.original_date:
+                                    current_ver.original_date = current_ver.date
                                 # Use transaction date instead
                                 if len(parts) >= 4 and len(parts[3]) == 8 and parts[3].isdigit():
-                                    current_ver['date'] = parts[3]
+                                    current_ver.date = parts[3]
                                 else:
                                     # Use a default date if none available
-                                    current_ver['date'] = self.data['metadata'].get('date', '')
+                                    current_ver.date = self.data['metadata'].get('date', '')
                         else:
                             # Try to parse the amount from position 2
                             try:
@@ -391,8 +468,10 @@ class SIEParser:
                         # If we can convert it to a float, it's probably an amount
                         second_amount = float(parts[3])
                         # If the previous amount is 0 or this looks more like an amount, use this one
-                        if amount == 0.0 or (abs(second_amount) > 1000 and abs(amount) < 100):
+                        if amount == 0 or (abs(second_amount) > 0 and abs(second_amount) < 10000000):
                             amount = second_amount
+                        else:
+                            trans_text = parts[3]
                     except ValueError:
                         # Not a number, treat as text
                         if not trans_text:
@@ -405,17 +484,89 @@ class SIEParser:
                     trans_text = parts[4]
         
         # If we still don't have a date, use the verification date
-        if not trans_date:
-            trans_date = current_ver['date']
-            
-        transaction = {
-            'account': account,
-            'amount': amount,
-            'date': trans_date,
-            'text': trans_text
-        }
+        if not trans_date and hasattr(current_ver, 'date'):
+            trans_date = current_ver.date
         
-        current_ver['transactions'].append(transaction)
+        # Check if the trans_text is actually an amount (common in Bokio files)
+        if amount == 0 and trans_text:
+            # Try to convert text to float if it looks like a number
+            try:
+                # Check if the text is just a number
+                if re.match(r'^-?\d+(\.\d+)?$', trans_text):
+                    amount = float(trans_text)
+                    trans_text = ""  # Clear the text since it was just the amount
+            except (ValueError, TypeError):
+                pass
+        
+        transaction = Transaction(account, amount, trans_date, trans_text)
+        
+        # Initialize transactions list if it doesn't exist
+        if not hasattr(current_ver, 'transactions'):
+            current_ver.transactions = []
+            
+        current_ver.transactions.append(transaction)
+    
+    def _parse_adress(self, line):
+        """Parse #ADRESS section (company address)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 2:
+            self.data['metadata']['address'] = parts[1]
+        if len(parts) >= 3:
+            self.data['metadata']['postal_code'] = parts[2]
+        if len(parts) >= 4:
+            self.data['metadata']['city'] = parts[3]
+    
+    def _parse_kptyp(self, line):
+        """Parse #KPTYP section (account type)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 2:
+            self.data['metadata']['account_type'] = parts[1]
+    
+    def _parse_sru(self, line):
+        """Parse #SRU section (SRU code)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 3:
+            account = parts[1]
+            sru_code = parts[2]
+            
+            if account in self.data['accounts']:
+                self.data['accounts'][account]['sru_code'] = sru_code
+    
+    def _parse_rtrans(self, line, current_ver):
+        """Parse #RTRANS section (reversed transaction)."""
+        # Handle reversed transaction similar to normal transaction
+        # but with the amount negated
+        parts = self._extract_values(line)
+        account = ""
+        amount = 0.0
+        trans_date = ""
+        trans_text = ""
+        
+        if len(parts) >= 2:
+            account = parts[1]
+        if len(parts) >= 3:
+            try:
+                # Negate the amount for reversed transactions
+                amount = -float(parts[2])
+            except ValueError:
+                amount = 0.0
+        if len(parts) >= 4:
+            trans_date = parts[3]
+        if len(parts) >= 5:
+            trans_text = parts[4]
+        
+        # If we still don't have a date, use the verification date
+        if not trans_date:
+            trans_date = current_ver.date
+            
+        transaction = Transaction(account, amount, trans_date, trans_text)
+        current_ver.transactions.append(transaction)
+    
+    def _parse_btrans(self, line):
+        """Parse #BTRANS section (budget transaction)."""
+        # Budget transactions are not currently used in the data model
+        # but we parse them to avoid errors
+        pass
     
     def _determine_account_type(self, account_number):
         """Determine account type based on Swedish BAS standard."""
@@ -441,9 +592,20 @@ class SIEParser:
         account_totals = {}
         
         for ver in self.data['verifications']:
-            for trans in ver['transactions']:
-                account = trans['account']
-                amount = trans['amount']
+            # Check if ver is a Verification object or a dictionary
+            if hasattr(ver, 'transactions'):
+                transactions = ver.transactions
+            else:
+                transactions = ver.get('transactions', [])
+                
+            for trans in transactions:
+                # Check if trans is a Transaction object or a dictionary
+                if hasattr(trans, 'account'):
+                    account = trans.account
+                    amount = trans.amount
+                else:
+                    account = trans.get('account', '')
+                    amount = trans.get('amount', 0)
                 
                 if account not in account_totals:
                     account_totals[account] = 0
@@ -454,9 +616,68 @@ class SIEParser:
         
         # Add account names to transactions for easier reference
         for ver in self.data['verifications']:
-            for trans in ver['transactions']:
-                account = trans['account']
-                if account in self.data['accounts']:
-                    trans['account_name'] = self.data['accounts'][account]['name']
+            # Check if ver is a Verification object or a dictionary
+            if hasattr(ver, 'transactions'):
+                transactions = ver.transactions
+            else:
+                transactions = ver.get('transactions', [])
+                
+            for trans in transactions:
+                # Check if trans is a Transaction object or a dictionary
+                if hasattr(trans, 'account'):
+                    account = trans.account
+                    # Use setattr for Transaction objects
+                    if account in self.data['accounts']:
+                        if isinstance(self.data['accounts'][account], dict):
+                            account_name = self.data['accounts'][account].get('name', "Unknown")
+                        else:
+                            account_name = getattr(self.data['accounts'][account], 'name', "Unknown")
+                        setattr(trans, 'account_name', account_name)
+                    else:
+                        setattr(trans, 'account_name', "Unknown")
                 else:
-                    trans['account_name'] = "Unknown"
+                    account = trans.get('account', '')
+                    # Use dictionary assignment for dictionary transactions
+                    if account in self.data['accounts']:
+                        if isinstance(self.data['accounts'][account], dict):
+                            trans['account_name'] = self.data['accounts'][account].get('name', "Unknown")
+                        else:
+                            trans['account_name'] = getattr(self.data['accounts'][account], 'name', "Unknown")
+                    else:
+                        trans['account_name'] = "Unknown"
+
+    def _calculate_account_balances(self):
+        """Calculate account balances based on transactions."""
+        # Initialize account balances
+        account_balances = {}
+        
+        # Add opening balances
+        for year, balances in self.data.get('ib', {}).items():
+            for account, amount in balances.items():
+                if account not in account_balances:
+                    account_balances[account] = 0
+                account_balances[account] += amount
+        
+        # Add transaction amounts
+        for ver in self.data['verifications']:
+            # Check if ver is a Verification object or a dictionary
+            if hasattr(ver, 'transactions'):
+                transactions = ver.transactions
+            else:
+                transactions = ver.get('transactions', [])
+                
+            for trans in transactions:
+                # Check if trans is a Transaction object or a dictionary
+                if hasattr(trans, 'account'):
+                    account = trans.account
+                    amount = trans.amount
+                else:
+                    account = trans.get('account', '')
+                    amount = trans.get('amount', 0)
+                
+                if account not in account_balances:
+                    account_balances[account] = 0
+                account_balances[account] += amount
+        
+        # Store account balances
+        self.data['account_balances'] = account_balances

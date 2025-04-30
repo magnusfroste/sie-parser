@@ -78,92 +78,22 @@
                     </div>
                     
                     <div id="balance-tab" class="tab-pane">
-                        <div class="balance-controls">
-                            <div class="search-box">
-                                <input type="text" id="balance-search" placeholder="Search accounts...">
-                            </div>
-                            <div class="balance-year-selector">
-                                <select id="balance-year-selector"></select>
-                                <label><input type="checkbox" id="show-decimals" checked> Show decimals</label>
-                            </div>
-                            <div class="balance-info">
-                                <span id="balance-account-count">0</span> accounts shown
-                            </div>
+                        <div class="filter-controls">
+                            <label class="toggle-checkbox">
+                                <input type="checkbox" id="balance-show-non-zero" checked>
+                                <span class="checkbox-text">Show only accounts with values</span>
+                            </label>
                         </div>
-                        <div class="balance-container">
-                            <div class="balance-header">
-                                <h3>Balance Sheet <span id="balance-year"></span></h3>
-                            </div>
-                            <div class="balance-table-container">
-                                <table class="balance-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="account-column">Accounts</th>
-                                            <th class="amount-column">OB<br><span class="date-label" id="ob-date-label"></span></th>
-                                            <th class="amount-column">Movement</th>
-                                            <th class="amount-column">CB<br><span class="date-label" id="cb-date-label"></span></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="section-header">
-                                            <td colspan="4">Assets</td>
-                                        </tr>
-                                        <tr class="subsection-header">
-                                            <td colspan="4">Fixed Assets</td>
-                                        </tr>
-                                        <tr id="fixed-assets-row">
-                                            <td>Fixed Assets</td>
-                                            <td class="amount-column" id="fixed-assets-ob">0.00</td>
-                                            <td class="amount-column" id="fixed-assets-movement">0.00</td>
-                                            <td class="amount-column" id="fixed-assets-cb">0.00</td>
-                                        </tr>
-                                        <tr class="subsection-header">
-                                            <td colspan="4">Current Assets</td>
-                                        </tr>
-                                        <tr id="current-assets-placeholder">
-                                            <td colspan="4" class="expandable-section">
-                                                <div id="current-assets-list" class="account-list"></div>
-                                            </td>
-                                        </tr>
-                                        <tr class="total-row">
-                                            <td>Total Assets</td>
-                                            <td class="amount-column" id="total-assets-ob">0.00</td>
-                                            <td class="amount-column" id="total-assets-movement">0.00</td>
-                                            <td class="amount-column" id="total-assets-cb">0.00</td>
-                                        </tr>
-                                        
-                                        <tr class="section-header">
-                                            <td colspan="4">Liabilities and Equity</td>
-                                        </tr>
-                                        <tr class="subsection-header">
-                                            <td colspan="4">Current Liabilities</td>
-                                        </tr>
-                                        <tr id="current-liabilities-placeholder">
-                                            <td colspan="4" class="expandable-section">
-                                                <div id="current-liabilities-list" class="account-list"></div>
-                                            </td>
-                                        </tr>
-                                        <tr class="subsection-header">
-                                            <td colspan="4">Equity</td>
-                                        </tr>
-                                        <tr id="equity-placeholder">
-                                            <td colspan="4" class="expandable-section">
-                                                <div id="equity-list" class="account-list"></div>
-                                            </td>
-                                        </tr>
-                                        <tr class="total-row">
-                                            <td>Total Liabilities and Equity</td>
-                                            <td class="amount-column" id="total-liab-equity-ob">0.00</td>
-                                            <td class="amount-column" id="total-liab-equity-movement">0.00</td>
-                                            <td class="amount-column" id="total-liab-equity-cb">0.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <!-- Balance sheet content will be populated here -->
                     </div>
                     
                     <div id="income-tab" class="tab-pane">
+                        <div class="filter-controls">
+                            <label class="toggle-checkbox">
+                                <input type="checkbox" id="income-show-non-zero" checked>
+                                <span class="checkbox-text">Show only accounts with values</span>
+                            </label>
+                        </div>
                         <div class="income-container">
                             <div class="income-column">
                                 <h3>Income</h3>

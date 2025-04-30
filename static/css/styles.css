@@ -336,6 +336,25 @@ button:hover {
     color: var(--error-color);
 }
 
+/* Balance sheet specific styles */
+#balance-sheet-table th:nth-child(3),
+#balance-sheet-table td:nth-child(3) {
+    text-align: right;
+    min-width: 120px;
+}
+
+#balance-sheet-table th:nth-child(4),
+#balance-sheet-table td:nth-child(4) {
+    text-align: right;
+    min-width: 120px;
+}
+
+#balance-sheet-table th:nth-child(5),
+#balance-sheet-table td:nth-child(5) {
+    text-align: right;
+    min-width: 120px;
+}
+
 /* Transactions Tab */
 .transactions-controls {
     display: flex;
@@ -506,6 +525,128 @@ pre {
     color: var(--error-color);
 }
 
+/* Ledger View Styles */
+.ledger-container {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 15px;
+}
+
+.ledger-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: var(--light-bg-color);
+    border-radius: var(--border-radius);
+}
+
+.ledger-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.ledger-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.account-section {
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--light-bg-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.account-header:hover {
+    background-color: var(--lightest-bg-color);
+}
+
+.account-title {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.account-toggle {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.transactions-container {
+    padding: 0;
+    background-color: white;
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions-table th,
+.transactions-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.transactions-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.transactions-table tr:hover {
+    background-color: var(--lightest-bg-color);
+}
+
+.transactions-table .positive {
+    color: var(--success-color);
+}
+
+.transactions-table .negative {
+    color: var(--error-color);
+}
+
+.opening-balance-row {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.opening-balance-row td {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Responsive adjustments for ledger */
+@media (max-width: 768px) {
+    .ledger-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .transactions-table {
+        font-size: 0.9rem;
+    }
+    
+    .transactions-table th,
+    .transactions-table td {
+        padding: 6px 8px;
+    }
+}
+
 /* Opening Balance Tab */
 .opening-controls {
     display: flex;
@@ -535,6 +676,33 @@ pre {
 
 .opening-container {
     margin-bottom: 30px;
+}
+
+/* Filter controls */
+.filter-controls {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-checkbox input {
+    margin-right: 8px;
+}
+
+.checkbox-text {
+    font-size: 14px;
+}
+
+.account-row.zero-value {
+    color: #999;
+    font-style: italic;
 }
 
 /* Footer */
