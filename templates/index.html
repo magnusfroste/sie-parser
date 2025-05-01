@@ -37,6 +37,7 @@
                     <button class="tab-btn" data-tab="opening">Opening Balance</button>
                     <button class="tab-btn" data-tab="ledger">Ledger</button>
                     <button class="tab-btn" data-tab="transactions">Transactions</button>
+                    <button class="tab-btn" data-tab="llm-export">LLM Export</button>
                     <button class="tab-btn" data-tab="json">JSON Output</button>
                     <button class="tab-btn" data-tab="schema">Schema</button>
                 </div>
@@ -355,6 +356,88 @@
                     
                     <div id="schema-tab" class="tab-pane">
                         <!-- Schema tab content will be added here -->
+                    </div>
+                    
+                    <div id="llm-export-tab" class="tab-pane">
+                        <div class="llm-export-header">
+                            <div class="company-info">
+                                <h2 id="llm-company-name">Company Name</h2>
+                                <h3>LLM Financial Analysis Export</h3>
+                                <p id="llm-period">Period: <span></span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="llm-export-controls">
+                            <div class="control-group">
+                                <h4>Detail Level</h4>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="detail-level" value="high" checked>
+                                        <span>High Level (Executive Summary)</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="detail-level" value="medium">
+                                        <span>Medium Level (Key Accounts)</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="detail-level" value="detailed">
+                                        <span>Detailed (All Accounts)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <h4>Time Period</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-previous-years" checked>
+                                        <span>Include Previous Years (if available)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <h4>Content Sections</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-summary" checked>
+                                        <span>Company Summary</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-income" checked>
+                                        <span>Income Statement</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-balance" checked>
+                                        <span>Balance Sheet</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-key-ratios">
+                                        <span>Key Financial Ratios</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <button id="generate-llm-export" class="primary-btn">Generate LLM Export</button>
+                            </div>
+                        </div>
+                        
+                        <div class="llm-preview-container">
+                            <h4>Preview</h4>
+                            <div class="preview-info">
+                                <p>This preview shows how your data will be formatted for LLM analysis. The actual JSON will contain more data based on your selections.</p>
+                                <p><strong>Estimated token count: </strong><span id="token-estimate">0</span></p>
+                            </div>
+                            <div class="llm-preview" id="llm-preview">
+                                <p class="placeholder-text">Select options and click "Generate LLM Export" to see a preview</p>
+                            </div>
+                        </div>
+                        
+                        <div class="llm-export-actions" style="display: none;">
+                            <button id="download-llm-export" class="action-btn">Download JSON</button>
+                            <button id="copy-llm-export" class="action-btn">Copy to Clipboard</button>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -1732,3 +1732,141 @@ footer {
         flex-direction: column;
     }
 }
+
+/* LLM Export Tab Styles */
+.llm-export-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.llm-export-controls {
+    background-color: var(--light-bg-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--secondary-color);
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-label, .checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-label span, .checkbox-label span {
+    margin-left: 8px;
+}
+
+.llm-preview-container {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.llm-preview-container h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: var(--secondary-color);
+}
+
+.preview-info {
+    background-color: var(--lightest-bg-color);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+}
+
+.preview-info p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.llm-preview {
+    background-color: var(--light-bg-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 14px;
+}
+
+.placeholder-text {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+}
+
+.llm-export-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Financial table styles for LLM preview */
+.financial-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.financial-table th, .financial-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.financial-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+}
+
+.financial-table .numeric {
+    text-align: right;
+}
+
+.financial-table .section-header {
+    background-color: var(--lightest-bg-color);
+    font-weight: 600;
+}
+
+.financial-table .total-row {
+    font-weight: 600;
+    background-color: var(--light-bg-color);
+}

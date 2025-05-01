@@ -224,6 +224,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (tabId === 'schema') {
                     loadSchemaContent();
                 }
+                
+                // Special handling for LLM export tab
+                if (tabId === 'llm-export') {
+                    initLLMExportTab();
+                }
             }
         });
     }
@@ -243,6 +248,555 @@ document.addEventListener('DOMContentLoaded', function() {
             schemaTab.innerHTML = '';
             schemaTab.appendChild(iframe);
         }
+    }
+    
+    // Initialize the LLM Export tab
+    function initLLMExportTab() {
+        if (!processedData) return;
+        
+        // Set company info
+        document.getElementById('llm-company-name').textContent = 
+            processedData.metadata.company_name || 'Company Name';
+        
+        const periodSpan = document.querySelector('#llm-period span');
+        periodSpan.textContent = 
+            `${processedData.metadata.financial_year_start || ''} - ${processedData.metadata.financial_year_end || ''}`;
+        
+        // Add event listeners if not already added
+        if (!document.getElementById('generate-llm-export').hasAttribute('listener')) {
+            document.getElementById('generate-llm-export').addEventListener('click', generateLLMExport);
+            document.getElementById('generate-llm-export').setAttribute('listener', 'true');
+            
+            document.getElementById('download-llm-export').addEventListener('click', downloadLLMExport);
+            document.getElementById('copy-llm-export').addEventListener('click', copyLLMExportToClipboard);
+            
+            // Add listeners for radio buttons to update preview when changed
+            document.querySelectorAll('input[name="detail-level"]').forEach(radio => {
+                radio.addEventListener('change', updateLLMPreview);
+            });
+            
+            // Add listeners for checkboxes to update preview when changed
+            document.getElementById('include-previous-years').addEventListener('change', updateLLMPreview);
+            document.getElementById('include-summary').addEventListener('change', updateLLMPreview);
+            document.getElementById('include-income').addEventListener('change', updateLLMPreview);
+            document.getElementById('include-balance').addEventListener('change', updateLLMPreview);
+            document.getElementById('include-key-ratios').addEventListener('change', updateLLMPreview);
+        }
+        
+        // Generate initial preview
+        updateLLMPreview();
+    }
+    
+    // Update the LLM preview based on selected options
+    function updateLLMPreview() {
+        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+        const includePreviousYears = document.getElementById('include-previous-years').checked;
+        const includeSummary = document.getElementById('include-summary').checked;
+        const includeIncome = document.getElementById('include-income').checked;
+        const includeBalance = document.getElementById('include-balance').checked;
+        const includeKeyRatios = document.getElementById('include-key-ratios').checked;
+        
+        // Generate preview data
+        const previewData = generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios);
+        
+        // Display preview
+        const previewElement = document.getElementById('llm-preview');
+        
+        // Format the preview data as JSON with indentation for readability
+        const formattedPreview = JSON.stringify(previewData, null, 2);
+        
+        // Update the preview
+        previewElement.innerHTML = `<pre>${formattedPreview}</pre>`;
+        
+        // Enhanced debugging
+        console.log("Detail Level:", detailLevel);
+        console.log("Preview Data:", previewData);
+        console.log("Original Data Structure:", JSON.stringify(processedData, null, 2));
+        
+        // Specifically log income statement and balance sheet data
+        console.log("Income Statement Data:", processedData.income_statement);
+        console.log("Balance Sheet Data:", processedData.balance_sheet);
+        
+        // Estimate token count (rough approximation: 1 token ≈ 4 characters for English text)
+        const tokenEstimate = Math.ceil(formattedPreview.length / 4);
+        document.getElementById('token-estimate').textContent = tokenEstimate.toLocaleString();
+        
+        // Show export actions
+        document.querySelector('.llm-export-actions').style.display = 'flex';
+    }
+    
+    // Generate LLM-optimized data structure based on selected options
+    function generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios) {
+        if (!processedData) return {};
+        
+        // Log the entire processed data for debugging
+        console.log("Full processed data:", JSON.stringify(processedData, null, 2));
+        
+        const result = {
+            company_info: {
+                name: processedData.metadata.company_name || 'Unknown',
+                organization_number: processedData.metadata.organization_number || 'Unknown',
+                fiscal_year: processedData.metadata.financial_year_start 
+                    ? `${processedData.metadata.financial_year_start} - ${processedData.metadata.financial_year_end}`
+                    : 'Unknown'
+            },
+            generated_at: new Date().toISOString(),
+            detail_level: detailLevel,
+            currency: processedData.metadata.currency || 'SEK'
+        };
+        
+        // Add company summary if selected
+        if (includeSummary) {
+            result.summary = {
+                total_accounts: Object.keys(processedData.accounts || {}).length,
+                total_transactions: processedData.summary?.total_transactions || 0,
+                net_result: parseFloat(processedData.income_statement?.net_result) || 0
+            };
+        }
+        
+        // Add income statement if selected
+        if (includeIncome) {
+            result.income_statement = generateSimpleIncomeStatement(detailLevel);
+        }
+        
+        // Add balance sheet if selected
+        if (includeBalance) {
+            result.balance_sheet = generateSimpleBalanceSheet(detailLevel);
+        }
+        
+        // Add key financial ratios if selected
+        if (includeKeyRatios) {
+            result.key_ratios = calculateFinancialRatios();
+        }
+        
+        return result;
+    }
+    
+    // Generate a simple income statement based on detail level
+    function generateSimpleIncomeStatement(detailLevel) {
+        if (!processedData) {
+            console.log("Processed data not available");
+            return { error: "Processed data not available" };
+        }
+        
+        console.log("Full processed data for income statement:", processedData);
+        
+        // Try to get income statement from different possible locations in the data structure
+        let incomeStatementData = processedData.income_statement;
+        
+        // Debug what we found
+        console.log("Income statement data found:", incomeStatementData);
+        
+        const currentYear = processedData.metadata?.financial_year_end 
+            ? processedData.metadata.financial_year_end.substring(0, 4) 
+            : new Date().getFullYear().toString();
+        
+        const incomeData = {
+            period: currentYear,
+            currency: processedData.metadata?.currency || 'SEK',
+            data: {}
+        };
+        
+        // If we don't have income statement data, try to build it from accounts directly
+        if (!incomeStatementData || Object.keys(incomeStatementData).length === 0) {
+            console.log("Building income statement from accounts");
+            
+            let totalRevenue = 0;
+            let totalExpenses = 0;
+            
+            // Look through all accounts to find income and expense accounts
+            if (processedData.accounts) {
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    // Income accounts typically start with 3
+                    if (accNum.startsWith('3') && account.balance) {
+                        totalRevenue += parseFloat(account.balance) || 0;
+                    }
+                    // Expense accounts typically start with 4-8
+                    else if ((accNum.startsWith('4') || accNum.startsWith('5') || 
+                             accNum.startsWith('6') || accNum.startsWith('7') || 
+                             accNum.startsWith('8')) && account.balance) {
+                        totalExpenses += parseFloat(account.balance) || 0;
+                    }
+                });
+            }
+            
+            // Create a basic income statement structure
+            incomeStatementData = {
+                total_income: totalRevenue,
+                total_expenses: totalExpenses,
+                net_income: totalRevenue - totalExpenses
+            };
+        }
+        
+        // Now build the data structure based on detail level
+        if (detailLevel === 'high') {
+            // High level - only major categories
+            incomeData.data = {
+                revenue: {
+                    total_revenue: parseFloat(incomeStatementData.total_income || 0)
+                },
+                expenses: {
+                    total_expenses: parseFloat(incomeStatementData.total_expenses || 0)
+                },
+                net_result: parseFloat(incomeStatementData.net_income || 0)
+            };
+        } else if (detailLevel === 'medium') {
+            // Medium level - categories
+            const incomeCategories = {};
+            const expenseCategories = {};
+            
+            // Try to extract categories from the data
+            if (processedData.accounts) {
+                // Group accounts by first digit for categories
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    if (accNum.startsWith('3') && account.balance) {
+                        const category = `Income - ${accNum.substring(0, 2)}xx`;
+                        incomeCategories[category] = (incomeCategories[category] || 0) + parseFloat(account.balance);
+                    }
+                    else if ((accNum.startsWith('4') || accNum.startsWith('5') || 
+                             accNum.startsWith('6') || accNum.startsWith('7') || 
+                             accNum.startsWith('8')) && account.balance) {
+                        const category = `Expense - ${accNum.substring(0, 2)}xx`;
+                        expenseCategories[category] = (expenseCategories[category] || 0) + parseFloat(account.balance);
+                    }
+                });
+            }
+            
+            incomeData.data = {
+                revenue: {
+                    categories: incomeCategories,
+                    total_revenue: parseFloat(incomeStatementData.total_income || 0)
+                },
+                expenses: {
+                    categories: expenseCategories,
+                    total_expenses: parseFloat(incomeStatementData.total_expenses || 0)
+                },
+                net_result: parseFloat(incomeStatementData.net_income || 0)
+            };
+        } else {
+            // Detailed level - all accounts
+            const incomeAccounts = {};
+            const expenseAccounts = {};
+            
+            // Extract all accounts
+            if (processedData.accounts) {
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    if (accNum.startsWith('3') && account.balance) {
+                        incomeAccounts[`${accNum} - ${account.name || 'Unknown'}`] = parseFloat(account.balance);
+                    }
+                    else if ((accNum.startsWith('4') || accNum.startsWith('5') || 
+                             accNum.startsWith('6') || accNum.startsWith('7') || 
+                             accNum.startsWith('8')) && account.balance) {
+                        expenseAccounts[`${accNum} - ${account.name || 'Unknown'}`] = parseFloat(account.balance);
+                    }
+                });
+            }
+            
+            incomeData.data = {
+                revenue: {
+                    accounts: incomeAccounts,
+                    total_revenue: parseFloat(incomeStatementData.total_income || 0)
+                },
+                expenses: {
+                    accounts: expenseAccounts,
+                    total_expenses: parseFloat(incomeStatementData.total_expenses || 0)
+                },
+                net_result: parseFloat(incomeStatementData.net_income || 0)
+            };
+        }
+        
+        return incomeData;
+    }
+    
+    // Generate a simple balance sheet based on detail level
+    function generateSimpleBalanceSheet(detailLevel) {
+        if (!processedData) {
+            console.log("Processed data not available");
+            return { error: "Processed data not available" };
+        }
+        
+        console.log("Full processed data for balance sheet:", processedData);
+        
+        // Try to get balance sheet from different possible locations in the data structure
+        let balanceSheetData = processedData.balance_sheet;
+        
+        // Debug what we found
+        console.log("Balance sheet data found:", balanceSheetData);
+        
+        const balanceData = {
+            as_of_date: processedData.metadata?.financial_year_end || 'Unknown',
+            currency: processedData.metadata?.currency || 'SEK',
+            data: {}
+        };
+        
+        // If we don't have balance sheet data, try to build it from accounts directly
+        if (!balanceSheetData || Object.keys(balanceSheetData).length === 0) {
+            console.log("Building balance sheet from accounts");
+            
+            let totalAssets = 0;
+            let totalLiabilities = 0;
+            let totalEquity = 0;
+            
+            // Look through all accounts to find asset, liability, and equity accounts
+            if (processedData.accounts) {
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    // Asset accounts typically start with 1
+                    if (accNum.startsWith('1') && account.balance) {
+                        totalAssets += parseFloat(account.balance) || 0;
+                    }
+                    // Equity accounts typically start with 20-21
+                    else if ((accNum.startsWith('20') || accNum.startsWith('21')) && account.balance) {
+                        totalEquity += parseFloat(account.balance) || 0;
+                    }
+                    // Liability accounts typically start with 2 (except 20-21)
+                    else if (accNum.startsWith('2') && account.balance) {
+                        totalLiabilities += parseFloat(account.balance) || 0;
+                    }
+                });
+            }
+            
+            // Create a basic balance sheet structure
+            balanceSheetData = {
+                total_assets: totalAssets,
+                total_liabilities: totalLiabilities,
+                total_equity: totalEquity
+            };
+        }
+        
+        // Now build the data structure based on detail level
+        if (detailLevel === 'high') {
+            // High level - only major categories
+            balanceData.data = {
+                assets: {
+                    total_assets: parseFloat(balanceSheetData.total_assets || 0)
+                },
+                liabilities: {
+                    total_liabilities: parseFloat(balanceSheetData.total_liabilities || 0)
+                },
+                equity: {
+                    total_equity: parseFloat(balanceSheetData.total_equity || 0)
+                }
+            };
+        } else if (detailLevel === 'medium') {
+            // Medium level - categories
+            const assetCategories = {};
+            const liabilityCategories = {};
+            const equityCategories = {};
+            
+            // Try to extract categories from the data
+            if (processedData.accounts) {
+                // Group accounts by first digit for categories
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    if (accNum.startsWith('1') && account.balance) {
+                        const category = `Asset - ${accNum.substring(0, 2)}xx`;
+                        assetCategories[category] = (assetCategories[category] || 0) + parseFloat(account.balance);
+                    }
+                    else if ((accNum.startsWith('20') || accNum.startsWith('21')) && account.balance) {
+                        const category = `Equity - ${accNum.substring(0, 2)}xx`;
+                        equityCategories[category] = (equityCategories[category] || 0) + parseFloat(account.balance);
+                    }
+                    else if (accNum.startsWith('2') && account.balance) {
+                        const category = `Liability - ${accNum.substring(0, 2)}xx`;
+                        liabilityCategories[category] = (liabilityCategories[category] || 0) + parseFloat(account.balance);
+                    }
+                });
+            }
+            
+            balanceData.data = {
+                assets: {
+                    categories: assetCategories,
+                    total_assets: parseFloat(balanceSheetData.total_assets || 0)
+                },
+                liabilities: {
+                    categories: liabilityCategories,
+                    total_liabilities: parseFloat(balanceSheetData.total_liabilities || 0)
+                },
+                equity: {
+                    categories: equityCategories,
+                    total_equity: parseFloat(balanceSheetData.total_equity || 0)
+                }
+            };
+        } else {
+            // Detailed level - all accounts
+            const assetAccounts = {};
+            const liabilityAccounts = {};
+            const equityAccounts = {};
+            
+            // Extract all accounts
+            if (processedData.accounts) {
+                Object.entries(processedData.accounts).forEach(([accNum, account]) => {
+                    if (accNum.startsWith('1') && account.balance) {
+                        assetAccounts[`${accNum} - ${account.name || 'Unknown'}`] = parseFloat(account.balance);
+                    }
+                    else if ((accNum.startsWith('20') || accNum.startsWith('21')) && account.balance) {
+                        equityAccounts[`${accNum} - ${account.name || 'Unknown'}`] = parseFloat(account.balance);
+                    }
+                    else if (accNum.startsWith('2') && account.balance) {
+                        liabilityAccounts[`${accNum} - ${account.name || 'Unknown'}`] = parseFloat(account.balance);
+                    }
+                });
+            }
+            
+            balanceData.data = {
+                assets: {
+                    accounts: assetAccounts,
+                    total_assets: parseFloat(balanceSheetData.total_assets || 0)
+                },
+                liabilities: {
+                    accounts: liabilityAccounts,
+                    total_liabilities: parseFloat(balanceSheetData.total_liabilities || 0)
+                },
+                equity: {
+                    accounts: equityAccounts,
+                    total_equity: parseFloat(balanceSheetData.total_equity || 0)
+                }
+            };
+        }
+        
+        return balanceData;
+    }
+    
+    // Calculate key financial ratios
+    function calculateFinancialRatios() {
+        if (!processedData) return {};
+        
+        const balanceSheet = processedData.balance_sheet || {};
+        const incomeStatement = processedData.income_statement || {};
+        
+        const totalAssets = parseFloat(balanceSheet.total_assets) || 0;
+        const totalLiabilities = parseFloat(balanceSheet.total_liabilities) || 0;
+        const totalEquity = parseFloat(balanceSheet.total_equity) || 0;
+        const totalRevenue = parseFloat(incomeStatement.total_income) || 0;
+        const netIncome = parseFloat(incomeStatement.net_result) || 0;
+        
+        // Calculate ratios
+        const ratios = {
+            // Liquidity ratios
+            current_ratio: 0,
+            quick_ratio: 0,
+            
+            // Solvency ratios
+            debt_to_equity: totalEquity !== 0 ? (totalLiabilities / totalEquity) : 0,
+            equity_ratio: totalAssets !== 0 ? (totalEquity / totalAssets) : 0,
+            debt_ratio: totalAssets !== 0 ? (totalLiabilities / totalAssets) : 0,
+            
+            // Profitability ratios
+            return_on_assets: totalAssets !== 0 ? (netIncome / totalAssets) : 0,
+            return_on_equity: totalEquity !== 0 ? (netIncome / totalEquity) : 0,
+            profit_margin: totalRevenue !== 0 ? (netIncome / totalRevenue) : 0,
+            
+            // Efficiency ratios
+            asset_turnover: totalAssets !== 0 ? (totalRevenue / totalAssets) : 0
+        };
+        
+        // Try to calculate current ratio and quick ratio if we have current assets and liabilities
+        if (balanceSheet.assets && balanceSheet.liabilities) {
+            let currentAssets = 0;
+            let currentLiabilities = 0;
+            let quickAssets = 0; // Cash + Short-term investments + Accounts receivable
+            
+            // Extract current assets
+            if (balanceSheet.assets.current_assets) {
+                currentAssets = Array.isArray(balanceSheet.assets.current_assets) 
+                    ? balanceSheet.assets.current_assets.reduce((sum, acc) => sum + (parseFloat(acc.closing_balance) || 0), 0)
+                    : 0;
+                
+                // Extract quick assets (cash, receivables)
+                const cashAccounts = balanceSheet.assets.current_assets.filter(acc => 
+                    acc.number.startsWith('19') || // Cash and bank accounts
+                    acc.number.startsWith('15') || // Short-term receivables
+                    acc.number.startsWith('16') || // Short-term receivables
+                    acc.number.startsWith('17')    // Short-term receivables
+                );
+                
+                quickAssets = cashAccounts.reduce((sum, acc) => sum + (parseFloat(acc.closing_balance) || 0), 0);
+            }
+            
+            // Extract current liabilities
+            if (balanceSheet.liabilities.current_liabilities) {
+                currentLiabilities = Array.isArray(balanceSheet.liabilities.current_liabilities)
+                    ? balanceSheet.liabilities.current_liabilities.reduce((sum, acc) => sum + (parseFloat(acc.closing_balance) || 0), 0)
+                    : 0;
+            }
+            
+            // Calculate liquidity ratios
+            if (currentLiabilities !== 0) {
+                ratios.current_ratio = currentAssets / currentLiabilities;
+                ratios.quick_ratio = quickAssets / currentLiabilities;
+            }
+        }
+        
+        return ratios;
+    }
+    
+    // Generate the full LLM export
+    function generateLLMExport() {
+        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+        const includePreviousYears = document.getElementById('include-previous-years').checked;
+        const includeSummary = document.getElementById('include-summary').checked;
+        const includeIncome = document.getElementById('include-income').checked;
+        const includeBalance = document.getElementById('include-balance').checked;
+        const includeKeyRatios = document.getElementById('include-key-ratios').checked;
+        
+        // Generate the complete data
+        window.llmExportData = generateLLMData(
+            detailLevel, 
+            includePreviousYears, 
+            includeSummary, 
+            includeIncome, 
+            includeBalance, 
+            includeKeyRatios
+        );
+        
+        // Update the preview
+        updateLLMPreview();
+    }
+    
+    // Download the LLM export as JSON
+    function downloadLLMExport() {
+        if (!window.llmExportData) {
+            generateLLMExport();
+        }
+        
+        const jsonString = JSON.stringify(window.llmExportData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const companyName = processedData.metadata.company_name || 'company';
+        const sanitizedName = companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${sanitizedName}_financial_data_${detailLevel}_level.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    // Copy the LLM export to clipboard
+    function copyLLMExportToClipboard() {
+        if (!window.llmExportData) {
+            generateLLMExport();
+        }
+        
+        const jsonString = JSON.stringify(window.llmExportData, null, 2);
+        
+        navigator.clipboard.writeText(jsonString)
+            .then(() => {
+                const copyButton = document.getElementById('copy-llm-export');
+                const originalText = copyButton.textContent;
+                
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy to clipboard');
+            });
     }
     
     // Populate summary information
@@ -990,36 +1544,36 @@ document.addEventListener('DOMContentLoaded', function() {
         let transactions = [];
         
         // Process verifications from the standardized data model
-        data.verifications.forEach(ver => {
-            if (ver.transactions && ver.transactions.length > 0) {
-                ver.transactions.forEach(trans => {
-                    // Format verification number using standardized fields
-                    let verNumber = '';
-                    if (ver.series && ver.number) {
-                        verNumber = `${ver.series}${ver.number}`;
-                    } else if (ver.number) {
-                        verNumber = ver.number;
+        data.verifications.forEach(verification => {
+            if (!verification.transactions) return;
+            
+            verification.transactions.forEach(transaction => {
+                // Format verification number using standardized fields
+                let verNumber = '';
+                if (verification.series && verification.number) {
+                    verNumber = `${verification.series}${verification.number}`;
+                } else if (verification.number) {
+                    verNumber = verification.number;
+                }
+                
+                // Get account name from the standardized data model
+                let accountName = transaction.account_name || "Unknown";
+                if (!accountName || accountName === "Unknown") {
+                    if (data.accounts && data.accounts[transaction.account]) {
+                        accountName = data.accounts[transaction.account].name || "Unknown";
                     }
-                    
-                    // Get account name from the standardized data model
-                    let accountName = trans.account_name || "Unknown";
-                    if (!accountName || accountName === "Unknown") {
-                        if (data.accounts && data.accounts[trans.account]) {
-                            accountName = data.accounts[trans.account].name || "Unknown";
-                        }
-                    }
-                    
-                    // Use the standardized transaction fields directly
-                    transactions.push({
-                        verification: verNumber,
-                        date: trans.date || ver.date || '',
-                        account: trans.account,
-                        account_name: accountName,
-                        text: trans.text || ver.text || '',
-                        amount: trans.amount || 0
-                    });
+                }
+                
+                // Use the standardized transaction fields directly
+                transactions.push({
+                    verification: verNumber,
+                    date: transaction.date || verification.date || '',
+                    account: transaction.account,
+                    account_name: accountName,
+                    text: transaction.text || verification.text || '',
+                    amount: transaction.amount || 0
                 });
-            }
+            });
         });
         
         // Update transaction count
@@ -1196,6 +1750,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 downloadLink.href = `/download/${encodeURIComponent(filename)}`;
                 downloadLink.download = filename;
                 downloadLink.click();
+                document.body.appendChild(downloadLink);
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(downloadLink.href);
             } else {
                 alert(data.error || 'An error occurred');
             }
@@ -1321,7 +1878,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const openingBalances = data.opening_balances || {};
         const year = data.metadata && data.metadata.financial_year_start ? 
             data.metadata.financial_year_start.substring(0, 4) : new Date().getFullYear().toString();
-        
+            
         // Create a map to store account transactions
         const accountTransactionsMap = new Map();
         
@@ -1615,7 +2172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         table.appendChild(headerRow);
         
         // Get the first year (usually there's only one in SIE4)
-        const year = Object.keys(openingBalances)[0];
+        const year = Object.keys(openingBalances)[0] || '';
         
         if (!year || !openingBalances[year]) {
             openingTab.innerHTML = '<div class="note">No opening balance data available for any year.</div>';
