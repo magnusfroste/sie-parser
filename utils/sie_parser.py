@@ -31,6 +31,7 @@ class SIEParser:
             # Open with CP437 encoding to properly handle Swedish characters
             with codecs.open(self.file_path, 'r', encoding='cp437') as file:
                 current_ver = None
+                in_verification_block = False
                 
                 for line in file:
                     line = line.strip()
@@ -66,9 +67,9 @@ class SIEParser:
                         self._parse_ub(line)
                     elif line.startswith('#RES'):
                         self._parse_res(line)
-                    elif line.startswith('#VER'):
+                    elif line.startswith('#VER') or line.startswith('VER '):
                         # Start a new verification
-                        if current_ver:
+                        if current_ver and not in_verification_block:
                             self.data['verifications'].append(current_ver)
                         current_ver = self._parse_ver(line)
                     elif line.startswith('#TRANS') and current_ver:
@@ -81,16 +82,17 @@ class SIEParser:
                         # Add budget transaction
                         self._parse_btrans(line)
                     elif line.startswith('{'):
-                        # Start of verification block, already handled
-                        pass
+                        # Start of verification block
+                        in_verification_block = True
                     elif line.startswith('}'):
                         # End of verification block
                         if current_ver:
                             self.data['verifications'].append(current_ver)
                             current_ver = None
+                        in_verification_block = False
                 
                 # Add the last verification if not already added
-                if current_ver:
+                if current_ver and not in_verification_block:
                     self.data['verifications'].append(current_ver)
                 
                 try:
@@ -303,20 +305,44 @@ class SIEParser:
     
     def _parse_ver(self, line):
         """Parse #VER section (verification)."""
+        # Handle both #VER and VER formats
+        if line.startswith('#'):
+            line = line[1:]  # Remove the # if present
+        
         parts = self._extract_values(line)
         series = ""
         ver_number = ""
         ver_date = ""
         ver_text = ""
+        ver_reg_date = ""  # For registration date if present
         
-        if len(parts) >= 2:
-            series = parts[1]
-        if len(parts) >= 3:
-            ver_number = parts[2]
-        if len(parts) >= 4:
-            ver_date = parts[3]
-        if len(parts) >= 5:
-            ver_text = parts[4]
+        # Handle different VER formats according to SIE 4 standard
+        if parts[0] == "VER":
+            # Format: VER series number date "text" reg_date
+            if len(parts) >= 2:
+                series = parts[1]
+            if len(parts) >= 3:
+                ver_number = parts[2]
+            if len(parts) >= 4:
+                ver_date = parts[3]
+            if len(parts) >= 5:
+                ver_text = parts[4]
+            if len(parts) >= 6:
+                ver_reg_date = parts[5]
+        else:
+            # Standard #VER format
+            if len(parts) >= 2:
+                series = parts[1]
+            if len(parts) >= 3:
+                ver_number = parts[2]
+            if len(parts) >= 4:
+                ver_date = parts[3]
+            if len(parts) >= 5:
+                ver_text = parts[4]
+        
+        # Format date if it's in YYYYMMDD format
+        if ver_date and len(ver_date) == 8 and ver_date.isdigit():
+            ver_date = f"{ver_date[:4]}-{ver_date[4:6]}-{ver_date[6:8]}"
         
         print(f"Creating verification: series={series}, number={ver_number}, date={ver_date}, text={ver_text}")
         
@@ -328,6 +354,10 @@ class SIEParser:
             text=ver_text
         )
         
+        # Store registration date if available
+        if ver_reg_date:
+            verification.reg_date = ver_reg_date
+        
         # Initialize the transactions list
         verification.transactions = []
         
@@ -335,241 +365,239 @@ class SIEParser:
     
     def _parse_trans(self, line, current_ver):
         """Parse #TRANS section (transaction)."""
+        if line.startswith('#'):
+            line = line[1:]  # Remove the # if present
+            
         parts = self._extract_values(line)
         account = ""
         amount = 0.0
         trans_date = ""
         trans_text = ""
+        object_info = ""
+        quantity = 0.0
+        sign = ""  # For signature/user info
         
-        # Apply program-specific parsing rules
-        program_name = self.program_info['name'].lower() if self.program_info['name'] else ""
+        # According to SIE 4 standard, the format for TRANS is:
+        # #TRANS account object_info amount trans_date trans_text quantity sign
         
-        if program_name == "dooer" or program_name == "dooer ledger":
-            # Dooer specific parsing
-            if len(parts) >= 2:
-                account = parts[1]
-            if len(parts) >= 3:
-                # In Dooer, the amount is typically in position 2
-                try:
-                    amount = float(parts[2])
-                except ValueError:
-                    amount = 0.0
-            if len(parts) >= 4:
-                # In Dooer, the date is typically in position 4 (YYYYMMDD format)
-                if len(parts[3]) == 8 and parts[3].isdigit():
-                    trans_date = parts[3]
-                else:
-                    trans_text = parts[3]
-            if len(parts) >= 5:
-                if not trans_text:
-                    trans_text = parts[4]
+        # Get account number (always in position 1)
+        if len(parts) >= 2:
+            account = parts[1]
+        
+        # Parse object info (position 2)
+        if len(parts) >= 3:
+            # Object info can be {} or {dimension "value"}
+            if parts[2] == '{}' or (parts[2].startswith('{') and parts[2].endswith('}')):
+                object_info = parts[2]
+            else:
+                # If it's a multi-part object notation, collect all parts
+                if parts[2].startswith('{') and not parts[2].endswith('}'):
+                    object_parts = [parts[2]]
+                    i = 3
+                    while i < len(parts) and not parts[i].endswith('}'):
+                        object_parts.append(parts[i])
+                        i += 1
                     
-        elif program_name == "fortnox":
-            # Fortnox specific parsing based on the provided example
-            if len(parts) >= 2:
-                account = parts[1]
-            
-            # Check for empty object notation {} which is common in Fortnox files
-            # Skip the empty object if present
-            amount_index = 2
-            for i in range(2, len(parts)):
-                if parts[i] == '{}':
-                    amount_index = i + 1
-                    break
-            
-            # Parse amount from the correct position (usually after {})
-            if amount_index < len(parts):
-                try:
-                    # Handle both dot and comma as decimal separators
-                    amount_str = parts[amount_index].replace(',', '.')
-                    amount = float(amount_str)
-                    print(f"Fortnox transaction amount parsed: {amount} for account {account}")
-                except (ValueError, TypeError):
-                    # Try to find any numeric value in the string
-                    import re
-                    numeric_match = re.search(r'-?\d+\.?\d*', parts[amount_index])
-                    if numeric_match:
-                        try:
-                            amount = float(numeric_match.group())
-                            print(f"Extracted numeric amount from Fortnox transaction: {amount}")
-                        except ValueError:
-                            amount = 0.0
-                            print(f"Failed to parse extracted amount for Fortnox transaction")
-                    else:
-                        amount = 0.0
-                        print(f"No numeric value found in Fortnox transaction: {parts[amount_index]}")
-            
-            # Look for text in quoted strings
-            for i in range(amount_index + 1, len(parts)):
-                if parts[i].startswith('"') and parts[i].endswith('"'):
-                    trans_text = parts[i][1:-1]  # Remove quotes
-                    break
-                elif parts[i].startswith('"'):
-                    # Start of a multi-part quoted string
-                    text_parts = [parts[i][1:]]  # Remove opening quote
-                    j = i + 1
-                    while j < len(parts) and not parts[j].endswith('"'):
-                        text_parts.append(parts[j])
-                        j += 1
-                    if j < len(parts):
-                        text_parts.append(parts[j][:-1])  # Remove closing quote
-                    trans_text = ' '.join(text_parts)
-                    break
-            
-            # Look for date in YYYYMMDD format
-            for i in range(2, len(parts)):
-                if len(parts[i]) == 8 and parts[i].isdigit():
-                    trans_date = parts[i]
-                    break
-            
-            # Debug output for Fortnox transactions
-            print(f"Parsed Fortnox transaction: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}")
-                
-        elif program_name == "bokio":
-            # Bokio specific parsing
-            if len(parts) >= 2:
-                account = parts[1]
-            if len(parts) >= 3:
-                # In Bokio, the amount is in position 2 (not in the date field)
-                try:
-                    amount = float(parts[2])
-                except ValueError:
-                    amount = 0.0
-                
-                # Don't use verification number or date for amount
-                if current_ver:
-                    # Store the original verification number and date
-                    if not hasattr(current_ver, 'original_number') or not current_ver.original_number:
-                        current_ver.original_number = current_ver.number
-                    if not hasattr(current_ver, 'original_date') or not current_ver.original_date:
-                        current_ver.original_date = current_ver.date
-            
-            # Handle date properly - don't use it for amount
-            if len(parts) >= 4:
-                # Check if this is a date (YYYYMMDD format)
-                if len(parts[3]) == 8 and parts[3].isdigit():
-                    trans_date = parts[3]
-                else:
-                    trans_text = parts[3]
-            if len(parts) >= 5:
-                if not trans_text:
-                    trans_text = parts[4]
+                    if i < len(parts):
+                        object_parts.append(parts[i])  # Add the closing part
+                        object_info = ' '.join(object_parts)
+                        
+                        # Adjust parts list to skip the object parts we've processed
+                        new_parts = parts[:2] + parts[i+1:]
+                        parts = new_parts
         
-        else:
-            # Generic parsing with smart detection for unknown programs
-            if len(parts) >= 2:
-                account = parts[1]
-            if len(parts) >= 3:
-                try:
-                    amount = float(parts[2])
-                except ValueError:
-                    amount = 0.0
-            if len(parts) >= 4:
-                # Check if this is a date (YYYYMMDD format) or possibly an amount
-                if len(parts[3]) == 8 and parts[3].isdigit():
-                    trans_date = parts[3]
-                else:
-                    # This might be an amount in some SIE formats
-                    try:
-                        # If we can convert it to a float, it's probably an amount
-                        second_amount = float(parts[3])
-                        # If the previous amount is 0 or this looks more like an amount, use this one
-                        if amount == 0 or (abs(second_amount) > 0 and abs(second_amount) < 10000000):
-                            amount = second_amount
-                        else:
-                            trans_text = parts[3]
-                    except ValueError:
-                        # Not a number, treat as text
-                        if not trans_text:
-                            trans_text = parts[3]
-            if len(parts) >= 5:
-                # Check if this might be a date that was in position 5 instead of 4
-                if len(parts[4]) == 8 and parts[4].isdigit() and not trans_date:
-                    trans_date = parts[4]
-                else:
-                    trans_text = parts[4]
-        
-        # If we still don't have a date, use the verification date
-        if not trans_date and hasattr(current_ver, 'date'):
-            trans_date = current_ver.date
-        
-        # Check if the trans_text is actually an amount (common in Bokio files)
-        if amount == 0 and trans_text:
-            # Try to convert text to float if it looks like a number
+        # Parse amount (position 3 after accounting for object info)
+        if len(parts) >= 4:
             try:
-                # Check if the text is just a number
-                if re.match(r'^-?\d+(\.\d+)?$', trans_text):
-                    amount = float(trans_text)
-                    trans_text = ""  # Clear the text since it was just the amount
+                # Handle both dot and comma as decimal separators
+                amount_str = parts[3].replace(',', '.')
+                amount = float(amount_str)
             except (ValueError, TypeError):
                 pass
         
-        transaction = Transaction(account, amount, trans_date, trans_text)
+        # Parse transaction date if present (position 4)
+        if len(parts) >= 5:
+            if len(parts[4]) == 8 and parts[4].isdigit():
+                # Format: YYYYMMDD
+                trans_date = f"{parts[4][:4]}-{parts[4][4:6]}-{parts[4][6:8]}"
+            elif parts[4] and parts[4] != '""':
+                # If not a date, it might be text
+                if parts[4].startswith('"') and parts[4].endswith('"'):
+                    trans_text = parts[4][1:-1]  # Remove quotes
+                else:
+                    trans_text = parts[4]
         
-        # Debug output for transaction creation
-        print(f"Created transaction: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}")
+        # Parse transaction text if present (position 5)
+        if len(parts) >= 6 and not trans_text:
+            if parts[5].startswith('"') and parts[5].endswith('"'):
+                trans_text = parts[5][1:-1]  # Remove quotes
+            else:
+                trans_text = parts[5]
         
-        # Initialize transactions list if it doesn't exist
-        if not hasattr(current_ver, 'transactions'):
-            current_ver.transactions = []
-            
-        current_ver.transactions.append(transaction)
-    
-    def _parse_adress(self, line):
-        """Parse #ADRESS section (company address)."""
-        parts = self._extract_values(line)
-        if len(parts) >= 2:
-            self.data['metadata']['address'] = parts[1]
-        if len(parts) >= 3:
-            self.data['metadata']['postal_code'] = parts[2]
-        if len(parts) >= 4:
-            self.data['metadata']['city'] = parts[3]
-    
-    def _parse_kptyp(self, line):
-        """Parse #KPTYP section (account type)."""
-        parts = self._extract_values(line)
-        if len(parts) >= 2:
-            self.data['metadata']['account_type'] = parts[1]
-    
-    def _parse_sru(self, line):
-        """Parse #SRU section (SRU code)."""
-        parts = self._extract_values(line)
-        if len(parts) >= 3:
-            account = parts[1]
-            sru_code = parts[2]
-            
-            if account in self.data['accounts']:
-                self.data['accounts'][account]['sru_code'] = sru_code
+        # Parse quantity if present (position 6)
+        if len(parts) >= 7:
+            try:
+                quantity = float(parts[6])
+            except (ValueError, TypeError):
+                pass
+        
+        # Parse signature/user if present (position 7)
+        if len(parts) >= 8:
+            if parts[7].startswith('"') and parts[7].endswith('"'):
+                sign = parts[7][1:-1]  # Remove quotes
+            else:
+                sign = parts[7]
+        
+        # If no transaction date was provided, use the verification date
+        if not trans_date and current_ver and hasattr(current_ver, 'date'):
+            trans_date = current_ver.date
+        
+        print(f"Parsed transaction: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}, Object={object_info}, Quantity={quantity}, Sign={sign}")
+        
+        # Create a Transaction object
+        transaction = Transaction(
+            account=account,
+            amount=amount,
+            date=trans_date,
+            text=trans_text
+        )
+        
+        # Add additional properties if available
+        if object_info:
+            transaction.object_info = object_info
+        if quantity != 0.0:
+            transaction.quantity = quantity
+        if sign:
+            transaction.sign = sign
+        
+        # Add account name if available
+        if account in self.data['accounts']:
+            transaction.account_name = self.data['accounts'][account].get('name', '')
+        
+        # Add transaction to current verification
+        if current_ver and hasattr(current_ver, 'transactions'):
+            current_ver.transactions.append(transaction)
+        
+        return transaction
     
     def _parse_rtrans(self, line, current_ver):
         """Parse #RTRANS section (reversed transaction)."""
-        # Handle reversed transaction similar to normal transaction
-        # but with the amount negated
+        # RTRANS follows the same format as TRANS according to SIE 4 standard
+        if line.startswith('#'):
+            line = line[1:]  # Remove the # if present
+            
         parts = self._extract_values(line)
         account = ""
         amount = 0.0
         trans_date = ""
         trans_text = ""
+        object_info = ""
+        quantity = 0.0
+        sign = ""  # For signature/user info
         
+        # According to SIE 4 standard, the format for RTRANS is:
+        # #RTRANS account object_info amount trans_date trans_text quantity sign
+        
+        # Get account number (always in position 1)
         if len(parts) >= 2:
             account = parts[1]
-        if len(parts) >= 3:
-            try:
-                # Negate the amount for reversed transactions
-                amount = -float(parts[2])
-            except ValueError:
-                amount = 0.0
-        if len(parts) >= 4:
-            trans_date = parts[3]
-        if len(parts) >= 5:
-            trans_text = parts[4]
         
-        # If we still don't have a date, use the verification date
-        if not trans_date:
+        # Parse object info (position 2)
+        if len(parts) >= 3:
+            # Object info can be {} or {dimension "value"}
+            if parts[2] == '{}' or (parts[2].startswith('{') and parts[2].endswith('}')):
+                object_info = parts[2]
+            else:
+                # If it's a multi-part object notation, collect all parts
+                if parts[2].startswith('{') and not parts[2].endswith('}'):
+                    object_parts = [parts[2]]
+                    i = 3
+                    while i < len(parts) and not parts[i].endswith('}'):
+                        object_parts.append(parts[i])
+                        i += 1
+                    
+                    if i < len(parts):
+                        object_parts.append(parts[i])  # Add the closing part
+                        object_info = ' '.join(object_parts)
+                        
+                        # Adjust parts list to skip the object parts we've processed
+                        new_parts = parts[:2] + parts[i+1:]
+                        parts = new_parts
+        
+        # Parse amount (position 3 after accounting for object info)
+        if len(parts) >= 4:
+            try:
+                # Handle both dot and comma as decimal separators
+                amount_str = parts[3].replace(',', '.')
+                # For RTRANS, negate the amount
+                amount = -float(amount_str)
+            except (ValueError, TypeError):
+                pass
+        
+        # Parse transaction date if present (position 4)
+        if len(parts) >= 5:
+            if len(parts[4]) == 8 and parts[4].isdigit():
+                # Format: YYYYMMDD
+                trans_date = f"{parts[4][:4]}-{parts[4][4:6]}-{parts[4][6:8]}"
+            elif parts[4] and parts[4] != '""':
+                # If not a date, it might be text
+                if parts[4].startswith('"') and parts[4].endswith('"'):
+                    trans_text = parts[4][1:-1]  # Remove quotes
+                else:
+                    trans_text = parts[4]
+        
+        # Parse transaction text if present (position 5)
+        if len(parts) >= 6 and not trans_text:
+            if parts[5].startswith('"') and parts[5].endswith('"'):
+                trans_text = parts[5][1:-1]  # Remove quotes
+            else:
+                trans_text = parts[5]
+        
+        # Parse quantity if present (position 6)
+        if len(parts) >= 7:
+            try:
+                quantity = float(parts[6])
+            except (ValueError, TypeError):
+                pass
+        
+        # Parse signature/user if present (position 7)
+        if len(parts) >= 8:
+            if parts[7].startswith('"') and parts[7].endswith('"'):
+                sign = parts[7][1:-1]  # Remove quotes
+            else:
+                sign = parts[7]
+        
+        # If no transaction date was provided, use the verification date
+        if not trans_date and current_ver and hasattr(current_ver, 'date'):
             trans_date = current_ver.date
-            
-        transaction = Transaction(account, amount, trans_date, trans_text)
-        current_ver.transactions.append(transaction)
+        
+        print(f"Parsed RTRANS: Account={account}, Amount={amount}, Date={trans_date}, Text={trans_text}, Object={object_info}, Quantity={quantity}, Sign={sign}")
+        
+        # Create a Transaction object
+        transaction = Transaction(
+            account=account,
+            amount=amount,
+            date=trans_date,
+            text=trans_text
+        )
+        
+        # Add additional properties if available
+        if object_info:
+            transaction.object_info = object_info
+        if quantity != 0.0:
+            transaction.quantity = quantity
+        if sign:
+            transaction.sign = sign
+        
+        # Add account name if available
+        if account in self.data['accounts']:
+            transaction.account_name = self.data['accounts'][account].get('name', '')
+        
+        # Add transaction to current verification
+        if current_ver and hasattr(current_ver, 'transactions'):
+            current_ver.transactions.append(transaction)
+        
+        return transaction
     
     def _parse_btrans(self, line):
         """Parse #BTRANS section (budget transaction)."""
@@ -690,3 +718,29 @@ class SIEParser:
         
         # Store account balances
         self.data['account_balances'] = account_balances
+
+    def _parse_adress(self, line):
+        """Parse #ADRESS section (company address)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 2:
+            self.data['metadata']['address'] = parts[1]
+        if len(parts) >= 3:
+            self.data['metadata']['postal_code'] = parts[2]
+        if len(parts) >= 4:
+            self.data['metadata']['city'] = parts[3]
+    
+    def _parse_kptyp(self, line):
+        """Parse #KPTYP section (account type)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 2:
+            self.data['metadata']['account_type'] = parts[1]
+    
+    def _parse_sru(self, line):
+        """Parse #SRU section (SRU code)."""
+        parts = self._extract_values(line)
+        if len(parts) >= 3:
+            account = parts[1]
+            sru_code = parts[2]
+            
+            if account in self.data['accounts']:
+                self.data['accounts'][account]['sru_code'] = sru_code

@@ -270,15 +270,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // Populate balance sheet tab
     function populateBalanceSheet(data) {
         // Get references to DOM elements
-        const balanceSheetTab = document.getElementById('balance-sheet-tab');
+        const balanceSheetTab = document.getElementById('balance-tab');
+        const bsTable = document.querySelector('.bs-report-table tbody');
+        const totalAssetsSpan = document.getElementById('total-assets');
+        const totalLiabilitiesSpan = document.getElementById('total-liabilities');
+        const totalEquitySpan = document.getElementById('total-equity');
+        const totalLiabilitiesEquitySpan = document.getElementById('total-liabilities-equity');
+        const assetsPlaceholder = document.getElementById('assets-placeholder');
+        const liabilitiesPlaceholder = document.getElementById('liabilities-placeholder');
+        const equityPlaceholder = document.getElementById('equity-placeholder');
         
-        if (!balanceSheetTab) {
-            console.error('Balance sheet tab element not found');
+        // Get total spans for OB and Movement
+        const totalAssetsOBSpan = document.getElementById('total-assets-ob');
+        const totalAssetsMovementSpan = document.getElementById('total-assets-movement');
+        const totalLiabilitiesOBSpan = document.getElementById('total-liabilities-ob');
+        const totalLiabilitiesMovementSpan = document.getElementById('total-liabilities-movement');
+        const totalEquityOBSpan = document.getElementById('total-equity-ob');
+        const totalEquityMovementSpan = document.getElementById('total-equity-movement');
+        const totalLiabilitiesEquityOBSpan = document.getElementById('total-liabilities-equity-ob');
+        const totalLiabilitiesEquityMovementSpan = document.getElementById('total-liabilities-equity-movement');
+        
+        // Get company info elements
+        const bsCompanyName = document.getElementById('bs-company-name');
+        const bsPeriod = document.getElementById('bs-period').querySelector('span');
+        
+        if (!balanceSheetTab || !bsTable) {
+            console.error('Balance sheet elements not found');
             return;
         }
         
-        // Clear previous content
-        balanceSheetTab.innerHTML = '';
+        // Set company name and period
+        const companyName = data.metadata?.company_name || 'Company Name';
+        const endDate = data.metadata?.financial_year_end || '';
+        const periodText = endDate ? endDate : 'Current Period';
+        
+        bsCompanyName.textContent = companyName;
+        bsPeriod.textContent = periodText;
         
         // Extract data
         const accounts = data.accounts || {};
@@ -291,59 +318,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
         // For opening balances, use the first available year key (same as Opening Balance tab)
         const openingBalanceYear = Object.keys(openingBalances)[0] || year;
-        
-        console.log("Processing balance sheet for year:", year);
-        console.log("Opening balance year:", openingBalanceYear);
-        console.log("All opening balance years:", Object.keys(openingBalances));
-        
-        // Log all accounts in the opening balances
-        if (openingBalances[openingBalanceYear]) {
-            console.log("All accounts in opening balances:", Object.keys(openingBalances[openingBalanceYear]));
-            console.log("Total accounts in opening balances:", Object.keys(openingBalances[openingBalanceYear]).length);
-        }
-        
-        // Check all opening balance years
-        Object.keys(openingBalances).forEach(yearKey => {
-            console.log(`Opening balances for year ${yearKey}:`, Object.keys(openingBalances[yearKey]).length, "accounts");
-        });
-        
-        // Create filter checkbox
-        const filterContainer = document.createElement('div');
-        filterContainer.className = 'filter-container';
-        
-        const filterCheckbox = document.createElement('input');
-        filterCheckbox.type = 'checkbox';
-        filterCheckbox.id = 'balance-show-non-zero';
-        filterCheckbox.checked = true;
-        
-        const filterLabel = document.createElement('label');
-        filterLabel.htmlFor = 'balance-show-non-zero';
-        filterLabel.textContent = 'Show only accounts with values';
-        
-        filterContainer.appendChild(filterCheckbox);
-        filterContainer.appendChild(filterLabel);
-        balanceSheetTab.appendChild(filterContainer);
-        
-        // Create balance sheet table
-        const table = document.createElement('table');
-        table.className = 'balance-sheet-table';
-        
-        // Create table header
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-            <tr>
-                <th>Account</th>
-                <th>Name</th>
-                <th>Opening Balance</th>
-                <th>Movement</th>
-                <th>Closing Balance</th>
-            </tr>
-        `;
-        
-        table.appendChild(thead);
-        
-        // Create table body
-        const tbody = document.createElement('tbody');
         
         // Process accounts by type
         const accountsByType = {
@@ -364,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Also add accounts from opening balances that might not be in the accounts list
-        // Only use the first available year's opening balances
         if (openingBalances[openingBalanceYear]) {
             Object.keys(openingBalances[openingBalanceYear]).forEach(accountNum => {
                 // Check if this account is already in our lists
@@ -445,12 +418,15 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalAssets = 0;
         let totalLiabilities = 0;
         let totalEquity = 0;
+        let totalOpeningAssets = 0;
+        let totalMovementAssets = 0;
+        let totalOpeningLiabilities = 0;
+        let totalMovementLiabilities = 0;
+        let totalOpeningEquity = 0;
+        let totalMovementEquity = 0;
         
-        // Add Assets section
-        const assetHeader = document.createElement('tr');
-        assetHeader.className = 'section-header';
-        assetHeader.innerHTML = `<td colspan="5">Assets</td>`;
-        tbody.appendChild(assetHeader);
+        // Process Assets
+        let assetsRowsHTML = '';
         
         // Sort accounts by number
         accountsByType['Asset'].sort((a, b) => parseInt(a.number) - parseInt(b.number));
@@ -475,64 +451,64 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate closing balance
             const closingBalance = openingBalance + movement;
             
-            // Skip accounts with zero values if filter is checked
-            if (document.getElementById('balance-show-non-zero').checked && 
+            // Skip accounts with zero values if filter is active
+            if (document.getElementById('balance-show-non-zero')?.checked && 
                 openingBalance === 0 && movement === 0 && closingBalance === 0) {
                 return;
             }
             
-            // Create row
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${number}</td>
-                <td>${data.name || ''}</td>
-                <td>${formatCurrency(openingBalance)}</td>
-                <td>${formatCurrency(movement)}</td>
-                <td>${formatCurrency(closingBalance)}</td>
+            // Create row HTML
+            assetsRowsHTML += `
+                <tr class="account-row" data-account-num="${number}" data-amount="${closingBalance}">
+                    <td class="account-col">${number}</td>
+                    <td class="name-col">${data.name || ''}</td>
+                    <td class="amount-col">${formatCurrency(openingBalance)}</td>
+                    <td class="amount-col">${formatCurrency(movement)}</td>
+                    <td class="amount-col">${formatCurrency(closingBalance)}</td>
+                </tr>
             `;
             
-            tbody.appendChild(row);
             totalAssets += closingBalance;
+            totalOpeningAssets += openingBalance;
+            totalMovementAssets += movement;
         });
         
-        // Add total assets row
-        const totalAssetsRow = document.createElement('tr');
-        totalAssetsRow.className = 'total-row';
-        
-        // Calculate total opening balances for assets
-        let totalOpeningAssets = 0;
-        let totalMovementAssets = 0;
-        
-        accountsByType['Asset'].forEach(({ number }) => {
-            // Get opening balance
-            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
-                const obEntry = openingBalances[openingBalanceYear][number];
-                const openingBalance = typeof obEntry === 'object' ? 
-                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
-                totalOpeningAssets += openingBalance;
+        // Insert asset rows
+        if (assetsRowsHTML) {
+            // Remove placeholder if we have rows
+            if (assetsPlaceholder) {
+                assetsPlaceholder.remove();
             }
             
-            // Calculate movement
-            if (accountTransactionsMap.has(number)) {
-                const transactions = accountTransactionsMap.get(number).transactions;
-                const movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
-                totalMovementAssets += movement;
+            // Find the assets section header
+            const assetsSectionHeader = Array.from(bsTable.querySelectorAll('.section-header')).find(
+                header => header.textContent.trim() === 'Assets'
+            );
+            
+            if (assetsSectionHeader) {
+                // Insert after the header
+                assetsSectionHeader.insertAdjacentHTML('afterend', assetsRowsHTML);
             }
-        });
+        }
         
-        totalAssetsRow.innerHTML = `
-            <td colspan="2">Total Assets</td>
-            <td>${formatCurrency(totalOpeningAssets)}</td>
-            <td>${formatCurrency(totalMovementAssets)}</td>
-            <td>${formatCurrency(totalAssets)}</td>
-        `;
-        tbody.appendChild(totalAssetsRow);
+        // Update total assets
+        if (totalAssetsSpan) {
+            totalAssetsSpan.textContent = formatCurrency(totalAssets);
+            totalAssetsSpan.className = 'amount-col ' + (totalAssets >= 0 ? 'positive' : 'negative');
+        }
         
-        // Add Liabilities section
-        const liabilitiesHeader = document.createElement('tr');
-        liabilitiesHeader.className = 'section-header';
-        liabilitiesHeader.innerHTML = `<td colspan="5">Liabilities</td>`;
-        tbody.appendChild(liabilitiesHeader);
+        if (totalAssetsOBSpan) {
+            totalAssetsOBSpan.textContent = formatCurrency(totalOpeningAssets);
+            totalAssetsOBSpan.className = 'amount-col ' + (totalOpeningAssets >= 0 ? 'positive' : 'negative');
+        }
+        
+        if (totalAssetsMovementSpan) {
+            totalAssetsMovementSpan.textContent = formatCurrency(totalMovementAssets);
+            totalAssetsMovementSpan.className = 'amount-col ' + (totalMovementAssets >= 0 ? 'positive' : 'negative');
+        }
+        
+        // Process Liabilities
+        let liabilitiesRowsHTML = '';
         
         // Sort accounts by number
         accountsByType['Liability'].sort((a, b) => parseInt(a.number) - parseInt(b.number));
@@ -557,64 +533,64 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate closing balance
             const closingBalance = openingBalance + movement;
             
-            // Skip accounts with zero values if filter is checked
-            if (document.getElementById('balance-show-non-zero').checked && 
+            // Skip accounts with zero values if filter is active
+            if (document.getElementById('balance-show-non-zero')?.checked && 
                 openingBalance === 0 && movement === 0 && closingBalance === 0) {
                 return;
             }
             
-            // Create row
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${number}</td>
-                <td>${data.name || ''}</td>
-                <td>${formatCurrency(openingBalance)}</td>
-                <td>${formatCurrency(movement)}</td>
-                <td>${formatCurrency(closingBalance)}</td>
+            // Create row HTML
+            liabilitiesRowsHTML += `
+                <tr class="account-row" data-account-num="${number}" data-amount="${closingBalance}">
+                    <td class="account-col">${number}</td>
+                    <td class="name-col">${data.name || ''}</td>
+                    <td class="amount-col">${formatCurrency(openingBalance)}</td>
+                    <td class="amount-col">${formatCurrency(movement)}</td>
+                    <td class="amount-col">${formatCurrency(closingBalance)}</td>
+                </tr>
             `;
             
-            tbody.appendChild(row);
             totalLiabilities += closingBalance;
+            totalOpeningLiabilities += openingBalance;
+            totalMovementLiabilities += movement;
         });
         
-        // Add total liabilities row
-        const totalLiabilitiesRow = document.createElement('tr');
-        totalLiabilitiesRow.className = 'total-row';
-        
-        // Calculate total opening balances for liabilities
-        let totalOpeningLiabilities = 0;
-        let totalMovementLiabilities = 0;
-        
-        accountsByType['Liability'].forEach(({ number }) => {
-            // Get opening balance
-            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
-                const obEntry = openingBalances[openingBalanceYear][number];
-                const openingBalance = typeof obEntry === 'object' ? 
-                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
-                totalOpeningLiabilities += openingBalance;
+        // Insert liability rows
+        if (liabilitiesRowsHTML) {
+            // Remove placeholder if we have rows
+            if (liabilitiesPlaceholder) {
+                liabilitiesPlaceholder.remove();
             }
             
-            // Calculate movement
-            if (accountTransactionsMap.has(number)) {
-                const transactions = accountTransactionsMap.get(number).transactions;
-                const movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
-                totalMovementLiabilities += movement;
+            // Find the liabilities section header
+            const liabilitiesSectionHeader = Array.from(bsTable.querySelectorAll('.section-header')).find(
+                header => header.textContent.trim() === 'Liabilities'
+            );
+            
+            if (liabilitiesSectionHeader) {
+                // Insert after the header
+                liabilitiesSectionHeader.insertAdjacentHTML('afterend', liabilitiesRowsHTML);
             }
-        });
+        }
         
-        totalLiabilitiesRow.innerHTML = `
-            <td colspan="2">Total Liabilities</td>
-            <td>${formatCurrency(totalOpeningLiabilities)}</td>
-            <td>${formatCurrency(totalMovementLiabilities)}</td>
-            <td>${formatCurrency(totalLiabilities)}</td>
-        `;
-        tbody.appendChild(totalLiabilitiesRow);
+        // Update total liabilities
+        if (totalLiabilitiesSpan) {
+            totalLiabilitiesSpan.textContent = formatCurrency(totalLiabilities);
+            totalLiabilitiesSpan.className = 'amount-col ' + (totalLiabilities >= 0 ? 'positive' : 'negative');
+        }
         
-        // Add Equity section
-        const equityHeader = document.createElement('tr');
-        equityHeader.className = 'section-header';
-        equityHeader.innerHTML = `<td colspan="5">Equity</td>`;
-        tbody.appendChild(equityHeader);
+        if (totalLiabilitiesOBSpan) {
+            totalLiabilitiesOBSpan.textContent = formatCurrency(totalOpeningLiabilities);
+            totalLiabilitiesOBSpan.className = 'amount-col ' + (totalOpeningLiabilities >= 0 ? 'positive' : 'negative');
+        }
+        
+        if (totalLiabilitiesMovementSpan) {
+            totalLiabilitiesMovementSpan.textContent = formatCurrency(totalMovementLiabilities);
+            totalLiabilitiesMovementSpan.className = 'amount-col ' + (totalMovementLiabilities >= 0 ? 'positive' : 'negative');
+        }
+        
+        // Process Equity
+        let equityRowsHTML = '';
         
         // Sort accounts by number
         accountsByType['Equity'].sort((a, b) => parseInt(a.number) - parseInt(b.number));
@@ -639,119 +615,114 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate closing balance
             const closingBalance = openingBalance + movement;
             
-            // Skip accounts with zero values if filter is checked
-            if (document.getElementById('balance-show-non-zero').checked && 
+            // Skip accounts with zero values if filter is active
+            if (document.getElementById('balance-show-non-zero')?.checked && 
                 openingBalance === 0 && movement === 0 && closingBalance === 0) {
                 return;
             }
             
-            // Create row
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${number}</td>
-                <td>${data.name || ''}</td>
-                <td>${formatCurrency(openingBalance)}</td>
-                <td>${formatCurrency(movement)}</td>
-                <td>${formatCurrency(closingBalance)}</td>
+            // Create row HTML
+            equityRowsHTML += `
+                <tr class="account-row" data-account-num="${number}" data-amount="${closingBalance}">
+                    <td class="account-col">${number}</td>
+                    <td class="name-col">${data.name || ''}</td>
+                    <td class="amount-col">${formatCurrency(openingBalance)}</td>
+                    <td class="amount-col">${formatCurrency(movement)}</td>
+                    <td class="amount-col">${formatCurrency(closingBalance)}</td>
+                </tr>
             `;
             
-            tbody.appendChild(row);
             totalEquity += closingBalance;
+            totalOpeningEquity += openingBalance;
+            totalMovementEquity += movement;
         });
         
-        // Add total equity row
-        const totalEquityRow = document.createElement('tr');
-        totalEquityRow.className = 'total-row';
-        
-        // Calculate total opening balances for equity
-        let totalOpeningEquity = 0;
-        let totalMovementEquity = 0;
-        
-        accountsByType['Equity'].forEach(({ number }) => {
-            // Get opening balance
-            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
-                const obEntry = openingBalances[openingBalanceYear][number];
-                const openingBalance = typeof obEntry === 'object' ? 
-                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
-                totalOpeningEquity += openingBalance;
+        // Insert equity rows
+        if (equityRowsHTML) {
+            // Remove placeholder if we have rows
+            if (equityPlaceholder) {
+                equityPlaceholder.remove();
             }
             
-            // Calculate movement
-            if (accountTransactionsMap.has(number)) {
-                const transactions = accountTransactionsMap.get(number).transactions;
-                const movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
-                totalMovementEquity += movement;
+            // Find the equity section header
+            const equitySectionHeader = Array.from(bsTable.querySelectorAll('.section-header')).find(
+                header => header.textContent.trim() === 'Equity'
+            );
+            
+            if (equitySectionHeader) {
+                // Insert after the header
+                equitySectionHeader.insertAdjacentHTML('afterend', equityRowsHTML);
             }
-        });
+        }
         
-        totalEquityRow.innerHTML = `
-            <td colspan="2">Total Equity</td>
-            <td>${formatCurrency(totalOpeningEquity)}</td>
-            <td>${formatCurrency(totalMovementEquity)}</td>
-            <td>${formatCurrency(totalEquity)}</td>
-        `;
-        tbody.appendChild(totalEquityRow);
+        // Update total equity
+        if (totalEquitySpan) {
+            totalEquitySpan.textContent = formatCurrency(totalEquity);
+            totalEquitySpan.className = 'amount-col ' + (totalEquity >= 0 ? 'positive' : 'negative');
+        }
         
-        // Add total liabilities and equity row
-        const totalLiabilitiesEquityRow = document.createElement('tr');
-        totalLiabilitiesEquityRow.className = 'total-row grand-total';
+        if (totalEquityOBSpan) {
+            totalEquityOBSpan.textContent = formatCurrency(totalOpeningEquity);
+            totalEquityOBSpan.className = 'amount-col ' + (totalOpeningEquity >= 0 ? 'positive' : 'negative');
+        }
         
-        // Calculate combined totals
+        if (totalEquityMovementSpan) {
+            totalEquityMovementSpan.textContent = formatCurrency(totalMovementEquity);
+            totalEquityMovementSpan.className = 'amount-col ' + (totalMovementEquity >= 0 ? 'positive' : 'negative');
+        }
+        
+        // Update total liabilities & equity
+        const totalLiabilitiesEquity = totalLiabilities + totalEquity;
         const totalOpeningLiabilitiesEquity = totalOpeningLiabilities + totalOpeningEquity;
         const totalMovementLiabilitiesEquity = totalMovementLiabilities + totalMovementEquity;
-        const totalClosingLiabilitiesEquity = totalLiabilities + totalEquity;
         
-        totalLiabilitiesEquityRow.innerHTML = `
-            <td colspan="2">Total Liabilities & Equity</td>
-            <td>${formatCurrency(totalOpeningLiabilitiesEquity)}</td>
-            <td>${formatCurrency(totalMovementLiabilitiesEquity)}</td>
-            <td>${formatCurrency(totalClosingLiabilitiesEquity)}</td>
-        `;
-        tbody.appendChild(totalLiabilitiesEquityRow);
+        if (totalLiabilitiesEquitySpan) {
+            totalLiabilitiesEquitySpan.textContent = formatCurrency(totalLiabilitiesEquity);
+            totalLiabilitiesEquitySpan.className = 'amount-col ' + (totalLiabilitiesEquity >= 0 ? 'positive' : 'negative');
+        }
         
-        // Add closing balance summary row
-        const closingBalanceSummaryRow = document.createElement('tr');
-        closingBalanceSummaryRow.className = 'closing-balance-row';
-        closingBalanceSummaryRow.innerHTML = `
-            <td colspan="3" class="closing-balance-label">Closing Balance (${year}-12-31)</td>
-            <td></td>
-            <td class="closing-balance-value">${formatCurrency(totalClosingLiabilitiesEquity)}</td>
-        `;
-        tbody.appendChild(closingBalanceSummaryRow);
+        if (totalLiabilitiesEquityOBSpan) {
+            totalLiabilitiesEquityOBSpan.textContent = formatCurrency(totalOpeningLiabilitiesEquity);
+            totalLiabilitiesEquityOBSpan.className = 'amount-col ' + (totalOpeningLiabilitiesEquity >= 0 ? 'positive' : 'negative');
+        }
         
-        table.appendChild(tbody);
-        balanceSheetTab.appendChild(table);
+        if (totalLiabilitiesEquityMovementSpan) {
+            totalLiabilitiesEquityMovementSpan.textContent = formatCurrency(totalMovementLiabilitiesEquity);
+            totalLiabilitiesEquityMovementSpan.className = 'amount-col ' + (totalMovementLiabilitiesEquity >= 0 ? 'positive' : 'negative');
+        }
         
-        // Add event listener to filter checkbox
-        filterCheckbox.addEventListener('change', filterBalanceAccounts);
+        // Add event listeners for the action buttons
+        document.getElementById('print-bs')?.addEventListener('click', () => {
+            window.print();
+        });
+        
+        document.getElementById('export-bs-pdf')?.addEventListener('click', () => {
+            alert('PDF export functionality would be implemented here.');
+            // In a real implementation, this would use a library like jsPDF to generate a PDF
+        });
+        
+        // Update the filter event listener
+        document.getElementById('balance-show-non-zero')?.addEventListener('change', filterBalanceAccounts);
     }
     
     // Filter balance sheet accounts based on checkbox
     function filterBalanceAccounts() {
-        const showNonZero = document.getElementById('balance-show-non-zero').checked;
-        const table = document.querySelector('.balance-sheet-table');
+        const showNonZeroCheckbox = document.getElementById('balance-show-non-zero');
+        const accountRows = document.querySelectorAll('.bs-report-table .account-row');
         
-        if (!table) return;
+        if (!showNonZeroCheckbox || !accountRows.length) {
+            return;
+        }
         
-        const rows = table.querySelectorAll('tbody tr');
+        const showOnlyNonZero = showNonZeroCheckbox.checked;
         
-        rows.forEach(row => {
-            // Skip section headers and total rows
-            if (row.classList.contains('section-header') || row.classList.contains('total-row')) {
-                return;
-            }
+        accountRows.forEach(row => {
+            const amount = parseFloat(row.dataset.amount) || 0;
             
-            const cells = row.querySelectorAll('td');
-            if (cells.length >= 5) {
-                const openingBalance = parseFloat(cells[2].textContent.replace(/[^\d.-]/g, '')) || 0;
-                const movement = parseFloat(cells[3].textContent.replace(/[^\d.-]/g, '')) || 0;
-                const closingBalance = parseFloat(cells[4].textContent.replace(/[^\d.-]/g, '')) || 0;
-                
-                if (showNonZero && openingBalance === 0 && movement === 0 && closingBalance === 0) {
-                    row.style.display = 'none';
-                } else {
-                    row.style.display = '';
-                }
+            if (showOnlyNonZero && amount === 0) {
+                row.style.display = 'none';
+            } else {
+                row.style.display = '';
             }
         });
     }
@@ -760,20 +731,30 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateIncomeStatement(data) {
         // Get references to DOM elements
         const incomeStatementTab = document.getElementById('income-tab');
-        const incomeList = document.getElementById('income-list');
-        const expensesList = document.getElementById('expenses-list');
+        const plTable = document.querySelector('.pl-report-table tbody');
         const totalIncomeSpan = document.getElementById('total-income');
         const totalExpensesSpan = document.getElementById('total-expenses');
         const netResultSpan = document.getElementById('income-net-result');
+        const incomePlaceholder = document.getElementById('income-placeholder');
+        const expensesPlaceholder = document.getElementById('expenses-placeholder');
         
-        if (!incomeStatementTab || !incomeList || !expensesList) {
+        // Get company info elements
+        const plCompanyName = document.getElementById('pl-company-name');
+        const plPeriod = document.getElementById('pl-period').querySelector('span');
+        
+        if (!incomeStatementTab || !plTable) {
             console.error('Income statement elements not found');
             return;
         }
         
-        // Clear previous content
-        incomeList.innerHTML = '';
-        expensesList.innerHTML = '';
+        // Set company name and period
+        const companyName = data.metadata?.company_name || 'Company Name';
+        const startDate = data.metadata?.financial_year_start || '';
+        const endDate = data.metadata?.financial_year_end || '';
+        const periodText = startDate && endDate ? `${startDate} - ${endDate}` : 'Current Period';
+        
+        plCompanyName.textContent = companyName;
+        plPeriod.textContent = periodText;
         
         // Extract data
         const incomeStatement = data.income_statement || {};
@@ -804,6 +785,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Process income accounts
         let totalIncome = 0;
+        let incomeRowsHTML = '';
         
         // Sort account numbers
         const sortedIncomeAccounts = Array.from(incomeAccounts).sort((a, b) => parseInt(a) - parseInt(b));
@@ -829,29 +811,36 @@ document.addEventListener('DOMContentLoaded', function() {
             totalIncome += amount;
             
             // Create account row
-            const accountRow = document.createElement('div');
-            accountRow.className = 'account-row';
-            accountRow.dataset.accountNum = accountNum;
-            accountRow.dataset.amount = amount;
-            
-            // Add zero-value class if amount is zero
-            if (amount === 0) {
-                accountRow.classList.add('zero-value');
+            incomeRowsHTML += `
+                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNum}" data-amount="${amount}">
+                    <td class="account-col">${accountNum}</td>
+                    <td class="name-col">${accountData.name || 'Unknown'}</td>
+                    <td class="amount-col positive">${formatCurrency(displayAmount)}</td>
+                </tr>
+            `;
+        }
+        
+        // Insert income rows
+        if (incomeRowsHTML) {
+            // Remove placeholder if we have rows
+            if (incomePlaceholder) {
+                incomePlaceholder.remove();
             }
             
-            accountRow.innerHTML = `
-                <div class="account-info">
-                    <span class="account-number">${accountNum}</span>
-                    <span class="account-name">${accountData.name || 'Unknown'}</span>
-                </div>
-                <span class="account-amount positive">${formatCurrency(displayAmount)}</span>
-            `;
+            // Find the income section header
+            const incomeSectionHeader = Array.from(plTable.querySelectorAll('.section-header')).find(
+                header => header.textContent.trim() === 'Revenue'
+            );
             
-            incomeList.appendChild(accountRow);
+            if (incomeSectionHeader) {
+                // Insert after the header
+                incomeSectionHeader.insertAdjacentHTML('afterend', incomeRowsHTML);
+            }
         }
         
         // Process expense accounts
         let totalExpenses = 0;
+        let expenseRowsHTML = '';
         
         // Sort account numbers
         const sortedExpenseAccounts = Array.from(expenseAccounts).sort((a, b) => parseInt(a) - parseInt(b));
@@ -874,25 +863,31 @@ document.addEventListener('DOMContentLoaded', function() {
             totalExpenses += amount;
             
             // Create account row
-            const accountRow = document.createElement('div');
-            accountRow.className = 'account-row';
-            accountRow.dataset.accountNum = accountNum;
-            accountRow.dataset.amount = amount;
-            
-            // Add zero-value class if amount is zero
-            if (amount === 0) {
-                accountRow.classList.add('zero-value');
+            expenseRowsHTML += `
+                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNum}" data-amount="${amount}">
+                    <td class="account-col">${accountNum}</td>
+                    <td class="name-col">${accountData.name || 'Unknown'}</td>
+                    <td class="amount-col ${amount >= 0 ? 'positive' : 'negative'}">${formatCurrency(amount)}</td>
+                </tr>
+            `;
+        }
+        
+        // Insert expense rows
+        if (expenseRowsHTML) {
+            // Remove placeholder if we have rows
+            if (expensesPlaceholder) {
+                expensesPlaceholder.remove();
             }
             
-            accountRow.innerHTML = `
-                <div class="account-info">
-                    <span class="account-number">${accountNum}</span>
-                    <span class="account-name">${accountData.name || 'Unknown'}</span>
-                </div>
-                <span class="account-amount ${amount >= 0 ? 'positive' : 'negative'}">${formatCurrency(amount)}</span>
-            `;
+            // Find the expenses section header
+            const expensesSectionHeader = Array.from(plTable.querySelectorAll('.section-header')).find(
+                header => header.textContent.trim() === 'Expenses'
+            );
             
-            expensesList.appendChild(accountRow);
+            if (expensesSectionHeader) {
+                // Insert after the header
+                expensesSectionHeader.insertAdjacentHTML('afterend', expenseRowsHTML);
+            }
         }
         
         // Update totals and net result
@@ -901,13 +896,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const netIncome = displayTotalIncome - displayTotalExpenses;
         
         totalIncomeSpan.textContent = formatCurrency(displayTotalIncome);
-        totalIncomeSpan.className = 'positive';
+        totalIncomeSpan.className = 'amount-col positive';
         
         totalExpensesSpan.textContent = formatCurrency(displayTotalExpenses);
-        totalExpensesSpan.className = displayTotalExpenses >= 0 ? 'positive' : 'negative';
+        totalExpensesSpan.className = 'amount-col ' + (displayTotalExpenses >= 0 ? 'positive' : 'negative');
         
         netResultSpan.textContent = formatCurrency(netIncome);
-        netResultSpan.className = netIncome >= 0 ? 'positive' : 'negative';
+        netResultSpan.className = 'amount-col ' + (netIncome >= 0 ? 'positive' : 'negative');
+        
+        // Add event listeners for the action buttons
+        document.getElementById('print-pl')?.addEventListener('click', () => {
+            window.print();
+        });
+        
+        document.getElementById('export-pl-pdf')?.addEventListener('click', () => {
+            alert('PDF export functionality would be implemented here.');
+            // In a real implementation, this would use a library like jsPDF to generate a PDF
+        });
     }
     
     // Filter income statement accounts based on checkbox
@@ -1287,103 +1292,80 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateLedger(data) {
         // Get references to DOM elements
         const ledgerTab = document.getElementById('ledger-tab');
+        const ledgerTransactions = document.getElementById('ledger-transactions');
+        const accountCount = document.getElementById('account-count');
         
-        if (!ledgerTab) {
-            console.error('Ledger tab element not found');
+        // Get company info elements
+        const ledgerCompanyName = document.getElementById('ledger-company-name');
+        const ledgerPeriod = document.getElementById('ledger-period').querySelector('span');
+        
+        if (!ledgerTab || !ledgerTransactions) {
+            console.error('Ledger elements not found');
             return;
         }
+        
+        // Set company name and period
+        const companyName = data.metadata?.company_name || 'Company Name';
+        const startDate = data.metadata?.financial_year_start || '';
+        const endDate = data.metadata?.financial_year_end || '';
+        const periodText = startDate && endDate ? `${startDate} - ${endDate}` : 'Current Period';
+        
+        ledgerCompanyName.textContent = companyName;
+        ledgerPeriod.textContent = periodText;
         
         // Clear previous content
-        ledgerTab.innerHTML = '';
+        ledgerTransactions.innerHTML = '';
         
-        // Create ledger container and list
-        const ledgerContainer = document.createElement('div');
-        ledgerContainer.className = 'ledger-container';
+        // Extract data
+        const accounts = data.accounts || {};
+        const openingBalances = data.opening_balances || {};
+        const year = data.metadata && data.metadata.financial_year_start ? 
+            data.metadata.financial_year_start.substring(0, 4) : new Date().getFullYear().toString();
         
-        const ledgerList = document.createElement('div');
-        ledgerList.id = 'ledger-list';
-        ledgerList.className = 'ledger-list';
-        
-        ledgerContainer.appendChild(ledgerList);
-        ledgerTab.appendChild(ledgerContainer);
-        
-        // Add account count display
-        const accountCountDisplay = document.createElement('div');
-        accountCountDisplay.className = 'ledger-info';
-        accountCountDisplay.innerHTML = '<span id="account-count">0</span> accounts shown';
-        ledgerTab.insertBefore(accountCountDisplay, ledgerContainer);
-        
-        // Add search box
-        const searchBox = document.createElement('div');
-        searchBox.className = 'ledger-controls';
-        searchBox.innerHTML = `
-            <div class="search-box">
-                <input type="text" id="ledger-search" placeholder="Search accounts...">
-            </div>
-        `;
-        ledgerTab.insertBefore(searchBox, accountCountDisplay);
-        
-        // Make sure we're working with the correct data structure
-        // The data might be nested inside a data property
-        const sieData = data.data || data;
-        
-        // Basic validation
-        if (!sieData || !sieData.accounts || Object.keys(sieData.accounts).length === 0) {
-            ledgerList.innerHTML = '<div class="note">No account data available in this SIE file.</div>';
-            return;
-        }
-        
-        // Create a map to group transactions by account
+        // Create a map to store account transactions
         const accountTransactionsMap = new Map();
         
-        // Get opening balances
-        const openingBalances = data.opening_balances || {};
-        // Determine the year (financial year)
-        const year = Object.keys(openingBalances)[0] || '';
-        
-        // Initialize all accounts first
-        for (const accountNum in sieData.accounts) {
-            const account = sieData.accounts[accountNum];
+        // Initialize map with all accounts
+        Object.entries(accounts).forEach(([accountNum, accountData]) => {
             accountTransactionsMap.set(accountNum, {
-                name: account.name || "Unknown",
+                name: accountData.name || '',
+                type: accountData.type || 'Other',
                 transactions: []
             });
-        }
+        });
         
-        // Process all verifications and their transactions
-        if (sieData.verifications && Array.isArray(sieData.verifications)) {
-            sieData.verifications.forEach((verification) => {
-                // Skip if no transactions
-                if (!verification.transactions || !Array.isArray(verification.transactions)) {
-                    return;
-                }
+        // Collect transactions for each account
+        if (data.verifications) {
+            data.verifications.forEach(verification => {
+                if (!verification.transactions) return;
                 
-                // Format verification number
-                const verNumber = verification.series && verification.number 
-                    ? `${verification.series}${verification.number}` 
-                    : verification.number || '';
+                const verNumber = verification.id || '';
                 
-                // Process each transaction in this verification
-                verification.transactions.forEach((transaction) => {
-                    // Skip if no account number
-                    if (!transaction.account) {
-                        return;
-                    }
-                    
+                verification.transactions.forEach(transaction => {
                     const accountNumber = transaction.account;
+                    const accountName = transaction.account_name || accounts[accountNumber]?.name || '';
                     
-                    // Get account name
-                    let accountName = transaction.account_name || "Unknown";
-                    if (!accountName || accountName === "Unknown") {
-                        if (sieData.accounts && sieData.accounts[accountNumber]) {
-                            accountName = sieData.accounts[accountNumber].name || "Unknown";
-                        }
-                    }
-                    
-                    // Create entry for this account if it doesn't exist
+                    // If this account is not in our map yet, add it
                     if (!accountTransactionsMap.has(accountNumber)) {
+                        // Try to determine account type from account number
+                        let type = 'Other';
+                        const accNum = parseInt(accountNumber);
+                        
+                        if (accNum >= 1000 && accNum < 2000) {
+                            type = 'Asset';
+                        } else if (accNum >= 2000 && accNum < 3000) {
+                            type = 'Equity';
+                        } else if (accNum >= 3000 && accNum < 4000) {
+                            type = 'Liability';
+                        } else if (accNum >= 3000 && accNum < 4000) {
+                            type = 'Income';
+                        } else if (accNum >= 5000 && accNum < 8000) {
+                            type = 'Expense';
+                        }
+                        
                         accountTransactionsMap.set(accountNumber, {
                             name: accountName,
+                            type: type,
                             transactions: []
                         });
                     }
@@ -1406,9 +1388,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return parseInt(a) - parseInt(b);
         });
         
-        // Create account sections
+        // Track accounts with transactions
         let accountsWithTransactions = 0;
         
+        // Process each account
         sortedAccounts.forEach(accountNumber => {
             const accountData = accountTransactionsMap.get(accountNumber);
             const transactions = accountData.transactions;
@@ -1418,40 +1401,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Create account section
-            const accountSection = document.createElement('div');
-            accountSection.className = 'account-section';
-            accountSection.dataset.account = accountNumber;
+            accountsWithTransactions++;
             
-            // Create account header
-            const accountHeader = document.createElement('div');
-            accountHeader.className = 'account-header';
-            accountHeader.innerHTML = `
-                <div class="account-title">${accountNumber} - ${accountData.name}</div>
-                <div class="account-toggle">▼</div>
+            // Create account header row
+            const accountHeaderRow = document.createElement('tr');
+            accountHeaderRow.className = `account-header account-type-${accountData.type}`;
+            accountHeaderRow.innerHTML = `
+                <td colspan="6">${accountNumber} ${accountData.name}</td>
             `;
-            
-            // Create transactions container
-            const transactionsContainer = document.createElement('div');
-            transactionsContainer.className = 'transactions-container';
-            
-            // Create transactions table
-            const transactionsTable = document.createElement('table');
-            transactionsTable.className = 'transactions-table';
-            transactionsTable.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Verification</th>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Balance</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            `;
-            
-            const tbody = transactionsTable.querySelector('tbody');
+            ledgerTransactions.appendChild(accountHeaderRow);
             
             // Sort transactions by date
             transactions.sort((a, b) => {
@@ -1460,6 +1418,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add opening balance row if available
             let runningBalance = 0;
+            
+            // Always show opening balance row, even if zero
             if (year && openingBalances[year] && openingBalances[year][accountNumber]) {
                 const obEntry = openingBalances[year][accountNumber];
                 const openingBalance = typeof obEntry === 'object' ? 
@@ -1469,14 +1429,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 const openingRow = document.createElement('tr');
                 openingRow.className = 'opening-balance-row';
                 openingRow.innerHTML = `
-                    <td>-</td>
+                    <td>${accountNumber}</td>
                     <td>${year}-01-01</td>
+                    <td>-</td>
                     <td>Opening Balance</td>
-                    <td></td>
-                    <td>${formatCurrency(openingBalance)}</td>
+                    <td class="amount-col"></td>
+                    <td class="balance-col">${formatCurrency(openingBalance)}</td>
                 `;
                 
-                tbody.appendChild(openingRow);
+                ledgerTransactions.appendChild(openingRow);
+            } else {
+                // If no opening balance exists in the current year, check other years
+                let foundOpeningBalance = false;
+                let openingBalance = 0;
+                
+                // Check all available years for opening balances
+                for (const yearKey in openingBalances) {
+                    if (openingBalances[yearKey] && openingBalances[yearKey][accountNumber]) {
+                        const obEntry = openingBalances[yearKey][accountNumber];
+                        openingBalance = typeof obEntry === 'object' ? 
+                            obEntry.amount || 0 : parseFloat(obEntry) || 0;
+                        runningBalance = openingBalance;
+                        foundOpeningBalance = true;
+                        break;
+                    }
+                }
+                
+                // Only add a zero opening balance if we couldn't find any opening balance
+                if (!foundOpeningBalance) {
+                    openingBalance = 0;
+                    runningBalance = 0;
+                }
+                
+                const openingRow = document.createElement('tr');
+                openingRow.className = 'opening-balance-row';
+                openingRow.innerHTML = `
+                    <td>${accountNumber}</td>
+                    <td>${year}-01-01</td>
+                    <td>-</td>
+                    <td>Opening Balance</td>
+                    <td class="amount-col"></td>
+                    <td class="balance-col">${formatCurrency(openingBalance)}</td>
+                `;
+                
+                ledgerTransactions.appendChild(openingRow);
             }
             
             // Add transactions to table with running balance
@@ -1485,59 +1481,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${transaction.verification}</td>
+                    <td>${accountNumber}</td>
                     <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.verification}</td>
                     <td>${transaction.text}</td>
-                    <td>${formatCurrency(transaction.amount)}</td>
-                    <td>${formatCurrency(runningBalance)}</td>
+                    <td class="amount-col ${transaction.amount >= 0 ? 'positive' : 'negative'}">${formatCurrency(transaction.amount)}</td>
+                    <td class="balance-col">${formatCurrency(runningBalance)}</td>
                 `;
                 
-                tbody.appendChild(row);
+                ledgerTransactions.appendChild(row);
             });
             
-            // Add closing balance summary row
-            const closingBalanceRow = document.createElement('tr');
-            closingBalanceRow.className = 'closing-balance-row';
-            closingBalanceRow.innerHTML = `
-                <td colspan="3" class="closing-balance-label">Closing Balance (${year}-12-31)</td>
-                <td></td>
-                <td class="closing-balance-value">${formatCurrency(runningBalance)}</td>
+            // Add closing balance row
+            const closingRow = document.createElement('tr');
+            closingRow.className = 'closing-balance-row';
+            closingRow.innerHTML = `
+                <td>${accountNumber}</td>
+                <td>${year}-12-31</td>
+                <td>-</td>
+                <td>Closing Balance</td>
+                <td class="amount-col"></td>
+                <td class="balance-col ${runningBalance >= 0 ? 'positive' : 'negative'}">${formatCurrency(runningBalance)}</td>
             `;
-            
-            tbody.appendChild(closingBalanceRow);
-            
-            transactionsContainer.appendChild(transactionsTable);
-            
-            accountSection.appendChild(accountHeader);
-            accountSection.appendChild(transactionsContainer);
-            
-            ledgerList.appendChild(accountSection);
-            accountsWithTransactions++;
-            
-            // Add click event to toggle transactions visibility
-            accountHeader.addEventListener('click', function() {
-                const transactionsContainer = this.nextElementSibling;
-                const toggle = this.querySelector('.account-toggle');
-                
-                if (transactionsContainer.style.display === 'none') {
-                    transactionsContainer.style.display = 'block';
-                    toggle.textContent = '▼';
-                } else {
-                    transactionsContainer.style.display = 'none';
-                    toggle.textContent = '▶';
-                }
-            });
+            ledgerTransactions.appendChild(closingRow);
         });
         
         // Update account count
-        const accountCount = document.getElementById('account-count');
         if (accountCount) {
             accountCount.textContent = accountsWithTransactions;
         }
         
         // If no accounts with transactions were found
         if (accountsWithTransactions === 0) {
-            ledgerList.innerHTML = '<div class="note">No transactions found for any account.</div>';
+            ledgerTransactions.innerHTML = '<tr><td colspan="6" class="empty-message">No transactions found for any account.</td></tr>';
         }
         
         // Add search functionality
@@ -1545,26 +1521,62 @@ document.addEventListener('DOMContentLoaded', function() {
         if (ledgerSearch) {
             ledgerSearch.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
-                const accountSections = document.querySelectorAll('.account-section');
-                let visibleCount = 0;
+                let visibleAccounts = 0;
+                let currentAccount = null;
+                let accountVisible = false;
+                let accountRows = [];
                 
-                accountSections.forEach(section => {
-                    const account = section.dataset.account;
-                    const accountName = section.querySelector('.account-title').textContent.toLowerCase();
-                    
-                    if (account.includes(searchTerm) || accountName.includes(searchTerm)) {
-                        section.style.display = '';
-                        visibleCount++;
+                // Get all rows in the table
+                const rows = ledgerTransactions.querySelectorAll('tr');
+                
+                // Process each row
+                rows.forEach(row => {
+                    // Check if this is an account header row
+                    if (row.classList.contains('account-header')) {
+                        // If we were processing an account before, update its visibility
+                        if (currentAccount !== null) {
+                            accountRows.forEach(r => r.style.display = accountVisible ? '' : 'none');
+                            if (accountVisible) visibleAccounts++;
+                        }
+                        
+                        // Start processing a new account
+                        currentAccount = row.textContent.trim();
+                        accountVisible = currentAccount.toLowerCase().includes(searchTerm);
+                        accountRows = [row];
                     } else {
-                        section.style.display = 'none';
+                        // This is a transaction row for the current account
+                        accountRows.push(row);
+                        
+                        // If the search term is found in this transaction, make the account visible
+                        const rowText = row.textContent.toLowerCase();
+                        if (rowText.includes(searchTerm)) {
+                            accountVisible = true;
+                        }
                     }
                 });
                 
+                // Update the last account's visibility
+                if (currentAccount !== null) {
+                    accountRows.forEach(r => r.style.display = accountVisible ? '' : 'none');
+                    if (accountVisible) visibleAccounts++;
+                }
+                
+                // Update the account count
                 if (accountCount) {
-                    accountCount.textContent = visibleCount;
+                    accountCount.textContent = visibleAccounts;
                 }
             });
         }
+        
+        // Add event listeners for the action buttons
+        document.getElementById('print-ledger')?.addEventListener('click', () => {
+            window.print();
+        });
+        
+        document.getElementById('export-ledger-pdf')?.addEventListener('click', () => {
+            alert('PDF export functionality would be implemented here.');
+            // In a real implementation, this would use a library like jsPDF to generate a PDF
+        });
     }
     
     // Populate opening balance tab
@@ -1629,7 +1641,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Process each account in the opening balance
         for (const accountNum in yearBalances) {
             const balanceEntry = yearBalances[accountNum];
-            const amount = typeof balanceEntry === 'object' ? balanceEntry.amount : parseFloat(balanceEntry) || 0;
+            const amount = typeof balanceEntry === 'object' ? 
+                balanceEntry.amount || 0 : parseFloat(balanceEntry) || 0;
             
             // Skip accounts with zero balances
             if (amount === 0) {
