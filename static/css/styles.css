@@ -1870,3 +1870,34 @@ footer {
     font-weight: 600;
     background-color: var(--light-bg-color);
 }
+    background-color: #f9f9f9;
+}
+
+.balance-history-table tr:hover .account-col,
+.balance-history-table tr:hover .name-col {
+    background-color: #f9f9f9;
+}
+
+.balance-history-table .positive {
+    color: #2e7d32;
+}
+
+.balance-history-table .negative {
+    color: #c62828;
+}
+
+.year-filter-container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#balance-history-year-filter {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    min-width: 120px;
+}

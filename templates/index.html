@@ -37,6 +37,7 @@
                     <button class="tab-btn" data-tab="opening">Opening Balance</button>
                     <button class="tab-btn" data-tab="ledger">Ledger</button>
                     <button class="tab-btn" data-tab="transactions">Transactions</button>
+                    <button class="tab-btn" data-tab="balance-history">Balance History</button>
                     <button class="tab-btn" data-tab="llm-export">LLM Export</button>
                     <button class="tab-btn" data-tab="json">JSON Output</button>
                     <button class="tab-btn" data-tab="schema">Schema</button>
@@ -331,6 +332,40 @@
                         <div class="transactions-container">
                             <table id="transactions-table" class="data-table">
                                 <!-- Table content will be populated by JavaScript -->
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="balance-history-tab" class="tab-pane">
+                        <div class="balance-history-header">
+                            <div class="company-info">
+                                <h2 id="balance-history-company-name">Company Name</h2>
+                                <h3>Balance History</h3>
+                                <p id="balance-history-period">Period: <span></span></p>
+                            </div>
+                            <div class="filter-controls">
+                                <div class="search-box">
+                                    <input type="text" id="balance-history-search" placeholder="Search accounts...">
+                                </div>
+                                <label class="toggle-checkbox">
+                                    <input type="checkbox" id="balance-history-show-non-zero" checked>
+                                    <span class="checkbox-text">Show only accounts with values</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="balance-history-container">
+                            <table class="balance-history-table">
+                                <thead>
+                                    <tr>
+                                        <th class="account-col">Account</th>
+                                        <th class="name-col">Description</th>
+                                        <!-- Year columns will be added dynamically -->
+                                    </tr>
+                                </thead>
+                                <tbody id="balance-history-body">
+                                    <!-- Balance history data will be inserted here -->
+                                </tbody>
                             </table>
                         </div>
                     </div>

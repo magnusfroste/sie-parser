@@ -85,6 +85,10 @@ class Metadata:
     program: str = ""
     program_version: str = ""
     currency: str = "SEK"
+    fiscal_years: Dict[str, Dict[str, str]] = field(default_factory=dict)
+    current_fiscal_year: Dict[str, str] = field(default_factory=dict)
+    current_fiscal_year_start_year: str = ""
+    current_fiscal_year_end_year: str = ""
     
     def to_dict(self):
         return asdict(self)
@@ -127,7 +131,11 @@ class SIEDataModel:
             generation_date=metadata.get('date', ''),
             program=metadata.get('program', ''),
             program_version=metadata.get('program_version', ''),
-            currency=metadata.get('currency', 'SEK')
+            currency=metadata.get('currency', 'SEK'),
+            fiscal_years=metadata.get('fiscal_years', {}),
+            current_fiscal_year=metadata.get('current_fiscal_year', {}),
+            current_fiscal_year_start_year=metadata.get('current_fiscal_year_start_year', ''),
+            current_fiscal_year_end_year=metadata.get('current_fiscal_year_end_year', '')
         )
         
         # Process accounts

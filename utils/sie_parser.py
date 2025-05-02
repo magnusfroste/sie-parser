@@ -251,6 +251,19 @@ class SIEParser:
                 'start_date': start_date,
                 'end_date': end_date
             }
+            
+            # If this is the current fiscal year (0), also store it in the main metadata
+            if year_id == '0' or year_id == 0:
+                self.data['metadata']['current_fiscal_year'] = {
+                    'start_date': start_date,
+                    'end_date': end_date
+                }
+                
+                # Extract year from the dates for easier access
+                if start_date and len(start_date) >= 4:
+                    self.data['metadata']['current_fiscal_year_start_year'] = start_date[:4]
+                if end_date and len(end_date) >= 4:
+                    self.data['metadata']['current_fiscal_year_end_year'] = end_date[:4]
     
     def _parse_konto(self, line):
         """Parse #KONTO section (account)."""
