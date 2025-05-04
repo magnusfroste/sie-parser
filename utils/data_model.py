@@ -106,7 +106,7 @@ class SIEDataModel:
         self.verifications: List[Verification] = []
         self.opening_balances: Dict[str, Dict[str, BalanceEntry]] = {}  # Year -> Account -> BalanceEntry
         self.closing_balances: Dict[str, Dict[str, BalanceEntry]] = {}  # Year -> Account -> BalanceEntry
-        self.results: Dict[str, Dict[str, float]] = {}  # Year -> Account -> Amount
+        self.results: Dict[str, Dict[str, BalanceEntry]] = {}  # Year -> Account -> BalanceEntry
         
     def from_parser_data(self, parser_data: dict) -> 'SIEDataModel':
         """
@@ -262,7 +262,15 @@ class SIEDataModel:
         
         # Process results
         for year, results in parser_data.get('res', {}).items():
-            self.results[year] = results
+            if year not in self.results:
+                self.results[year] = {}
+            
+            for acc_num, amount in results.items():
+                self.results[year][acc_num] = BalanceEntry(
+                    account=acc_num,
+                    amount=amount,
+                    year=year
+                )
         
         return self
     
@@ -433,13 +441,14 @@ class SIEDataModel:
         Returns:
             Dictionary representation of the data model
         """
+        print("Converting data model to dictionary")
         result = {
             'metadata': self.metadata.to_dict(),
             'accounts': {acc_num: acc.to_dict() for acc_num, acc in self.accounts.items()},
             'verifications': [ver.to_dict() for ver in self.verifications],
             'opening_balances': {},
             'closing_balances': {},
-            'results': self.results,
+            'results': {},
             'balance_sheet': self.get_balance_sheet(),
             'income_statement': self.get_income_statement()
         }
@@ -460,13 +469,18 @@ class SIEDataModel:
             for acc_num, balance in balances.items():
                 result['closing_balances'][year][acc_num] = balance.to_dict()
         
+        # Process results
+        print(f"Converting results data: {self.results}")
+        for year, balances in self.results.items():
+            if year not in result['results']:
+                result['results'][year] = {}
+            
+            for acc_num, balance in balances.items():
+                result['results'][year][acc_num] = balance.to_dict()
+                print(f"Added result for year {year}, account {acc_num}: {balance.to_dict()}")
+        
         print(f"Data model converted to dictionary with {len(result['verifications'])} verifications")
-        if result['verifications']:
-            print(f"First verification: {result['verifications'][0]}")
-            if 'transactions' in result['verifications'][0]:
-                print(f"First verification has {len(result['verifications'][0]['transactions'])} transactions")
-                if result['verifications'][0]['transactions']:
-                    print(f"First transaction: {result['verifications'][0]['transactions'][0]}")
+        print(f"Results in dictionary: {result['results']}")
         
         return result
     

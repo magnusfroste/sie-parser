@@ -194,6 +194,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error populating balance history:", e);
             }
             
+            try {
+                populateResultHistory(data);
+            } catch (e) {
+                console.error("Error populating result history:", e);
+            }
+            
             // Create charts
             try {
                 createCharts(data);
@@ -295,40 +301,48 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update the LLM preview based on selected options
     function updateLLMPreview() {
-        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
-        const includePreviousYears = document.getElementById('include-previous-years').checked;
-        const includeSummary = document.getElementById('include-summary').checked;
-        const includeIncome = document.getElementById('include-income').checked;
-        const includeBalance = document.getElementById('include-balance').checked;
-        const includeKeyRatios = document.getElementById('include-key-ratios').checked;
+        console.log("updateLLMPreview function called");
         
-        // Generate preview data
-        const previewData = generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios);
-        
-        // Display preview
-        const previewElement = document.getElementById('llm-preview');
-        
-        // Format the preview data as JSON with indentation for readability
-        const formattedPreview = JSON.stringify(previewData, null, 2);
-        
-        // Update the preview
-        previewElement.innerHTML = `<pre>${formattedPreview}</pre>`;
-        
-        // Enhanced debugging
-        console.log("Detail Level:", detailLevel);
-        console.log("Preview Data:", previewData);
-        console.log("Original Data Structure:", JSON.stringify(processedData, null, 2));
-        
-        // Specifically log income statement and balance sheet data
-        console.log("Income Statement Data:", processedData.income_statement);
-        console.log("Balance Sheet Data:", processedData.balance_sheet);
-        
-        // Estimate token count (rough approximation: 1 token ≈ 4 characters for English text)
-        const tokenEstimate = Math.ceil(formattedPreview.length / 4);
-        document.getElementById('token-estimate').textContent = tokenEstimate.toLocaleString();
-        
-        // Show export actions
-        document.querySelector('.llm-export-actions').style.display = 'flex';
+        try {
+            const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+            const includePreviousYears = document.getElementById('include-previous-years').checked;
+            const includeSummary = document.getElementById('include-summary').checked;
+            const includeIncome = document.getElementById('include-income').checked;
+            const includeBalance = document.getElementById('include-balance').checked;
+            const includeKeyRatios = document.getElementById('include-key-ratios').checked;
+            
+            // Generate preview data
+            const previewData = generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios);
+            
+            // Display preview
+            const previewElement = document.getElementById('llm-preview');
+            
+            // Format the preview data as JSON with indentation for readability
+            const formattedPreview = JSON.stringify(previewData, null, 2);
+            
+            // Update the preview
+            previewElement.innerHTML = `<pre>${formattedPreview}</pre>`;
+            
+            // Enhanced debugging
+            console.log("Detail Level:", detailLevel);
+            console.log("Preview Data:", previewData);
+            console.log("Original Data Structure:", JSON.stringify(processedData, null, 2));
+            
+            // Specifically log income statement and balance sheet data
+            console.log("Income Statement Data:", processedData.income_statement);
+            console.log("Balance Sheet Data:", processedData.balance_sheet);
+            
+            // Estimate token count (rough approximation: 1 token ≈ 4 characters for English text)
+            const tokenEstimate = Math.ceil(formattedPreview.length / 4);
+            document.getElementById('token-estimate').textContent = tokenEstimate.toLocaleString();
+            
+            // Show export actions
+            document.querySelector('.llm-export-actions').style.display = 'flex';
+        } catch (error) {
+            console.error("Error updating LLM preview:", error);
+            const previewElement = document.getElementById('llm-preview');
+            previewElement.innerHTML = `<div class="error-message">Error updating preview: ${error.message}</div>`;
+        }
     }
     
     // Generate LLM-optimized data structure based on selected options
@@ -373,6 +387,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add key financial ratios if selected
         if (includeKeyRatios) {
             result.key_ratios = calculateFinancialRatios();
+        }
+        
+        // Add balance history analysis if selected
+        if (includePreviousYears) {
+            console.log("Including balance history in LLM export");
+            const balanceHistory = generateBalanceHistoryAnalysis();
+            console.log("Generated balance history:", balanceHistory);
+            result.balance_history = balanceHistory;
         }
         
         return result;
@@ -701,6 +723,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Generate the full LLM export
     function generateLLMExport() {
+        console.log("generateLLMExport function called");
+        
         const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
         const includePreviousYears = document.getElementById('include-previous-years').checked;
         const includeSummary = document.getElementById('include-summary').checked;
@@ -708,18 +732,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const includeBalance = document.getElementById('include-balance').checked;
         const includeKeyRatios = document.getElementById('include-key-ratios').checked;
         
-        // Generate the complete data
-        window.llmExportData = generateLLMData(
-            detailLevel, 
-            includePreviousYears, 
-            includeSummary, 
-            includeIncome, 
-            includeBalance, 
+        console.log("Options:", {
+            detailLevel,
+            includePreviousYears,
+            includeSummary,
+            includeIncome,
+            includeBalance,
             includeKeyRatios
-        );
+        });
         
-        // Update the preview
-        updateLLMPreview();
+        try {
+            // Generate the complete data
+            window.llmExportData = generateLLMData(
+                detailLevel, 
+                includePreviousYears, 
+                includeSummary, 
+                includeIncome, 
+                includeBalance, 
+                includeKeyRatios
+            );
+            
+            // Update the preview
+            updateLLMPreview();
+        } catch (error) {
+            console.error("Error generating LLM export:", error);
+            const previewElement = document.getElementById('llm-preview');
+            previewElement.innerHTML = `<div class="error-message">Error generating LLM export: ${error.message}</div>`;
+        }
     }
     
     // Download the LLM export as JSON
@@ -1314,11 +1353,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Sort account numbers
         const sortedIncomeAccounts = Array.from(incomeAccounts).sort((a, b) => parseInt(a) - parseInt(b));
         
-        for (const accountNum of sortedIncomeAccounts) {
+        for (const accountNumber of sortedIncomeAccounts) {
             // Get account data
-            const accountData = incomeStatement.income && incomeStatement.income[accountNum] ? 
-                incomeStatement.income[accountNum] : 
-                { name: accounts[accountNum].name || '', amount: 0 };
+            const accountData = incomeStatement.income && incomeStatement.income[accountNumber] ? 
+                incomeStatement.income[accountNumber] : 
+                { name: accounts[accountNumber].name || '', amount: 0 };
             
             // Get the amount
             let amount = accountData.amount || 0;
@@ -1336,8 +1375,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Create account row
             incomeRowsHTML += `
-                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNum}" data-amount="${amount}">
-                    <td class="account-col">${accountNum}</td>
+                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNumber}" data-amount="${amount}">
+                    <td class="account-col">${accountNumber}</td>
                     <td class="name-col">${accountData.name || 'Unknown'}</td>
                     <td class="amount-col positive">${formatCurrency(displayAmount)}</td>
                 </tr>
@@ -1369,11 +1408,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Sort account numbers
         const sortedExpenseAccounts = Array.from(expenseAccounts).sort((a, b) => parseInt(a) - parseInt(b));
         
-        for (const accountNum of sortedExpenseAccounts) {
+        for (const accountNumber of sortedExpenseAccounts) {
             // Get account data
-            const accountData = incomeStatement.expenses && incomeStatement.expenses[accountNum] ? 
-                incomeStatement.expenses[accountNum] : 
-                { name: accounts[accountNum].name || '', amount: 0 };
+            const accountData = incomeStatement.expenses && incomeStatement.expenses[accountNumber] ? 
+                incomeStatement.expenses[accountNumber] : 
+                { name: accounts[accountNumber].name || '', amount: 0 };
             
             // Get the amount
             const amount = accountData.amount || 0;
@@ -1388,8 +1427,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Create account row
             expenseRowsHTML += `
-                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNum}" data-amount="${amount}">
-                    <td class="account-col">${accountNum}</td>
+                <tr class="account-row ${amount === 0 ? 'zero-value' : ''}" data-account-num="${accountNumber}" data-amount="${amount}">
+                    <td class="account-col">${accountNumber}</td>
                     <td class="name-col">${accountData.name || 'Unknown'}</td>
                     <td class="amount-col ${amount >= 0 ? 'positive' : 'negative'}">${formatCurrency(amount)}</td>
                 </tr>
@@ -1719,8 +1758,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const downloadLink = document.createElement('a');
                 downloadLink.href = `/download/${encodeURIComponent(filename)}`;
                 downloadLink.download = filename;
-                downloadLink.click();
                 document.body.appendChild(downloadLink);
+                downloadLink.click();
                 document.body.removeChild(downloadLink);
                 URL.revokeObjectURL(downloadLink.href);
             } else {
@@ -1739,7 +1778,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         navigator.clipboard.writeText(jsonOutput.textContent)
             .then(() => {
-                alert('JSON copied to clipboard');
+                const copyButton = document.getElementById('copy-llm-export');
+                const originalText = copyButton.textContent;
+                
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                }, 2000);
             })
             .catch(err => {
                 console.error('Error copying to clipboard:', err);
@@ -2349,11 +2394,22 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Fiscal years:", data.metadata.fiscal_years);
         
         // Determine all available years in the data
-        const allIbYears = Object.keys(data.opening_balances || {}).sort();
-        const allUbYears = Object.keys(data.closing_balances || {}).sort();
+        // Filter out empty year keys to prevent the "2022 (UB)" column without a year indicator
+        const allIbYears = Object.keys(data.opening_balances || {})
+            .filter(year => year !== "" && year !== undefined)
+            .sort();
+        const allUbYears = Object.keys(data.closing_balances || {})
+            .filter(year => year !== "" && year !== undefined)
+            .sort();
         
-        console.log("IB years:", allIbYears);
-        console.log("UB years:", allUbYears);
+        console.log("IB years (filtered):", allIbYears);
+        console.log("UB years (filtered):", allUbYears);
+        
+        if (allIbYears.length === 0 && allUbYears.length === 0) {
+            console.log("No balance history years found in the data");
+            document.querySelector('.balance-history-container').innerHTML = '<div class="no-data-message">No balance history data available in this SIE file.</div>';
+            return;
+        }
         
         // Create a map to translate relative years to actual calendar years
         const yearMap = {};
@@ -2371,6 +2427,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     fiscalYearInfo = ` (${formatDate(fy.start_date)} - ${formatDate(fy.end_date)})`;
                 }
             }
+            
+            console.log(`Creating year map for IB ${relativeYear}, actualYear: ${actualYear}`);
             
             yearMap[`IB ${relativeYear}`] = {
                 relativeYear,
@@ -2395,6 +2453,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
+            console.log(`Creating year map for UB ${relativeYear}, actualYear: ${actualYear}`);
+            
             yearMap[`UB ${relativeYear}`] = {
                 relativeYear,
                 actualYear,
@@ -2417,7 +2477,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return yearA - yearB;
         });
         
-        console.log("All year keys:", allYearKeys);
+        console.log("All year keys (sorted):", allYearKeys);
         
         // Create table header with all available years
         const headerRow = document.querySelector('.balance-history-table thead tr');
@@ -2428,10 +2488,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add column for each year
         allYearKeys.forEach(yearKey => {
-            const yearInfo = yearMap[yearKey];
+            console.log("Creating column for year key:", yearKey, "with info:", yearMap[yearKey]);
             const th = document.createElement('th');
             th.classList.add('amount-col');
-            th.textContent = yearInfo.displayName;
+            th.textContent = yearMap[yearKey].displayName;
             th.dataset.yearKey = yearKey;
             headerRow.appendChild(th);
         });
@@ -2439,7 +2499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create a map to store account balances
         const accountBalances = {};
         
-        // Process all accounts
+        // Process each account
         Object.keys(accounts).forEach(accountNum => {
             const accountName = accounts[accountNum].name || '';
             
@@ -2454,7 +2514,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Process opening balances (IB)
+        console.log("Processing opening balances:", data.opening_balances);
         Object.keys(data.opening_balances || {}).forEach(year => {
+            console.log("Processing IB year:", year, "Type:", typeof year);
+            
+            // Skip empty year keys (this is what's causing the extra "2022 (UB)" column)
+            if (year === "" || year === undefined) {
+                console.log("Skipping empty year key in IB data");
+                return;
+            }
+            
             const yearBalances = data.opening_balances[year] || {};
             
             Object.keys(yearBalances).forEach(accountNum => {
@@ -2468,12 +2537,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Add opening balance for this year
-                accountBalances[accountNum].balances[`IB ${year}`] = yearBalances[accountNum].amount;
+                // Handle both direct number values and object values with amount property
+                const ibValue = typeof yearBalances[accountNum] === 'object' ? 
+                    yearBalances[accountNum].amount : yearBalances[accountNum];
+                accountBalances[accountNum].balances[`IB ${year}`] = ibValue;
             });
         });
         
         // Process closing balances (UB)
+        console.log("Processing closing balances:", data.closing_balances);
         Object.keys(data.closing_balances || {}).forEach(year => {
+            console.log("Processing UB year:", year, "Type:", typeof year);
+            
+            // Skip empty year keys (this is what's causing the extra "2022 (UB)" column)
+            if (year === "" || year === undefined) {
+                console.log("Skipping empty year key in UB data");
+                return;
+            }
+            
             const yearBalances = data.closing_balances[year] || {};
             
             Object.keys(yearBalances).forEach(accountNum => {
@@ -2487,7 +2568,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Add closing balance for this year
-                accountBalances[accountNum].balances[`UB ${year}`] = yearBalances[accountNum].amount;
+                console.log(`Adding UB balance for account ${accountNum}, year ${year}:`, yearBalances[accountNum]);
+                // Handle both direct number values and object values with amount property
+                const ubValue = typeof yearBalances[accountNum] === 'object' ? 
+                    yearBalances[accountNum].amount : yearBalances[accountNum];
+                accountBalances[accountNum].balances[`UB ${year}`] = ubValue;
             });
         });
         
@@ -2507,11 +2592,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Create row HTML
+            // Create account row
             const row = document.createElement('tr');
-            row.classList.add('balance-history-row');
-            row.dataset.accountNum = account.number;
-            row.dataset.accountName = account.name;
             
             // Account number cell
             const accountNumCell = document.createElement('td');
@@ -2678,5 +2760,552 @@ document.addEventListener('DOMContentLoaded', function() {
             row.style.display = (matchesSearch && hasNonZeroBalance) ? '' : 'none';
             row.dataset.visible = (matchesSearch && hasNonZeroBalance) ? 'true' : 'false';
         });
+    }
+    
+    // Populate result history tab
+    function populateResultHistory(data) {
+        console.log("Populating result history...");
+        console.log("Full data for result history:", data);
+        
+        if (!data || !data.results) {
+            console.log("No result data available");
+            document.querySelector('.result-history-container').innerHTML = '<div class="no-data-message">No result data available in this SIE file.</div>';
+            return;
+        }
+        
+        console.log("Result data found:", data.results);
+        console.log("Result data structure:", JSON.stringify(data.results, null, 2));
+        
+        // Update company info
+        document.getElementById('result-history-company-name').textContent = data.metadata.company_name || 'Company Name';
+        
+        // Get RAR year from metadata (the financial year in the SIE file)
+        // This is the reference year for all relative years in the SIE file
+        let rarYear = 2022; // Using the same fixed year as in Balance History for consistency
+        
+        console.log("RAR year for Result History:", rarYear);
+        
+        // Determine all available years in the data
+        // Filter out empty year keys
+        const allResYears = Object.keys(data.results || {})
+            .filter(year => year !== "" && year !== undefined)
+            .sort();
+        
+        console.log("RES years (filtered):", allResYears);
+        
+        if (allResYears.length === 0) {
+            console.log("No result years found in the data");
+            document.querySelector('.result-history-container').innerHTML = '<div class="no-data-message">No result data available in this SIE file.</div>';
+            return;
+        }
+        
+        // Create a map to translate relative years to actual calendar years
+        const yearMap = {};
+        
+        // Map for RES (Result)
+        allResYears.forEach(relativeYear => {
+            const yearOffset = parseInt(relativeYear) || 0;
+            const actualYear = (rarYear + yearOffset).toString();
+            
+            // Get fiscal year info if available
+            let fiscalYearInfo = '';
+            if (data.metadata.fiscal_years && data.metadata.fiscal_years[relativeYear]) {
+                const fy = data.metadata.fiscal_years[relativeYear];
+                if (fy.start_date && fy.end_date) {
+                    fiscalYearInfo = ` (${formatDate(fy.start_date)} - ${formatDate(fy.end_date)})`;
+                }
+            }
+            
+            console.log(`Creating year map for RES ${relativeYear}, actualYear: ${actualYear}`);
+            
+            yearMap[`RES ${relativeYear}`] = {
+                relativeYear,
+                actualYear,
+                type: 'RES',
+                displayName: `${actualYear} (RES ${relativeYear})${fiscalYearInfo}`,
+                shortName: `${actualYear} (RES ${relativeYear})`
+            };
+        });
+        
+        console.log("Year map:", yearMap);
+        
+        // Sort all years for display (chronological order)
+        const allYearKeys = Object.keys(yearMap).sort((a, b) => {
+            const yearA = parseInt(yearMap[a].actualYear);
+            const yearB = parseInt(yearMap[b].actualYear);
+            return yearA - yearB;
+        });
+        
+        console.log("All year keys (sorted):", allYearKeys);
+        
+        // Create table header with all available years
+        const headerRow = document.querySelector('.result-history-table thead tr');
+        headerRow.innerHTML = `
+            <th class="account-col">Account</th>
+            <th class="name-col">Description</th>
+        `;
+        
+        // Add column for each year
+        allYearKeys.forEach(yearKey => {
+            console.log("Creating column for year key:", yearKey, "with info:", yearMap[yearKey]);
+            const th = document.createElement('th');
+            th.classList.add('amount-col');
+            th.textContent = yearMap[yearKey].displayName;
+            th.dataset.yearKey = yearKey;
+            headerRow.appendChild(th);
+        });
+        
+        // Create a map to store account balances
+        const accountResults = {};
+        
+        // Process all accounts
+        Object.keys(accounts).forEach(accountNum => {
+            const accountName = accounts[accountNum].name || '';
+            
+            // Only include income statement accounts (class 3-8)
+            if (accountNum.length >= 1 && '3456789'.includes(accountNum[0])) {
+                // Initialize account in the map if not exists
+                if (!accountResults[accountNum]) {
+                    accountResults[accountNum] = {
+                        number: accountNum,
+                        name: accountName,
+                        results: {}
+                    };
+                }
+            }
+        });
+        
+        // Process result accounts
+        console.log("Processing result accounts:", data.results);
+        Object.keys(data.results || {}).forEach(year => {
+            console.log("Processing RES year:", year, "Type:", typeof year);
+            
+            // Skip empty year keys
+            if (year === "" || year === undefined) {
+                console.log("Skipping empty year key in RES data");
+                return;
+            }
+            
+            const yearResults = data.results[year] || {};
+            
+            Object.keys(yearResults).forEach(accountNum => {
+                // Initialize account in the map if not exists
+                if (!accountResults[accountNum]) {
+                    accountResults[accountNum] = {
+                        number: accountNum,
+                        name: accounts[accountNum]?.name || '',
+                        results: {}
+                    };
+                }
+                
+                // Add result for this year
+                console.log(`Adding RES result for account ${accountNum}, year ${year}:`, yearResults[accountNum]);
+                // Handle both direct number values and object values with amount property
+                const resultValue = typeof yearResults[accountNum] === 'object' ? 
+                    yearResults[accountNum].amount : yearResults[accountNum];
+                accountResults[accountNum].results[`RES ${year}`] = resultValue;
+            });
+        });
+        
+        // Sort accounts by account number
+        const sortedAccounts = Object.values(accountResults).sort((a, b) => {
+            return a.number.localeCompare(b.number);
+        });
+        
+        console.log("Sorted accounts:", sortedAccounts);
+        
+        // Create table rows for each account
+        const tableBody = document.getElementById('result-history-body');
+        tableBody.innerHTML = '';
+        
+        sortedAccounts.forEach(account => {
+            // Skip accounts with no results if show-non-zero is checked
+            const hasResults = allYearKeys.some(yearKey => account.results[yearKey]);
+            
+            if (document.getElementById('result-history-show-non-zero')?.checked && !hasResults) {
+                return;
+            }
+            
+            const row = document.createElement('tr');
+            
+            // Add account number and name
+            row.innerHTML = `
+                <td class="account-col">${account.number}</td>
+                <td class="name-col">${account.name}</td>
+            `;
+            
+            // Add result for each year
+            allYearKeys.forEach(yearKey => {
+                const td = document.createElement('td');
+                td.classList.add('amount-col');
+                
+                const amount = account.results[yearKey];
+                if (amount !== undefined) {
+                    td.textContent = formatCurrency(amount);
+                    
+                    // Add class for positive/negative values
+                    if (amount < 0) {
+                        td.classList.add('negative');
+                    } else if (amount > 0) {
+                        td.classList.add('positive');
+                    }
+                } else {
+                    td.textContent = '-';
+                }
+                
+                row.appendChild(td);
+            });
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Set up search functionality
+        document.getElementById('result-history-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            document.querySelectorAll('#result-history-body tr').forEach(row => {
+                const accountNum = row.querySelector('.account-col').textContent;
+                const accountName = row.querySelector('.name-col').textContent.toLowerCase();
+                
+                if (accountNum.includes(searchTerm) || accountName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Set up show non-zero toggle
+        document.getElementById('result-history-show-non-zero').addEventListener('change', function() {
+            const showOnlyNonZero = this.checked;
+            
+            sortedAccounts.forEach((account, index) => {
+                const hasResults = allYearKeys.some(yearKey => account.results[yearKey]);
+                const row = document.querySelectorAll('#result-history-body tr')[index];
+                
+                if (!row) return;
+                
+                if (showOnlyNonZero && !hasResults) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = '';
+                }
+            });
+        });
+    }
+    
+    // Generate a comprehensive balance history analysis for LLM
+    function generateBalanceHistoryAnalysis() {
+        if (!processedData || !processedData.opening_balances || !processedData.closing_balances) {
+            console.log("Balance history data not available");
+            return { error: "Balance history data not available" };
+        }
+        
+        console.log("Generating balance history analysis");
+        
+        // Get all available years from opening and closing balances
+        const years = new Set();
+        
+        // Add years from opening balances
+        Object.keys(processedData.opening_balances || {}).forEach(year => {
+            years.add(year);
+        });
+        
+        // Add years from closing balances
+        Object.keys(processedData.closing_balances || {}).forEach(year => {
+            years.add(year);
+        });
+        
+        // Add years from results if available
+        Object.keys(processedData.results || {}).forEach(year => {
+            years.add(year);
+        });
+        
+        // Convert to array and sort (most recent first)
+        const sortedYears = Array.from(years).sort((a, b) => {
+            // Convert relative years (0, -1, -2) to absolute years
+            const yearA = a === '0' ? parseInt(processedData.metadata.current_fiscal_year_end_year) : 
+                         a.startsWith('-') ? parseInt(processedData.metadata.current_fiscal_year_end_year) + parseInt(a) : 
+                         parseInt(a);
+            const yearB = b === '0' ? parseInt(processedData.metadata.current_fiscal_year_end_year) : 
+                         b.startsWith('-') ? parseInt(processedData.metadata.current_fiscal_year_end_year) + parseInt(b) : 
+                         parseInt(b);
+            return yearB - yearA;
+        });
+        
+        const balanceHistory = {};
+        
+        // Process each year
+        sortedYears.forEach(year => {
+            // Convert relative year to calendar year for display
+            const displayYear = year === '0' ? processedData.metadata.current_fiscal_year_end_year : 
+                               year.startsWith('-') ? (parseInt(processedData.metadata.current_fiscal_year_end_year) + parseInt(year)).toString() : 
+                               year;
+            
+            const yearData = {
+                year_label: displayYear,
+                relative_year: year,
+                opening_balances: {},
+                closing_balances: {},
+                results: {},
+                key_metrics: {}
+            };
+            
+            // Group accounts by type
+            const assetAccounts = {};
+            const liabilityAccounts = {};
+            const equityAccounts = {};
+            const incomeAccounts = {};
+            const expenseAccounts = {};
+            
+            // Process opening balances
+            if (processedData.opening_balances && processedData.opening_balances[year]) {
+                const openingBalances = processedData.opening_balances[year];
+                
+                // Calculate totals
+                let totalAssets = 0;
+                let totalLiabilities = 0;
+                let totalEquity = 0;
+                
+                Object.entries(openingBalances).forEach(([accNum, details]) => {
+                    if (accNum && details) {
+                        const amount = parseFloat(details.amount) || 0;
+                        const accountType = determineAccountType(accNum);
+                        const accountName = processedData.accounts[accNum]?.name || `Account ${accNum}`;
+                        
+                        // Add to the appropriate category
+                        if (accountType === 'asset') {
+                            assetAccounts[accNum] = {
+                                account_number: accNum,
+                                account_name: accountName,
+                                opening_balance: amount,
+                                closing_balance: null
+                            };
+                            totalAssets += amount;
+                        } else if (accountType === 'liability') {
+                            liabilityAccounts[accNum] = {
+                                account_number: accNum,
+                                account_name: accountName,
+                                opening_balance: amount,
+                                closing_balance: null
+                            };
+                            totalLiabilities += amount;
+                        } else if (accountType === 'equity') {
+                            equityAccounts[accNum] = {
+                                account_number: accNum,
+                                account_name: accountName,
+                                opening_balance: amount,
+                                closing_balance: null
+                            };
+                            totalEquity += amount;
+                        }
+                    }
+                });
+                
+                // Store totals
+                yearData.opening_balances = {
+                    total_assets: totalAssets,
+                    total_liabilities: totalLiabilities,
+                    total_equity: totalEquity,
+                    assets: assetAccounts,
+                    liabilities: liabilityAccounts,
+                    equity: equityAccounts
+                };
+            }
+            
+            // Process closing balances
+            if (processedData.closing_balances && processedData.closing_balances[year]) {
+                const closingBalances = processedData.closing_balances[year];
+                
+                // Calculate totals
+                let totalAssets = 0;
+                let totalLiabilities = 0;
+                let totalEquity = 0;
+                
+                Object.entries(closingBalances).forEach(([accNum, details]) => {
+                    if (accNum && details) {
+                        const amount = parseFloat(details.amount) || 0;
+                        const accountType = determineAccountType(accNum);
+                        const accountName = processedData.accounts[accNum]?.name || `Account ${accNum}`;
+                        
+                        // Add to the appropriate category
+                        if (accountType === 'asset') {
+                            if (assetAccounts[accNum]) {
+                                assetAccounts[accNum].closing_balance = amount;
+                            } else {
+                                assetAccounts[accNum] = {
+                                    account_number: accNum,
+                                    account_name: accountName,
+                                    opening_balance: null,
+                                    closing_balance: amount
+                                };
+                            }
+                            totalAssets += amount;
+                        } else if (accountType === 'liability') {
+                            if (liabilityAccounts[accNum]) {
+                                liabilityAccounts[accNum].closing_balance = amount;
+                            } else {
+                                liabilityAccounts[accNum] = {
+                                    account_number: accNum,
+                                    account_name: accountName,
+                                    opening_balance: null,
+                                    closing_balance: amount
+                                };
+                            }
+                            totalLiabilities += amount;
+                        } else if (accountType === 'equity') {
+                            if (equityAccounts[accNum]) {
+                                equityAccounts[accNum].closing_balance = amount;
+                            } else {
+                                equityAccounts[accNum] = {
+                                    account_number: accNum,
+                                    account_name: accountName,
+                                    opening_balance: null,
+                                    closing_balance: amount
+                                };
+                            }
+                            totalEquity += amount;
+                        }
+                    }
+                });
+                
+                // Store totals
+                yearData.closing_balances = {
+                    total_assets: totalAssets,
+                    total_liabilities: totalLiabilities,
+                    total_equity: totalEquity,
+                    assets: assetAccounts,
+                    liabilities: liabilityAccounts,
+                    equity: equityAccounts
+                };
+            }
+            
+            // Process results (income statement data)
+            if (processedData.results && processedData.results[year]) {
+                const resultsData = processedData.results[year];
+                
+                // Calculate totals
+                let totalIncome = 0;
+                let totalExpenses = 0;
+                
+                Object.entries(resultsData).forEach(([accNum, details]) => {
+                    if (accNum && details) {
+                        const amount = parseFloat(details.amount) || 0;
+                        const accountType = determineAccountType(accNum);
+                        const accountName = processedData.accounts[accNum]?.name || `Account ${accNum}`;
+                        
+                        // Add to the appropriate category
+                        if (accountType === 'income') {
+                            incomeAccounts[accNum] = {
+                                account_number: accNum,
+                                account_name: accountName,
+                                amount: amount
+                            };
+                            totalIncome += amount;
+                        } else if (accountType === 'expense') {
+                            expenseAccounts[accNum] = {
+                                account_number: accNum,
+                                account_name: accountName,
+                                amount: amount
+                            };
+                            totalExpenses += amount;
+                        }
+                    }
+                });
+                
+                // Store totals
+                yearData.results = {
+                    total_income: totalIncome,
+                    total_expenses: totalExpenses,
+                    net_result: totalIncome - totalExpenses,
+                    income_accounts: incomeAccounts,
+                    expense_accounts: expenseAccounts
+                };
+            }
+            
+            // Calculate key metrics and changes
+            if (yearData.opening_balances.total_assets && yearData.closing_balances.total_assets) {
+                yearData.key_metrics = {
+                    asset_growth: yearData.closing_balances.total_assets - yearData.opening_balances.total_assets,
+                    asset_growth_percentage: yearData.opening_balances.total_assets ? 
+                        ((yearData.closing_balances.total_assets - yearData.opening_balances.total_assets) / 
+                         Math.abs(yearData.opening_balances.total_assets) * 100).toFixed(2) + '%' : 'N/A',
+                    equity_growth: yearData.closing_balances.total_equity - yearData.opening_balances.total_equity,
+                    equity_growth_percentage: yearData.opening_balances.total_equity ? 
+                        ((yearData.closing_balances.total_equity - yearData.opening_balances.total_equity) / 
+                         Math.abs(yearData.opening_balances.total_equity) * 100).toFixed(2) + '%' : 'N/A',
+                    debt_to_equity_ratio: yearData.closing_balances.total_equity ? 
+                        (yearData.closing_balances.total_liabilities / yearData.closing_balances.total_equity).toFixed(2) : 'N/A',
+                    current_ratio: calculateCurrentRatio(yearData.closing_balances)
+                };
+            }
+            
+            balanceHistory[displayYear] = yearData;
+        });
+        
+        return {
+            company_name: processedData.metadata.company_name || 'Unknown',
+            organization_number: processedData.metadata.organization_number || 'Unknown',
+            fiscal_year: processedData.metadata.fiscal_year || 'Unknown',
+            currency: processedData.metadata.currency || 'SEK',
+            years_analyzed: sortedYears.length,
+            balance_history: balanceHistory
+        };
+    }
+    
+    // Helper function to calculate current ratio
+    function calculateCurrentRatio(balances) {
+        if (!balances || !balances.assets || !balances.liabilities) {
+            return 'N/A';
+        }
+        
+        let currentAssets = 0;
+        let currentLiabilities = 0;
+        
+        // Sum up current assets (typically accounts 1100-1999)
+        Object.entries(balances.assets).forEach(([accNum, details]) => {
+            if (accNum && details && details.closing_balance !== null) {
+                const firstDigit = accNum.charAt(0);
+                if (firstDigit === '1') {
+                    currentAssets += details.closing_balance;
+                }
+            }
+        });
+        
+        // Sum up current liabilities (typically accounts 2000-2999)
+        Object.entries(balances.liabilities).forEach(([accNum, details]) => {
+            if (accNum && details && details.closing_balance !== null) {
+                const firstDigit = accNum.charAt(0);
+                if (firstDigit === '2') {
+                    currentLiabilities += details.closing_balance;
+                }
+            }
+        });
+        
+        return currentLiabilities ? (currentAssets / currentLiabilities).toFixed(2) : 'N/A';
+    }
+    
+    // Helper function to determine account type based on account number
+    function determineAccountType(accountNumber) {
+        // Convert to string and get first digit
+        const accNum = accountNumber.toString();
+        const firstDigit = accNum.charAt(0);
+        
+        // Swedish BAS account classification
+        if (firstDigit === '1') {
+            return 'asset';
+        } else if (firstDigit === '2') {
+            return 'liability';
+        } else if (firstDigit === '3') {
+            return 'income';
+        } else if (firstDigit === '4' || firstDigit === '5' || firstDigit === '6' || firstDigit === '7') {
+            return 'expense';
+        } else if (firstDigit === '8') {
+            return 'result';
+        } else if (firstDigit === '9') {
+            return 'other';
+        } else {
+            return 'unknown';
+        }
     }
 });

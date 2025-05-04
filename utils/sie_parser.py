@@ -32,11 +32,17 @@ class SIEParser:
             with codecs.open(self.file_path, 'r', encoding='cp437') as file:
                 current_ver = None
                 in_verification_block = False
+                res_count = 0
                 
                 for line in file:
                     line = line.strip()
                     if not line:
                         continue
+                    
+                    # Special debug for RES lines
+                    if line.startswith('#RES'):
+                        print(f"Found RES line: {line}")
+                        res_count += 1
                     
                     # Parse different section types
                     if line.startswith('#FLAGGA'):
@@ -107,32 +113,15 @@ class SIEParser:
                     print("Data processed successfully")
                     
                     # Convert to standardized data model
-                    print("Converting to standardized data model...")
-                    print(f"Verification count: {len(self.data['verifications'])}")
-                    if len(self.data['verifications']) > 0:
-                        print(f"First verification type: {type(self.data['verifications'][0])}")
-                        print(f"First verification attributes: {dir(self.data['verifications'][0])}")
-                        if hasattr(self.data['verifications'][0], 'transactions'):
-                            print(f"First verification transactions type: {type(self.data['verifications'][0].transactions)}")
-                            print(f"First verification transactions count: {len(self.data['verifications'][0].transactions)}")
-                            if len(self.data['verifications'][0].transactions) > 0:
-                                print(f"First transaction type: {type(self.data['verifications'][0].transactions[0])}")
-                                print(f"First transaction attributes: {dir(self.data['verifications'][0].transactions[0])}")
+                    print("Converting to data model...")
+                    self.data_model.from_parser_data(self.data)
                     
-                    # Create a deep copy of the data to avoid modifying the original
-                    import copy
-                    data_copy = copy.deepcopy(self.data)
+                    # Debug the result accounts
+                    print(f"Processed {res_count} RES lines")
+                    print(f"RES data in parser: {self.data['res']}")
+                    print(f"Results in data model: {self.data_model.results}")
                     
-                    # Convert verifications to dictionaries before passing to data model
-                    for i, ver in enumerate(data_copy['verifications']):
-                        if hasattr(ver, 'to_dict'):
-                            data_copy['verifications'][i] = ver.to_dict()
-                        elif hasattr(ver, '__dict__'):
-                            data_copy['verifications'][i] = ver.__dict__
-                    
-                    self.data_model = SIEDataModel().from_parser_data(data_copy)
-                    print("Conversion to data model successful")
-                    
+                    # Return the standardized data model as a dictionary
                     return self.data_model.to_dict()
                 except Exception as e:
                     import traceback
@@ -143,6 +132,156 @@ class SIEParser:
         except Exception as e:
             print(f"Error parsing SIE file: {e}")
             import traceback
+            print(traceback.format_exc())
+            return None
+    
+    def parse_raw(self):
+        """Parse the SIE file and return raw parsed data without converting to data model."""
+        try:
+            # Try different encodings
+            encodings = ['cp437', 'latin1', 'utf-8', 'iso-8859-1']
+            file_content = None
+            
+            for encoding in encodings:
+                try:
+                    with codecs.open(self.file_path, 'r', encoding=encoding) as file:
+                        file_content = file.read()
+                        print(f"Successfully read file with encoding: {encoding}")
+                        break
+                except UnicodeDecodeError:
+                    print(f"Failed to read file with encoding: {encoding}")
+                    continue
+            
+            if not file_content:
+                print("Could not read file with any of the attempted encodings")
+                return None
+            
+            # Direct search for specific #RES lines
+            res_patterns = [
+                "#RES 0 3011", "#RES -1 3740", "#RES 0 3740", "#RES -1 3790",
+                "#RES -1 5410", "#RES 0 5410", "#RES -1 6230", "#RES 0 6230",
+                "#RES 0 6420", "#RES -1 6570", "#RES 0 6570", "#RES -1 8999",
+                "#RES 0 8999"
+            ]
+            
+            print("Directly searching for #RES patterns in file content:")
+            for pattern in res_patterns:
+                if pattern in file_content:
+                    print(f"  Found pattern: {pattern}")
+                else:
+                    print(f"  NOT found: {pattern}")
+            
+            # Also try with different line endings
+            print("Checking with different line endings:")
+            for pattern in res_patterns:
+                if pattern in file_content.replace('\r\n', '\n'):
+                    print(f"  Found pattern with LF: {pattern}")
+                elif pattern in file_content.replace('\n', '\r\n'):
+                    print(f"  Found pattern with CRLF: {pattern}")
+                
+            # Now continue with normal parsing using the successful encoding
+            with codecs.open(self.file_path, 'r', encoding=encoding) as file:
+                current_ver = None
+                in_verification_block = False
+                res_count = 0
+                
+                # Read the entire file content for direct search
+                file_content = file.read()
+                
+                # Direct search for specific #RES lines
+                res_patterns = [
+                    "#RES 0 3011", "#RES -1 3740", "#RES 0 3740", "#RES -1 3790",
+                    "#RES -1 5410", "#RES 0 5410", "#RES -1 6230", "#RES 0 6230",
+                    "#RES 0 6420", "#RES -1 6570", "#RES 0 6570", "#RES -1 8999",
+                    "#RES 0 8999"
+                ]
+                
+                print("Directly searching for #RES patterns in file content:")
+                for pattern in res_patterns:
+                    if pattern in file_content:
+                        print(f"  Found pattern: {pattern}")
+                    else:
+                        print(f"  NOT found: {pattern}")
+                
+                # Reset file position for normal parsing
+                file.seek(0)
+                
+                for line in file:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    
+                    # Special debug for RES lines
+                    if line.startswith('#RES'):
+                        print(f"Found RES line: {line}")
+                        res_count += 1
+                    
+                    # Parse different section types
+                    if line.startswith('#FLAGGA'):
+                        self._parse_flagga(line)
+                    elif line.startswith('#PROGRAM'):
+                        self._parse_program(line)
+                    elif line.startswith('#FORMAT'):
+                        self._parse_format(line)
+                    elif line.startswith('#GEN'):
+                        self._parse_gen(line)
+                    elif line.startswith('#SIETYP'):
+                        self._parse_sietyp(line)
+                    elif line.startswith('#FNAMN'):
+                        self._parse_fnamn(line)
+                    elif line.startswith('#ORGNR'):
+                        self._parse_orgnr(line)
+                    elif line.startswith('#ADRESS'):
+                        self._parse_adress(line)
+                    elif line.startswith('#KPTYP'):
+                        self._parse_kptyp(line)
+                    elif line.startswith('#KONTO'):
+                        self._parse_konto(line)
+                    elif line.startswith('#SRU'):
+                        self._parse_sru(line)
+                    elif line.startswith('#IB'):
+                        self._parse_ib(line)
+                    elif line.startswith('#UB'):
+                        self._parse_ub(line)
+                    elif line.startswith('#RES'):
+                        self._parse_res(line)
+                    elif line.startswith('#VER') or line.startswith('VER '):
+                        # Start a new verification
+                        if current_ver and not in_verification_block:
+                            self.data['verifications'].append(current_ver)
+                        current_ver = self._parse_ver(line)
+                    elif line.startswith('#TRANS') and current_ver:
+                        # Add transaction to current verification
+                        self._parse_trans(line, current_ver)
+                    elif line.startswith('#RTRANS') and current_ver:
+                        # Add reversed transaction to current verification
+                        self._parse_rtrans(line, current_ver)
+                    elif line.startswith('#BTRANS') and current_ver:
+                        # Add budget transaction
+                        self._parse_btrans(line)
+                    elif line.startswith('{'):
+                        # Start of verification block
+                        in_verification_block = True
+                    elif line.startswith('}'):
+                        # End of verification block
+                        if current_ver:
+                            self.data['verifications'].append(current_ver)
+                            current_ver = None
+                        in_verification_block = False
+                
+                # Add the last verification if not already added
+                if current_ver and not in_verification_block:
+                    self.data['verifications'].append(current_ver)
+                
+                # Debug the result accounts
+                print(f"Raw parse: Processed {res_count} RES lines")
+                print(f"Raw parse: RES data in parser: {self.data['res']}")
+                
+                return self.data
+                
+        except Exception as e:
+            import traceback
+            print(f"Error parsing SIE file: {e}")
             print(traceback.format_exc())
             return None
     
@@ -232,17 +371,42 @@ class SIEParser:
     
     def _parse_orgnr(self, line):
         """Parse #ORGNR section (organization number)."""
+        print(f"Parsing ORGNR line: '{line}'")
+        
+        # Handle both with and without the # prefix
+        if line.startswith('#'):
+            line = line[1:].strip()  # Remove the # and any leading whitespace
+        
         parts = line.split(' ')
+        print(f"ORGNR parts: {parts}")
+        
         if len(parts) > 1:
-            self.data['metadata']['org_number'] = parts[1]
+            org_number = parts[1].strip()
+            print(f"Found organization number: {org_number}")
+            self.data['metadata']['organization_number'] = org_number
+            
+            # Also store in org_number for backward compatibility
+            self.data['metadata']['org_number'] = org_number
+        else:
+            print(f"Warning: ORGNR line has fewer than 2 parts: {parts}")
     
     def _parse_rar(self, line):
         """Parse #RAR section (fiscal year)."""
+        print(f"Parsing RAR line: '{line}'")
+        
+        # Handle both with and without the # prefix
+        if line.startswith('#'):
+            line = line[1:].strip()  # Remove the # and any leading whitespace
+        
         parts = self._extract_values(line)
+        print(f"RAR parts: {parts}")
+        
         if len(parts) >= 3:
             year_id = parts[1]
             start_date = parts[2]
             end_date = parts[3] if len(parts) > 3 else None
+            
+            print(f"Found fiscal year: Year ID={year_id}, Start={start_date}, End={end_date}")
             
             if 'fiscal_years' not in self.data['metadata']:
                 self.data['metadata']['fiscal_years'] = {}
@@ -252,6 +416,13 @@ class SIEParser:
                 'end_date': end_date
             }
             
+            # Format the fiscal year string (e.g., "2020-01-01 to 2020-12-31")
+            if start_date and end_date:
+                formatted_start = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+                formatted_end = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+                fiscal_year_str = f"{formatted_start} to {formatted_end}"
+                self.data['metadata']['fiscal_year'] = fiscal_year_str
+            
             # If this is the current fiscal year (0), also store it in the main metadata
             if year_id == '0' or year_id == 0:
                 self.data['metadata']['current_fiscal_year'] = {
@@ -259,11 +430,18 @@ class SIEParser:
                     'end_date': end_date
                 }
                 
-                # Extract year from the dates for easier access
-                if start_date and len(start_date) >= 4:
+                # Store formatted dates for easier access
+                if start_date and len(start_date) >= 8:
+                    formatted_start = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+                    self.data['metadata']['financial_year_start'] = formatted_start
                     self.data['metadata']['current_fiscal_year_start_year'] = start_date[:4]
-                if end_date and len(end_date) >= 4:
+                
+                if end_date and len(end_date) >= 8:
+                    formatted_end = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+                    self.data['metadata']['financial_year_end'] = formatted_end
                     self.data['metadata']['current_fiscal_year_end_year'] = end_date[:4]
+        else:
+            print(f"Warning: RAR line has fewer than 3 parts: {parts}")
     
     def _parse_konto(self, line):
         """Parse #KONTO section (account)."""
@@ -305,16 +483,44 @@ class SIEParser:
     
     def _parse_res(self, line):
         """Parse #RES section (result)."""
+        # Print the raw line for debugging
+        print(f"Raw RES line: '{line}'")
+        
+        # Handle both with and without the # prefix
+        if line.startswith('#'):
+            line = line[1:].strip()  # Remove the # and any leading whitespace
+        
         parts = self._extract_values(line)
+        print(f"Extracted RES parts: {parts}")
+        
         if len(parts) >= 3:
             year = parts[1]
             account = parts[2]
             amount = float(parts[3]) if len(parts) > 3 else 0.0
             
+            print(f"Parsing RES: Year={year}, Account={account}, Amount={amount}")
+            
             if year not in self.data['res']:
                 self.data['res'][year] = {}
             
             self.data['res'][year][account] = amount
+        else:
+            print(f"Warning: RES line has fewer than 3 parts: {parts}")
+            
+        # Also try direct parsing as a fallback
+        if line.startswith('RES'):
+            # Try to match the pattern directly
+            import re
+            match = re.match(r'RES\s+(-?\d+)\s+(\d+)\s+(-?\d+\.?\d*)', line)
+            if match:
+                year, account, amount_str = match.groups()
+                amount = float(amount_str)
+                print(f"Direct match RES: Year={year}, Account={account}, Amount={amount}")
+                
+                if year not in self.data['res']:
+                    self.data['res'][year] = {}
+                
+                self.data['res'][year][account] = amount
     
     def _parse_ver(self, line):
         """Parse #VER section (verification)."""

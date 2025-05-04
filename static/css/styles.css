@@ -1803,7 +1803,7 @@ footer {
     background-color: var(--light-bg-color);
     padding: 15px;
     border-radius: var(--border-radius);
-    max-height: 400px;
+    max-height: 800px;
     overflow-y: auto;
     font-family: monospace;
     white-space: pre-wrap;
@@ -1870,7 +1870,82 @@ footer {
     font-weight: 600;
     background-color: var(--light-bg-color);
 }
-    background-color: #f9f9f9;
+
+/* Balance History Tab */
+.balance-history-header,
+.result-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.balance-history-container,
+.result-history-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.balance-history-table,
+.result-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.balance-history-table th,
+.balance-history-table td,
+.result-history-table th,
+.result-history-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    text-align: right;
+}
+
+.balance-history-table th.account-col,
+.balance-history-table td.account-col,
+.result-history-table th.account-col,
+.result-history-table td.account-col {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 2;
+    text-align: left;
+    min-width: 80px;
+    border-right: 2px solid var(--border-color);
+}
+
+.balance-history-table th.name-col,
+.balance-history-table td.name-col,
+.result-history-table th.name-col,
+.result-history-table td.name-col {
+    position: sticky;
+    left: 80px;
+    background-color: white;
+    z-index: 2;
+    text-align: left;
+    min-width: 200px;
+    border-right: 2px solid var(--border-color);
+}
+
+.balance-history-table th,
+.result-history-table th {
+    background-color: var(--light-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.balance-history-table th.account-col,
+.balance-history-table th.name-col,
+.result-history-table th.account-col,
+.result-history-table th.name-col {
+    z-index: 3;
+}
+
+.balance-history-table .amount-col,
+.result-history-table .amount-col {
+    min-width: 120px;
 }
 
 .balance-history-table tr:hover .account-col,
