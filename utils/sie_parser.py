@@ -487,40 +487,89 @@ class SIEParser:
         print(f"Raw RES line: '{line}'")
         
         # Handle both with and without the # prefix
+        original_line = line
         if line.startswith('#'):
             line = line[1:].strip()  # Remove the # and any leading whitespace
         
+        # Try multiple parsing approaches to ensure we capture the data
+        
+        # Approach 1: Use extract_values to handle quoted strings properly
         parts = self._extract_values(line)
         print(f"Extracted RES parts: {parts}")
         
-        if len(parts) >= 3:
-            year = parts[1]
-            account = parts[2]
-            amount = float(parts[3]) if len(parts) > 3 else 0.0
-            
-            print(f"Parsing RES: Year={year}, Account={account}, Amount={amount}")
-            
-            if year not in self.data['res']:
-                self.data['res'][year] = {}
-            
-            self.data['res'][year][account] = amount
-        else:
-            print(f"Warning: RES line has fewer than 3 parts: {parts}")
-            
-        # Also try direct parsing as a fallback
-        if line.startswith('RES'):
-            # Try to match the pattern directly
-            import re
-            match = re.match(r'RES\s+(-?\d+)\s+(\d+)\s+(-?\d+\.?\d*)', line)
-            if match:
-                year, account, amount_str = match.groups()
-                amount = float(amount_str)
-                print(f"Direct match RES: Year={year}, Account={account}, Amount={amount}")
+        success = False
+        
+        # Standard format: RES year account amount
+        if len(parts) >= 3 and parts[0].upper() == 'RES':
+            try:
+                year = parts[1]
+                account = parts[2]
+                amount = float(parts[3]) if len(parts) > 3 else 0.0
+                
+                print(f"Parsing RES (standard): Year={year}, Account={account}, Amount={amount}")
                 
                 if year not in self.data['res']:
                     self.data['res'][year] = {}
                 
                 self.data['res'][year][account] = amount
+                success = True
+            except (ValueError, IndexError) as e:
+                print(f"Error parsing RES parts: {e}")
+        
+        # Approach 2: Direct regex pattern matching as a fallback
+        if not success:
+            try:
+                # Try to match different patterns
+                import re
+                
+                # Pattern 1: RES year account amount
+                match = re.match(r'RES\s+(-?\d+)\s+(\d+)\s+(-?\d+\.?\d*)', line)
+                if match:
+                    year, account, amount_str = match.groups()
+                    amount = float(amount_str)
+                    print(f"Direct match RES pattern 1: Year={year}, Account={account}, Amount={amount}")
+                    
+                    if year not in self.data['res']:
+                        self.data['res'][year] = {}
+                    
+                    self.data['res'][year][account] = amount
+                    success = True
+                
+                # Pattern 2: RES year account amount with potential spaces or formatting
+                if not success:
+                    match = re.search(r'RES\s+(-?\d+)\s+(\d+)(?:\s+|{)(-?\d+\.?\d*)', line)
+                    if match:
+                        year, account, amount_str = match.groups()
+                        amount = float(amount_str)
+                        print(f"Direct match RES pattern 2: Year={year}, Account={account}, Amount={amount}")
+                        
+                        if year not in self.data['res']:
+                            self.data['res'][year] = {}
+                        
+                        self.data['res'][year][account] = amount
+                        success = True
+                
+                # Pattern 3: Try with the original line (with #)
+                if not success and original_line.startswith('#'):
+                    match = re.search(r'#RES\s+(-?\d+)\s+(\d+)(?:\s+|{)(-?\d+\.?\d*)', original_line)
+                    if match:
+                        year, account, amount_str = match.groups()
+                        amount = float(amount_str)
+                        print(f"Direct match RES pattern 3: Year={year}, Account={account}, Amount={amount}")
+                        
+                        if year not in self.data['res']:
+                            self.data['res'][year] = {}
+                        
+                        self.data['res'][year][account] = amount
+                        success = True
+            except Exception as e:
+                print(f"Error in regex parsing: {e}")
+        
+        if not success:
+            print(f"WARNING: Failed to parse RES line: {original_line}")
+            
+        # Always return the current state of self.data['res'] for debugging
+        return self.data['res']
     
     def _parse_ver(self, line):
         """Parse #VER section (verification)."""

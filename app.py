@@ -66,48 +66,44 @@ def upload_file():
             # Add detailed logging about the parsed data
             print(f"SIE data keys: {sie_data.keys() if isinstance(sie_data, dict) else 'Not a dictionary'}")
             
-            # DIRECT CHECK FOR RESULT DATA
-            print("DIRECT CHECK FOR RESULT DATA:")
-            print(f"Results in SIE data: {sie_data.get('results', 'NOT FOUND')}")
-            if 'results' in sie_data:
+            # Check for result data
+            print("Checking for result data:")
+            if 'results' in sie_data and sie_data['results']:
                 print(f"Results keys: {sie_data['results'].keys()}")
                 for year, year_data in sie_data['results'].items():
                     print(f"Year {year} has {len(year_data)} result entries")
                     for acc, value in list(year_data.items())[:5]:  # Show first 5 entries
                         print(f"  Account {acc}: {value}")
             else:
-                print("NO RESULTS DATA FOUND IN SIE DATA!")
-                
-                # Check raw parser data
-                print("Checking if 'res' data exists in raw parser data...")
-                parser = SIEParser(file_path)
-                raw_data = parser.parse_raw()  # Add this method to just parse without converting to data model
-                if raw_data and 'res' in raw_data:
-                    print(f"Raw RES data found: {raw_data['res']}")
-                else:
-                    print("No 'res' data found in raw parser data either!")
-            
-            # Manually add test result data based on the exact #RES lines provided by the user
-            print("Adding test result data based on the exact #RES lines provided by the user")
-            sie_data['results'] = {
-                '0': {
-                    '3011': {'account': '3011', 'amount': -3650.00, 'year': '0'},
-                    '3740': {'account': '3740', 'amount': -0.45, 'year': '0'},
-                    '5410': {'account': '5410', 'amount': 8308.00, 'year': '0'},
-                    '6230': {'account': '6230', 'amount': 384.21, 'year': '0'},
-                    '6420': {'account': '6420', 'amount': -0.42, 'year': '0'},
-                    '6570': {'account': '6570', 'amount': 1223.00, 'year': '0'},
-                    '8999': {'account': '8999', 'amount': -6264.34, 'year': '0'}
-                },
-                '-1': {
-                    '3740': {'account': '3740', 'amount': 0.27, 'year': '-1'},
-                    '3790': {'account': '3790', 'amount': -2.00, 'year': '-1'},
-                    '5410': {'account': '5410', 'amount': 6022.08, 'year': '-1'},
-                    '6230': {'account': '6230', 'amount': 375.00, 'year': '-1'},
-                    '6570': {'account': '6570', 'amount': 1000.00, 'year': '-1'},
-                    '8999': {'account': '8999', 'amount': -7395.35, 'year': '-1'}
-                }
-            }
+                print("WARNING: No results data found in SIE data!")
+                # If we still don't have results, try to parse the file again with the raw parser
+                print("Attempting to recover results data...")
+                try:
+                    parser = SIEParser(file_path)
+                    raw_data = parser.parse_raw()  # Parse without converting to data model
+                    if raw_data and 'res' in raw_data and raw_data['res']:
+                        print(f"Raw RES data found: {raw_data['res']}")
+                        # Convert raw RES data to the expected format
+                        results_data = {}
+                        for year, accounts in raw_data['res'].items():
+                            if year not in results_data:
+                                results_data[year] = {}
+                            for acc_num, amount in accounts.items():
+                                results_data[year][acc_num] = {
+                                    'account': acc_num,
+                                    'amount': float(amount),
+                                    'year': year
+                                }
+                        # Add the recovered results to the sie_data
+                        if results_data:
+                            print(f"Adding recovered results data: {results_data}")
+                            sie_data['results'] = results_data
+                    else:
+                        print("No 'res' data found in raw parser data either!")
+                except Exception as e:
+                    print(f"Error recovering results data: {e}")
+                    import traceback
+                    print(traceback.format_exc())
             
             # The data is already processed through our standardized model
             # No need for additional processing

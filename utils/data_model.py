@@ -261,16 +261,26 @@ class SIEDataModel:
                 )
         
         # Process results
+        print(f"Processing results data from parser: {parser_data.get('res', {})}")
         for year, results in parser_data.get('res', {}).items():
             if year not in self.results:
                 self.results[year] = {}
             
-            for acc_num, amount in results.items():
-                self.results[year][acc_num] = BalanceEntry(
-                    account=acc_num,
-                    amount=amount,
-                    year=year
-                )
+            # Handle different data types for results
+            if isinstance(results, dict):
+                for acc_num, amount in results.items():
+                    # Handle the case where amount might be a dict or a float
+                    if isinstance(amount, dict) and 'amount' in amount:
+                        actual_amount = amount['amount']
+                    else:
+                        actual_amount = float(amount)
+                    
+                    print(f"Adding result: Year={year}, Account={acc_num}, Amount={actual_amount}")
+                    self.results[year][acc_num] = BalanceEntry(
+                        account=acc_num,
+                        amount=actual_amount,
+                        year=year
+                    )
         
         return self
     
