@@ -1,0 +1,1997 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #34495e;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --error-color: #e74c3c;
+    --border-radius: 4px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --border-color: #ddd;
+    --light-bg-color: #f5f7fa;
+    --lightest-bg-color: #e4e8e9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-color);
+    background-color: #f5f7fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: var(--border-radius);
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+}
+
+h2 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+/* Upload Section */
+.upload-section {
+    text-align: center;
+}
+
+.file-input {
+    margin-bottom: 20px;
+}
+
+.file-input input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-input label {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-input label:hover {
+    background-color: #dde4e6;
+}
+
+button {
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.status-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+.status-message.success {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: var(--success-color);
+}
+
+.status-message.error {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: var(--error-color);
+}
+
+.status-message.loading {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: var(--primary-color);
+}
+
+/* Results Section */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background-color: transparent;
+    color: var(--dark-color);
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    background-color: #f5f7fa;
+}
+
+.tab-btn.active {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Summary Tab */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.highlight-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 10px 0;
+}
+
+.card p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.chart-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Balance Sheet Tab */
+.balance-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.balance-year-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.balance-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.balance-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.balance-table-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.balance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.balance-table th, 
+.balance-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.balance-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.balance-table .account-column {
+    width: 40%;
+}
+
+.balance-table .amount-column {
+    width: 20%;
+    text-align: right;
+}
+
+.balance-table .section-header td {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+    padding-top: 15px;
+}
+
+.balance-table .subsection-header td {
+    background-color: var(--lightest-bg-color);
+    font-weight: 500;
+    font-style: italic;
+}
+
+.balance-table .total-row {
+    font-weight: 600;
+    background-color: var(--lightest-bg-color);
+}
+
+.balance-table .expandable-section {
+    padding: 0;
+}
+
+.date-label {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: var(--secondary-color);
+}
+
+.account-list {
+    margin: 0;
+    padding: 0;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.account-item:last-child {
+    border-bottom: none;
+}
+
+.account-name {
+    flex: 1;
+}
+
+.account-ob,
+.account-movement,
+.account-cb {
+    width: 20%;
+    text-align: right;
+}
+
+.positive {
+    color: var(--success-color);
+}
+
+.negative {
+    color: var(--error-color);
+}
+
+/* Balance sheet specific styles */
+#balance-sheet-table th:nth-child(3),
+#balance-sheet-table td:nth-child(3) {
+    text-align: right;
+    min-width: 120px;
+}
+
+#balance-sheet-table th:nth-child(4),
+#balance-sheet-table td:nth-child(4) {
+    text-align: right;
+    min-width: 120px;
+}
+
+#balance-sheet-table th:nth-child(5),
+#balance-sheet-table td:nth-child(5) {
+    text-align: right;
+    min-width: 120px;
+}
+
+/* Balance Sheet Styles */
+.balance-sheet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.balance-sheet-table th,
+.balance-sheet-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.balance-sheet-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.balance-sheet-table .section-header {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.balance-sheet-table .section-header td {
+    padding: 10px 12px;
+}
+
+.balance-sheet-table .total-row {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
+.balance-sheet-table .grand-total {
+    background-color: #e9ecef;
+    border-top: 2px solid #adb5bd;
+}
+
+.filter-container {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.filter-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Transactions Tab */
+.transactions-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.transactions-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.transactions-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.data-table th, 
+.data-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.data-table td:last-child {
+    text-align: right;
+}
+
+/* JSON Tab */
+.json-controls {
+    margin-bottom: 20px;
+}
+
+.description-box {
+    margin-bottom: 20px;
+}
+
+.description-box label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.description-box textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+    font-family: inherit;
+}
+
+.save-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.save-controls input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    flex: 1;
+}
+
+.json-preview {
+    background-color: #f5f7fa;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+}
+
+pre {
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Ledger Tab */
+.ledger-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ledger-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.accounts-list {
+    margin-bottom: 30px;
+}
+
+.account-section {
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: var(--light-color);
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.account-header:hover {
+    background-color: #e4e8e9;
+}
+
+.account-title {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.account-balance {
+    font-weight: bold;
+}
+
+.account-transactions {
+    display: none;
+}
+
+.account-transactions.open {
+    display: block;
+}
+
+.account-transactions table {
+    width: 100%;
+}
+
+.account-transactions th {
+    background-color: #f5f7fa;
+}
+
+.account-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f5f7fa;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+}
+
+.positive {
+    color: var(--success-color);
+}
+
+.negative {
+    color: var(--error-color);
+}
+
+/* Ledger View Styles */
+.ledger-container {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 15px;
+}
+
+.ledger-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: var(--light-bg-color);
+    border-radius: var(--border-radius);
+}
+
+.ledger-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.ledger-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.account-section {
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--light-bg-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.account-header:hover {
+    background-color: var(--lightest-bg-color);
+}
+
+.account-title {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.account-toggle {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.transactions-container {
+    padding: 0;
+    background-color: white;
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions-table th,
+.transactions-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.transactions-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.transactions-table tr:hover {
+    background-color: var(--lightest-bg-color);
+}
+
+.transactions-table .positive {
+    color: var(--success-color);
+}
+
+.transactions-table .negative {
+    color: var(--error-color);
+}
+
+.opening-balance-row {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.opening-balance-row td {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Closing Balance Row Styles */
+.closing-balance-row {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    border-top: 1px solid #dee2e6;
+}
+
+.closing-balance-label {
+    text-align: right;
+    font-style: italic;
+    color: #495057;
+}
+
+.closing-balance-value {
+    font-weight: bold;
+    color: #212529;
+}
+
+.opening-balance-row {
+    background-color: #f8f9fa;
+    font-style: italic;
+    color: #6c757d;
+}
+
+/* Responsive adjustments for ledger */
+@media (max-width: 768px) {
+    .ledger-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .transactions-table {
+        font-size: 0.9rem;
+    }
+    
+    .transactions-table th,
+    .transactions-table td {
+        padding: 6px 8px;
+    }
+}
+
+/* Opening Balance Tab */
+.opening-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.opening-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.opening-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.opening-header h3 {
+    margin-bottom: 5px;
+}
+
+.opening-header .note {
+    font-style: italic;
+    color: var(--secondary-color);
+}
+
+.opening-container {
+    margin-bottom: 30px;
+}
+
+/* Filter controls */
+.filter-controls {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-checkbox input {
+    margin-right: 8px;
+}
+
+.checkbox-text {
+    font-size: 14px;
+}
+
+.account-row.zero-value {
+    color: #999;
+    font-style: italic;
+}
+
+/* P&L Report Styling - CFO Edition */
+.pl-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.pl-report-header .company-info {
+    flex: 1;
+}
+
+.pl-report-header h2 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1.8rem;
+    border-bottom: none;
+}
+
+.pl-report-header h3 {
+    color: #34495e;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.pl-report-header p {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.pl-report-container {
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.pl-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pl-report-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.pl-report-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+}
+
+.pl-report-table th.amount-col {
+    text-align: right;
+}
+
+.pl-report-table .account-col {
+    width: 15%;
+}
+
+.pl-report-table .name-col {
+    width: 65%;
+}
+
+.pl-report-table .amount-col {
+    width: 20%;
+    text-align: right;
+}
+
+.pl-report-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.pl-report-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.pl-report-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.pl-report-table .section-header td {
+    background-color: #e9ecef;
+    font-weight: 700;
+    color: #495057;
+    padding: 12px 15px;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+}
+
+.pl-report-table .subtotal-row td {
+    font-weight: 600;
+    background-color: #f1f3f5;
+    border-top: 1px solid #adb5bd;
+    border-bottom: 1px solid #adb5bd;
+    padding: 12px 15px;
+}
+
+.pl-report-table .net-income-row td {
+    font-weight: 700;
+    background-color: #e7f5ff;
+    border-top: 2px solid #4dabf7;
+    border-bottom: 2px solid #4dabf7;
+    padding: 15px;
+    font-size: 1.15em;
+    color: #1864ab;
+}
+
+.pl-report-table .empty-message {
+    text-align: center;
+    color: #868e96;
+    font-style: italic;
+    padding: 20px;
+}
+
+.pl-report-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pl-report-footer .notes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+    max-width: 70%;
+}
+
+.report-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* Print styles for P&L */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #income-tab, #income-tab * {
+        visibility: visible;
+    }
+    
+    #income-tab {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-color: white;
+    }
+    
+    .pl-report-table {
+        width: 100%;
+        box-shadow: none;
+    }
+    
+    .report-actions, .filter-controls {
+        display: none;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    header, footer, .tabs, .tab-btn {
+        display: none;
+    }
+}
+
+/* Existing styles for positive/negative values */
+.positive {
+    color: #28a745;
+}
+
+.negative {
+    color: #dc3545;
+}
+
+/* P&L Report Styles */
+.pl-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pl-report-table th,
+.pl-report-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.pl-report-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.pl-report-table .section-header {
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #495057;
+}
+
+.pl-report-table .section-header td {
+    padding: 10px 12px;
+    font-size: 1.1em;
+}
+
+.pl-report-table .total-row {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.pl-report-table .subtotal-row {
+    font-weight: bold;
+    background-color: #e9ecef;
+    border-top: 1px solid #adb5bd;
+    border-bottom: 1px solid #adb5bd;
+}
+
+.pl-report-table .net-income-row {
+    font-weight: bold;
+    background-color: #d1ecf1;
+    border-top: 2px solid #4dabf7;
+    border-bottom: 2px solid #4dabf7;
+    font-size: 1.1em;
+}
+
+.pl-report-table .positive {
+    color: #28a745;
+}
+
+.pl-report-table .negative {
+    color: #dc3545;
+}
+
+.report-title {
+    margin: 20px 0;
+    color: #343a40;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+/* Balance Sheet Report Styling - CFO Edition */
+.bs-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.bs-report-header .company-info {
+    flex: 1;
+}
+
+.bs-report-header h2 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1.8rem;
+    border-bottom: none;
+}
+
+.bs-report-header h3 {
+    color: #34495e;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.bs-report-header p {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.bs-report-container {
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.bs-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bs-report-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.bs-report-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+}
+
+.bs-report-table th.amount-col {
+    text-align: right;
+}
+
+.bs-report-table .account-col {
+    width: 15%;
+}
+
+.bs-report-table .name-col {
+    width: 65%;
+}
+
+.bs-report-table .amount-col {
+    width: 20%;
+    text-align: right;
+}
+
+.bs-report-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.bs-report-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.bs-report-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Section headers with different colors for balance sheet sections */
+.bs-report-table .section-header td {
+    font-weight: 700;
+    color: #495057;
+    padding: 12px 15px;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+}
+
+/* Assets section */
+.bs-report-table tr.section-header:nth-of-type(1) td {
+    background-color: #e3f2fd; /* Light blue for assets */
+}
+
+/* Liabilities section */
+.bs-report-table tr.section-header:nth-of-type(3) td {
+    background-color: #fff3e0; /* Light orange for liabilities */
+}
+
+/* Equity section */
+.bs-report-table tr.section-header:nth-of-type(5) td {
+    background-color: #e8f5e9; /* Light green for equity */
+}
+
+.bs-report-table .subtotal-row td {
+    font-weight: 600;
+    background-color: #f1f3f5;
+    border-top: 1px solid #adb5bd;
+    border-bottom: 1px solid #adb5bd;
+    padding: 12px 15px;
+}
+
+.bs-report-table .balance-check-row td {
+    font-weight: 700;
+    background-color: #e7f5ff;
+    border-top: 2px solid #4dabf7;
+    border-bottom: 2px solid #4dabf7;
+    padding: 15px;
+    font-size: 1.15em;
+    color: #1864ab;
+}
+
+.bs-report-table .empty-message {
+    text-align: center;
+    color: #868e96;
+    font-style: italic;
+    padding: 20px;
+}
+
+.bs-report-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.bs-report-footer .notes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+    max-width: 70%;
+}
+
+/* Print styles for Balance Sheet */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #balance-tab, #balance-tab * {
+        visibility: visible;
+    }
+    
+    #balance-tab {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-color: white;
+    }
+    
+    .bs-report-table {
+        width: 100%;
+        box-shadow: none;
+    }
+    
+    .report-actions, .filter-controls {
+        display: none;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    header, footer, .tabs, .tab-btn {
+        display: none;
+    }
+}
+
+/* Ledger Report Styling - CFO Edition */
+.ledger-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.ledger-report-header .company-info {
+    flex: 1;
+}
+
+.ledger-report-header h2 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1.8rem;
+    border-bottom: none;
+}
+
+.ledger-report-header h3 {
+    color: #34495e;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.ledger-report-header p {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.ledger-report-header .filter-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.ledger-report-container {
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+/* Simplified Ledger Table Styling */
+.ledger-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.ledger-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ledger-table th {
+    padding: 10px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+.ledger-table th.amount-col,
+.ledger-table th.balance-col {
+    text-align: right;
+}
+
+.ledger-table .account-col {
+    width: 10%;
+}
+
+.ledger-table .date-col {
+    width: 10%;
+}
+
+.ledger-table .ver-col {
+    width: 8%;
+}
+
+.ledger-table .desc-col {
+    width: 42%;
+}
+
+.ledger-table .amount-col {
+    width: 15%;
+    text-align: right;
+}
+
+.ledger-table .balance-col {
+    width: 15%;
+    text-align: right;
+}
+
+.ledger-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.ledger-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.ledger-table td {
+    padding: 8px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Account type color coding - simplified */
+.ledger-table tr.account-header {
+    border-top: 1px solid #dee2e6;
+    font-weight: 600;
+    background-color: #f1f3f5;
+    margin-top: 20px;
+}
+
+.ledger-table tr.account-header td {
+    padding: 12px 15px;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    border-left: 4px solid #4dabf7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Add space after closing balance row to separate accounts */
+.ledger-table tr.closing-balance-row {
+    border-bottom: 15px solid white;
+}
+
+.ledger-table tr.closing-balance-row td {
+    font-weight: 600;
+    border-top: 1px solid #adb5bd;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #f1f3f5;
+}
+
+/* Color coding for account types - just the left border */
+.ledger-table tr.account-type-Asset.account-header td {
+    border-left-color: #2196f3; /* Blue for assets */
+}
+
+.ledger-table tr.account-type-Liability.account-header td {
+    border-left-color: #ff9800; /* Orange for liabilities */
+}
+
+.ledger-table tr.account-type-Equity.account-header td {
+    border-left-color: #4caf50; /* Green for equity */
+}
+
+.ledger-table tr.account-type-Income.account-header td {
+    border-left-color: #9c27b0; /* Purple for income */
+}
+
+.ledger-table tr.account-type-Expense.account-header td {
+    border-left-color: #f44336; /* Red for expenses */
+}
+
+.ledger-table tr.account-type-Other.account-header td {
+    border-left-color: #9e9e9e; /* Gray for other */
+}
+
+.ledger-table tr.opening-balance-row td {
+    font-style: italic;
+    color: #6c757d;
+    background-color: #f8f9fa;
+}
+
+.ledger-table tr.closing-balance-row td {
+    font-weight: 600;
+    border-top: 1px solid #adb5bd;
+    background-color: #f1f3f5;
+}
+
+/* Keep color coding for numbers */
+.positive {
+    color: #28a745;
+}
+
+.negative {
+    color: #dc3545;
+}
+
+/* Print styles for simplified Ledger */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #ledger-tab, #ledger-tab * {
+        visibility: visible;
+    }
+    
+    #ledger-tab {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-color: white;
+    }
+    
+    .ledger-table {
+        width: 100%;
+        box-shadow: none;
+    }
+    
+    .report-actions, .filter-controls {
+        display: none;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    header, footer, .tabs, .tab-btn {
+        display: none;
+    }
+}
+
+/* Enhanced Accounts List */
+.accounts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.account-section {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+/* Color coding for account types */
+.account-section[data-type="Asset"] .account-header {
+    background-color: #e3f2fd; /* Light blue for assets */
+    border-left: 4px solid #2196f3;
+}
+
+.account-section[data-type="Liability"] .account-header {
+    background-color: #fff3e0; /* Light orange for liabilities */
+    border-left: 4px solid #ff9800;
+}
+
+.account-section[data-type="Equity"] .account-header {
+    background-color: #e8f5e9; /* Light green for equity */
+    border-left: 4px solid #4caf50;
+}
+
+.account-section[data-type="Income"] .account-header {
+    background-color: #f3e5f5; /* Light purple for income */
+    border-left: 4px solid #9c27b0;
+}
+
+.account-section[data-type="Expense"] .account-header {
+    background-color: #ffebee; /* Light red for expenses */
+    border-left: 4px solid #f44336;
+}
+
+.account-section[data-type="Other"] .account-header {
+    background-color: #f5f5f5; /* Light gray for other */
+    border-left: 4px solid #9e9e9e;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.account-header:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-number {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    min-width: 70px;
+}
+
+.account-name {
+    font-size: 1.05rem;
+    color: #34495e;
+}
+
+.account-balance {
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.account-transactions {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out;
+}
+
+.account-section.expanded .account-transactions {
+    max-height: 2000px; /* Large enough to show all transactions */
+    transition: max-height 0.5s ease-in;
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.transactions-table th {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.transactions-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.transactions-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.transactions-table tr:hover {
+    background-color: #e9ecef;
+}
+
+.transaction-date {
+    white-space: nowrap;
+    color: #495057;
+}
+
+.transaction-id {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.transaction-description {
+    max-width: 300px;
+}
+
+.transaction-amount {
+    text-align: right;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.ledger-report-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.ledger-report-footer .notes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+    max-width: 70%;
+}
+
+/* Toggle icon for expanding/collapsing */
+.toggle-icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.toggle-icon:before,
+.toggle-icon:after {
+    content: '';
+    position: absolute;
+    background-color: #6c757d;
+    transition: transform 0.3s;
+}
+
+.toggle-icon:before {
+    width: 2px;
+    height: 16px;
+    top: 4px;
+    left: 11px;
+}
+
+.toggle-icon:after {
+    width: 16px;
+    height: 2px;
+    top: 11px;
+    left: 4px;
+}
+
+.account-section.expanded .toggle-icon:before {
+    transform: scaleY(0);
+}
+
+/* Print styles for Ledger */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #ledger-tab, #ledger-tab * {
+        visibility: visible;
+    }
+    
+    #ledger-tab {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-color: white;
+    }
+    
+    .report-actions, .filter-controls {
+        display: none;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    header, footer, .tabs, .tab-btn {
+        display: none;
+    }
+    
+    .account-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+    
+    .account-transactions {
+        max-height: none !important;
+    }
+    
+    .toggle-icon {
+        display: none;
+    }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .balance-container,
+    .income-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .save-controls {
+        flex-direction: column;
+    }
+}
+
+/* LLM Export Tab Styles */
+.llm-export-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.llm-export-controls {
+    background-color: var(--light-bg-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--secondary-color);
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-label, .checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-label span, .checkbox-label span {
+    margin-left: 8px;
+}
+
+.llm-preview-container {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.llm-preview-container h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: var(--secondary-color);
+}
+
+.preview-info {
+    background-color: var(--lightest-bg-color);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+}
+
+.preview-info p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.llm-preview {
+    background-color: var(--light-bg-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    max-height: 800px;
+    overflow-y: auto;
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 14px;
+}
+
+.placeholder-text {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+}
+
+.llm-export-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Financial table styles for LLM preview */
+.financial-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.financial-table th, .financial-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.financial-table th {
+    background-color: var(--light-bg-color);
+    font-weight: 600;
+}
+
+.financial-table .numeric {
+    text-align: right;
+}
+
+.financial-table .section-header {
+    background-color: var(--lightest-bg-color);
+    font-weight: 600;
+}
+
+.financial-table .total-row {
+    font-weight: 600;
+    background-color: var(--light-bg-color);
+}
+
+/* Balance History Tab */
+.balance-history-header,
+.result-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+/* Styles for current year and previous year columns in Result History */
+.current-year, .current-year-cell {
+    background-color: rgba(46, 204, 113, 0.1); /* Light green background */
+}
+
+.previous-year, .previous-year-cell {
+    background-color: rgba(52, 152, 219, 0.1); /* Light blue background */
+}
+
+.result-history-table th.current-year {
+    background-color: rgba(46, 204, 113, 0.2); /* Slightly darker green for header */
+    border-bottom: 2px solid var(--success-color);
+}
+
+.result-history-table th.previous-year {
+    background-color: rgba(52, 152, 219, 0.2); /* Slightly darker blue for header */
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.balance-history-container,
+.result-history-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.balance-history-table,
+.result-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.balance-history-table th,
+.balance-history-table td,
+.result-history-table th,
+.result-history-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    text-align: right;
+}
+
+.balance-history-table th.account-col,
+.balance-history-table td.account-col,
+.result-history-table th.account-col,
+.result-history-table td.account-col {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 2;
+    text-align: left;
+    min-width: 80px;
+    border-right: 2px solid var(--border-color);
+}
+
+.balance-history-table th.name-col,
+.balance-history-table td.name-col,
+.result-history-table th.name-col,
+.result-history-table td.name-col {
+    position: sticky;
+    left: 80px;
+    background-color: white;
+    z-index: 2;
+    text-align: left;
+    min-width: 200px;
+    border-right: 2px solid var(--border-color);
+}
+
+.balance-history-table th,
+.result-history-table th {
+    background-color: var(--light-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.balance-history-table th.account-col,
+.balance-history-table th.name-col,
+.result-history-table th.account-col,
+.result-history-table th.name-col {
+    z-index: 3;
+}
+
+.balance-history-table .amount-col,
+.result-history-table .amount-col {
+    min-width: 120px;
+}
+
+.balance-history-table tr:hover .account-col,
+.balance-history-table tr:hover .name-col {
+    background-color: #f9f9f9;
+}
+
+.balance-history-table .positive {
+    color: #2e7d32;
+}
+
+.balance-history-table .negative {
+    color: #c62828;
+}
+
+.year-filter-container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#balance-history-year-filter {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    min-width: 120px;
+}

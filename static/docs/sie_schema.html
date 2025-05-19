@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIE File Format Schema</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f7fa;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        .required {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .optional {
+            background-color: #3498db;
+            color: white;
+        }
+        .note {
+            background-color: #f1c40f;
+            color: #34495e;
+        }
+        .code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #ecf0f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .example {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .program-specific {
+            border-left: 4px solid #e74c3c;
+            padding-left: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>SIE File Format Schema</h1>
+    <p>This document describes the structure of Swedish SIE 4 files and how different bookkeeping systems implement the format.</p>
+
+    <div class="section">
+        <h2>SIE File Overview</h2>
+        <p>SIE (Standard Import/Export) is a Swedish standard format for transferring accounting data between different bookkeeping systems. SIE 4 is the most common version used for exporting complete accounting data.</p>
+        
+        <p>Key characteristics:</p>
+        <ul>
+            <li>Text-based format with CP437 encoding (IBM PC charset) for Swedish characters</li>
+            <li>Each line starts with a label (e.g., #KONTO, #VER, #TRANS)</li>
+            <li>Data fields are separated by spaces</li>
+            <li>Text strings are enclosed in quotes</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>File Header Sections</h2>
+        <p>These sections appear at the beginning of the file and provide metadata about the accounting data.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Description</th>
+                    <th>Format</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="code">#FLAGGA</span></td>
+                    <td>SIE version flag</td>
+                    <td><span class="code">#FLAGGA 0</span></td>
+                    <td><span class="code">#FLAGGA 0</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#PROGRAM</span></td>
+                    <td>Source program information</td>
+                    <td><span class="code">#PROGRAM "Program Name" Version</span></td>
+                    <td><span class="code">#PROGRAM "Fortnox" 3.56.9</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#FORMAT</span></td>
+                    <td>SIE format version</td>
+                    <td><span class="code">#FORMAT PC8</span></td>
+                    <td><span class="code">#FORMAT PC8</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#GEN</span></td>
+                    <td>Generation date</td>
+                    <td><span class="code">#GEN YYYYMMDD</span></td>
+                    <td><span class="code">#GEN 20250428</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#SIETYP</span></td>
+                    <td>SIE type</td>
+                    <td><span class="code">#SIETYP 4</span></td>
+                    <td><span class="code">#SIETYP 4</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#FNAMN</span></td>
+                    <td>Company name</td>
+                    <td><span class="code">#FNAMN "Company Name"</span></td>
+                    <td><span class="code">#FNAMN "Acme AB"</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#ORGNR</span></td>
+                    <td>Organization number</td>
+                    <td><span class="code">#ORGNR XXXXXX-XXXX</span></td>
+                    <td><span class="code">#ORGNR 556123-4567</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Fiscal Year and Account Information</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Description</th>
+                    <th>Format</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="code">#RAR</span></td>
+                    <td>Fiscal year information</td>
+                    <td><span class="code">#RAR 0 YYYYMMDD YYYYMMDD</span></td>
+                    <td><span class="code">#RAR 0 20240101 20241231</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#KONTO</span></td>
+                    <td>Account definition</td>
+                    <td><span class="code">#KONTO AccountNumber "Account Name"</span></td>
+                    <td><span class="code">#KONTO 1930 "Företagskonto"</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#IB</span></td>
+                    <td>Opening balance</td>
+                    <td><span class="code">#IB Year AccountNumber Amount</span></td>
+                    <td><span class="code">#IB 0 1930 10000.00</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#UB</span></td>
+                    <td>Closing balance</td>
+                    <td><span class="code">#UB Year AccountNumber Amount</span></td>
+                    <td><span class="code">#UB 0 1930 15000.00</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#RES</span></td>
+                    <td>Result (for income statement accounts)</td>
+                    <td><span class="code">#RES Year AccountNumber Amount</span></td>
+                    <td><span class="code">#RES 0 3010 -50000.00</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Transaction Data</h2>
+        <p>Transactions are organized in verifications, each containing one or more transactions.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Description</th>
+                    <th>Format</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="code">#VER</span></td>
+                    <td>Verification header</td>
+                    <td><span class="code">#VER Series Number Date "Text"</span></td>
+                    <td><span class="code">#VER A 1 20250115 "Invoice payment"</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code">#TRANS</span></td>
+                    <td>Transaction line</td>
+                    <td><span class="code">#TRANS AccountNumber Amount [Date] ["Text"]</span></td>
+                    <td><span class="code">#TRANS 1930 -1000.00 20250115 "Payment"</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="program-specific">
+            <h3>Program-Specific Variations</h3>
+            <p>Different bookkeeping systems implement the #TRANS section with slight variations:</p>
+            
+            <h4>Fortnox</h4>
+            <div class="example">
+                <pre>#TRANS AccountNumber Amount Date "Text"</pre>
+                <pre>#TRANS 1930 -1000.00 20250115 "Payment"</pre>
+            </div>
+            
+            <h4>Dooer</h4>
+            <div class="example">
+                <pre>#TRANS AccountNumber 0.00 Date Amount</pre>
+                <pre>#TRANS 1930 0.00 20250115 -1000.00</pre>
+                <p><strong>Note:</strong> In Dooer, the amount is often placed in the text field position, with 0.00 in the amount position.</p>
+            </div>
+            
+            <h4>Bokio</h4>
+            <div class="example">
+                <pre>#TRANS AccountNumber Amount Date "Text"</pre>
+                <pre>#TRANS 1930 -1000.00 20250115 "Payment"</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Balance Sheet and Financial Structure</h2>
+        <p>The SIE format organizes accounts according to the Swedish BAS accounting standard, which determines how accounts are grouped in financial statements.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Account Range</th>
+                    <th>Category</th>
+                    <th>Financial Statement</th>
+                    <th>Example Accounts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1000-1999</td>
+                    <td>Assets</td>
+                    <td>Balance Sheet</td>
+                    <td>1350 (Securities), 1930 (Bank Account)</td>
+                </tr>
+                <tr>
+                    <td>2000-2999</td>
+                    <td>Liabilities and Equity</td>
+                    <td>Balance Sheet</td>
+                    <td>2099 (Profit/Loss for the Year), 2440 (Tax Liabilities)</td>
+                </tr>
+                <tr>
+                    <td>3000-3999</td>
+                    <td>Income</td>
+                    <td>Income Statement</td>
+                    <td>3010 (Sales), 3740 (Currency Exchange Gains)</td>
+                </tr>
+                <tr>
+                    <td>4000-7999</td>
+                    <td>Expenses</td>
+                    <td>Income Statement</td>
+                    <td>4010 (Purchases), 6570 (Bank Fees)</td>
+                </tr>
+                <tr>
+                    <td>8000-8999</td>
+                    <td>Other Income/Expenses</td>
+                    <td>Income Statement</td>
+                    <td>8310 (Interest Income), 8423 (Interest Expenses)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Balance Sheet Structure</h3>
+        <p>A typical balance sheet derived from SIE data includes:</p>
+        
+        <div class="example">
+            <pre>
+Balance Sheet
+Date: YYYY-MM-DD
+
+Assets
+  Fixed Assets
+    [Accounts 1000-1199]
+  Current Assets
+    [Accounts 1200-1999]
+Total Assets
+
+Liabilities and Equity
+  Current Liabilities
+    [Accounts 2000-2899]
+  Equity
+    [Accounts 2900-2999]
+Total Liabilities and Equity
+            </pre>
+        </div>
+        
+        <p>The balance sheet always balances, meaning Total Assets = Total Liabilities + Equity.</p>
+        
+        <h3>Opening and Closing Balances</h3>
+        <p>SIE files include opening balances (#IB) and closing balances (#UB) for balance sheet accounts, which represent the account values at the beginning and end of the accounting period.</p>
+        
+        <div class="example">
+            <pre>#IB 0 1930 80782.14  // Opening balance for account 1930 is 80,782.14</pre>
+            <pre>#UB 0 1930 80182.14  // Closing balance for account 1930 is 80,182.14</pre>
+        </div>
+        
+        <p>The difference between opening and closing balances represents the movement during the period, which is the sum of all transactions affecting the account.</p>
+    </div>
+
+    <div class="section">
+        <h2>Data Types</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Format</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Date</td>
+                    <td>YYYYMMDD</td>
+                    <td>8-digit date in format year-month-day</td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>Decimal number</td>
+                    <td>Decimal number with dot as decimal separator. Negative amounts have a minus sign.</td>
+                </tr>
+                <tr>
+                    <td>Account Number</td>
+                    <td>Integer</td>
+                    <td>Account number according to BAS standard (typically 4 digits)</td>
+                </tr>
+                <tr>
+                    <td>Text</td>
+                    <td>"String"</td>
+                    <td>Text string enclosed in double quotes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Common Issues and Solutions</h2>
+        <ul>
+            <li><strong>Character Encoding:</strong> SIE files use CP437 encoding, which can cause issues with Swedish characters if not handled correctly.</li>
+            <li><strong>Date Format:</strong> Dates are always in YYYYMMDD format without separators.</li>
+            <li><strong>Program Variations:</strong> Different bookkeeping systems may implement the SIE format with slight variations, especially in the #TRANS section.</li>
+            <li><strong>Amount Position:</strong> Some systems (like Dooer) place the amount in the text field position instead of the amount position.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>SIE Parser for LLM Analysis - Schema Documentation</p>
+    </footer>
+</body>
+</html>
