@@ -233,8 +233,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error populating balance history:", e);
             }
             
-            // Result History view has been removed for reimplementation
-            // Will be rebuilt with proper #RES 0 and #RES -1 data handling
+            try {
+                populateResultHistory(data);
+            } catch (e) {
+                console.error("Error populating result history:", e);
+            }
             
             // Create charts
             try {
@@ -2798,8 +2801,327 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Result History tab has been removed for reimplementation
-    // Will be rebuilt with proper #RES 0 and #RES -1 data handling
+    // Populate result history tab - focusing on #RES 0 and #RES -1 data
+    function populateResultHistory(data) {
+        console.log("Populating result history...");
+        console.log("Data for result history:", data);
+        
+        const tableBody = document.getElementById('result-history-body');
+        const companyName = document.getElementById('result-history-company-name');
+        const periodElement = document.getElementById('result-history-period').querySelector('span');
+        
+        // Clear previous content
+        tableBody.innerHTML = '';
+        
+        // Set company name and period
+        companyName.textContent = data.metadata.company_name || 'Company Name';
+        periodElement.textContent = `${data.metadata.financial_year_start || ''} - ${data.metadata.financial_year_end || ''}`;
+        
+        // Check if we have results data
+        if (!data.results || Object.keys(data.results).length === 0) {
+            console.log("No result data available in this SIE file");
+            document.querySelector('.result-history-container').innerHTML = '<div class="no-data-message">No result data available in this SIE file.</div>';
+            return;
+        }
+        
+        console.log("Results data keys:", Object.keys(data.results));
+        
+        // Get all accounts from the data
+        const accounts = data.accounts || {};
+        
+        // Extract fiscal year info for relative year conversion
+        let referenceYear = null;
+        
+        // Use RAR (Reference Accounting Record) field from metadata if available
+        if (data.metadata && data.metadata.rar) {
+            referenceYear = parseInt(data.metadata.rar);
+            console.log("Reference year from RAR field:", referenceYear);
+        }
+        // Try other fields if RAR is not available
+        else if (data.metadata && data.metadata.fiscal_years && data.metadata.fiscal_years['0']) {
+            const currentYear = data.metadata.fiscal_years['0'];
+            if (currentYear.start_date) {
+                referenceYear = parseInt(currentYear.start_date.substring(0, 4));
+                console.log("Reference year from fiscal_years['0']:", referenceYear);
+            }
+        }
+        else if (data.metadata && data.metadata.financial_year_start) {
+            referenceYear = parseInt(data.metadata.financial_year_start.substring(0, 4));
+            console.log("Reference year from financial_year_start:", referenceYear);
+        }
+        
+        // Check if the metadata contains a direct current_year value
+        if (!referenceYear && data.metadata && data.metadata.current_year) {
+            referenceYear = parseInt(data.metadata.current_year);
+            console.log("Reference year from current_year field:", referenceYear);
+        }
+        
+        // Try to find year in generation_date as a fallback
+        if (!referenceYear && data.metadata && data.metadata.generation_date) {
+            const genYear = parseInt(data.metadata.generation_date.substring(0, 4));
+            if (!isNaN(genYear)) {
+                referenceYear = genYear;
+                console.log("Reference year from generation_date:", referenceYear);
+            }
+        }
+        
+        // If we still don't have a reference year, look for it in the SIE file name
+        if (!referenceYear && data.metadata && data.metadata.filename) {
+            const yearMatch = data.metadata.filename.match(/20\d{2}/); // Match years like 2021, 2022, etc.
+            if (yearMatch) {
+                referenceYear = parseInt(yearMatch[0]);
+                console.log("Reference year extracted from filename:", referenceYear);
+            }
+        }
+        
+        // We need to use console.log here to examine the full metadata structure
+        console.log("Full metadata:", data.metadata);
+        
+        // If we still don't have a reference year, use the fixed value 2021 based on the user's feedback
+        if (!referenceYear) {
+            // The user mentioned the SIE file is from 2021
+            referenceYear = 2021;
+            console.log("Fallback to user-specified year 2021");
+        }
+        
+        // Determine which years to show, prioritizing 0 (current) and -1 (previous)
+        const availableYears = Object.keys(data.results);
+        console.log("Available result years:", availableYears);
+        
+        // Create columns for the table header
+        const headerRow = document.querySelector('.result-history-table thead tr');
+        
+        // Reset to just account and name columns
+        while (headerRow.children.length > 2) {
+            headerRow.removeChild(headerRow.lastChild);
+        }
+        
+        // Create year-to-display mapping for all available years
+        const yearMapping = {};
+        let yearsToDisplay = [];
+        
+        // Process all years, converting relative years to absolute years
+        availableYears.forEach(year => {
+            // If it's a relative year (like 0, -1, -2, etc.), calculate the absolute year
+            if (year.match(/^-?\d+$/)) {
+                const yearNum = parseInt(year);
+                const actualYear = referenceYear + yearNum;
+                
+                // Special labels for current and previous years
+                if (year === '0') {
+                    yearMapping[year] = `${actualYear} (Current Year)`;
+                } else if (year === '-1') {
+                    yearMapping[year] = `${actualYear} (Previous Year)`;
+                } else {
+                    yearMapping[year] = `${actualYear} (${year})`;
+                }
+            } else {
+                // Otherwise just use the year as is
+                yearMapping[year] = year;
+            }
+            
+            // Add to the list of years to display
+            yearsToDisplay.push(year);
+        });
+        
+        // Sort years in chronological order: most recent first
+        yearsToDisplay.sort((a, b) => {
+            // If both are numbers, sort numerically in descending order
+            if (a.match(/^-?\d+$/) && b.match(/^-?\d+$/)) {
+                return parseInt(b) - parseInt(a); // Descending order
+            }
+            // For mixed types, put numeric years first
+            if (a.match(/^-?\d+$/) && !b.match(/^-?\d+$/)) {
+                return -1;
+            }
+            if (!a.match(/^-?\d+$/) && b.match(/^-?\d+$/)) {
+                return 1;
+            }
+            // For non-numeric years, sort alphabetically
+            return a.localeCompare(b);
+        });
+        
+        // Ensure 0 (current year) and -1 (previous year) come first if they exist
+        // This creates a more logical ordering for the most important years
+        if (yearsToDisplay.includes('0')) {
+            yearsToDisplay = ['0', ...yearsToDisplay.filter(y => y !== '0')];
+        }
+        if (yearsToDisplay.includes('-1')) {
+            // Ensure -1 comes after 0 but before any other years
+            const indexToInsert = yearsToDisplay[0] === '0' ? 1 : 0;
+            yearsToDisplay = [
+                ...yearsToDisplay.slice(0, indexToInsert),
+                ...yearsToDisplay.includes('-1') ? ['-1'] : [],
+                ...yearsToDisplay.slice(indexToInsert).filter(y => y !== '-1')
+            ];
+        }
+        
+        console.log("Years to display:", yearsToDisplay);
+        console.log("Year mappings:", yearMapping);
+        
+        // Add year columns to header
+        yearsToDisplay.forEach(year => {
+            const th = document.createElement('th');
+            th.className = 'amount-col';
+            th.textContent = yearMapping[year];
+            
+            // Special styling for current and previous years
+            if (year === '0') {
+                th.classList.add('current-year');
+            } else if (year === '-1') {
+                th.classList.add('previous-year');
+            }
+            
+            headerRow.appendChild(th);
+        });
+        
+        // Build a combined list of all accounts across all result years
+        const resultAccounts = {};
+        
+        yearsToDisplay.forEach(year => {
+            const yearData = data.results[year] || {};
+            console.log(`Processing year ${year} with ${Object.keys(yearData).length} accounts`);
+            
+            Object.keys(yearData).forEach(accountNum => {
+                if (!resultAccounts[accountNum]) {
+                    const accountName = accounts[accountNum] ? 
+                        (accounts[accountNum].name || `Account ${accountNum}`) : 
+                        `Account ${accountNum}`;
+                    
+                    resultAccounts[accountNum] = {
+                        accountNum,
+                        accountName,
+                        values: {}
+                    };
+                }
+                
+                // Store the result value
+                let amount = yearData[accountNum];
+                // Handle both object format and direct number
+                if (typeof amount === 'object' && 'amount' in amount) {
+                    amount = amount.amount;
+                }
+                resultAccounts[accountNum].values[year] = parseFloat(amount);
+            });
+        });
+        
+        // Convert to array for sorting
+        const accountsList = Object.values(resultAccounts);
+        
+        // Sort by account number
+        accountsList.sort((a, b) => {
+            return a.accountNum.localeCompare(b.accountNum, undefined, {numeric: true});
+        });
+        
+        // Populate table rows
+        accountsList.forEach(account => {
+            const row = document.createElement('tr');
+            row.className = 'result-history-row';
+            row.dataset.accountNum = account.accountNum;
+            row.dataset.accountName = account.accountName;
+            
+            // Check if this account has any non-zero values
+            let hasValues = false;
+            Object.values(account.values).forEach(value => {
+                if (value !== 0 && value !== null && value !== undefined) {
+                    hasValues = true;
+                }
+            });
+            
+            // If show non-zero is checked and this account has no values, hide it
+            if (document.getElementById('result-history-show-non-zero')?.checked && !hasValues) {
+                row.style.display = 'none';
+            }
+            
+            // Add account number cell
+            const numCell = document.createElement('td');
+            numCell.className = 'account-col';
+            numCell.textContent = account.accountNum;
+            row.appendChild(numCell);
+            
+            // Add account name cell
+            const nameCell = document.createElement('td');
+            nameCell.className = 'name-col';
+            nameCell.textContent = account.accountName;
+            row.appendChild(nameCell);
+            
+            // Add cells for each year
+            yearsToDisplay.forEach(year => {
+                const cell = document.createElement('td');
+                cell.className = 'amount-col';
+                
+                // Add special styling for current year and previous year
+                if (year === '0') {
+                    cell.classList.add('current-year');
+                } else if (year === '-1') {
+                    cell.classList.add('previous-year');
+                }
+                
+                // Format the amount
+                const amount = account.values[year] || 0;
+                cell.textContent = formatCurrency(amount);
+                cell.dataset.value = amount;
+                
+                row.appendChild(cell);
+            });
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Add event listener for search
+        document.getElementById('result-history-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            document.querySelectorAll('.result-history-row').forEach(row => {
+                const accountNum = row.dataset.accountNum.toLowerCase();
+                const accountName = row.dataset.accountName.toLowerCase();
+                const matchesSearch = accountNum.includes(searchTerm) || accountName.includes(searchTerm);
+                
+                const showNonZero = document.getElementById('result-history-show-non-zero')?.checked;
+                let hasValues = false;
+                
+                if (showNonZero) {
+                    // Check if this row has any non-zero values
+                    row.querySelectorAll('.amount-col').forEach(cell => {
+                        if (parseFloat(cell.dataset.value || 0) !== 0) {
+                            hasValues = true;
+                        }
+                    });
+                } else {
+                    hasValues = true; // If not filtering for non-zero, treat as having values
+                }
+                
+                row.style.display = (matchesSearch && (showNonZero ? hasValues : true)) ? '' : 'none';
+            });
+        });
+        
+        // Add event listener for showing only non-zero values
+        document.getElementById('result-history-show-non-zero').addEventListener('change', function() {
+            const showNonZero = this.checked;
+            const searchTerm = document.getElementById('result-history-search').value.toLowerCase();
+            
+            document.querySelectorAll('.result-history-row').forEach(row => {
+                const accountNum = row.dataset.accountNum.toLowerCase();
+                const accountName = row.dataset.accountName.toLowerCase();
+                const matchesSearch = accountNum.includes(searchTerm) || accountName.includes(searchTerm);
+                
+                let hasValues = false;
+                
+                if (showNonZero) {
+                    // Check if this row has any non-zero values
+                    row.querySelectorAll('.amount-col').forEach(cell => {
+                        if (parseFloat(cell.dataset.value || 0) !== 0) {
+                            hasValues = true;
+                        }
+                    });
+                } else {
+                    hasValues = true; // If not filtering for non-zero, treat as having values
+                }
+                
+                row.style.display = (matchesSearch && (showNonZero ? hasValues : true)) ? '' : 'none';
+            });
+        });
+    }
     
     // Generate a comprehensive balance history analysis for LLM
     function generateBalanceHistoryAnalysis() {

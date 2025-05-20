@@ -53,9 +53,6 @@ def upload_file():
             parser = SIEParser(file_path)
             sie_data = parser.parse()
             
-            # Remove the temporary file
-            os.remove(file_path)
-            
             if sie_data is None:
                 print("Parser returned None")
                 return jsonify({
@@ -118,6 +115,14 @@ def upload_file():
             print("Account Types:", {acc_num: acc.get('type', '') for acc_num, acc in sie_data.get('accounts', {}).items()})
             print("=== END OF DATA ===")
             
+            # Clean up: Remove the temporary file at the end of processing
+            if os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                    print(f"Temporary file {file_path} removed successfully")
+                except Exception as e:
+                    print(f"Warning: Could not remove temporary file {file_path}: {e}")
+            
             return jsonify({
                 'status': 'success',
                 'data': sie_data,
@@ -127,6 +132,15 @@ def upload_file():
             import traceback
             print(f"Error processing file: {e}")
             print(traceback.format_exc())
+            
+            # Clean up: Remove the temporary file if there was an error
+            if 'file_path' in locals() and os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                    print(f"Temporary file {file_path} removed after error")
+                except Exception as cleanup_error:
+                    print(f"Warning: Could not remove temporary file after error: {cleanup_error}")
+            
             return jsonify({
                 'status': 'error',
                 'error': f'Error processing file: {str(e)}'

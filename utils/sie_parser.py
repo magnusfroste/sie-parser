@@ -86,6 +86,8 @@ class SIEParser:
                         self._parse_gen(line)
                     elif line.startswith('#SIETYP'):
                         self._parse_sietyp(line)
+                    elif line.startswith('#RAR'):
+                        self._parse_rar(line)
                     elif line.startswith('#FNAMN'):
                         self._parse_fnamn(line)
                     elif line.startswith('#ORGNR'):
@@ -258,6 +260,8 @@ class SIEParser:
                         self._parse_gen(line)
                     elif line.startswith('#SIETYP'):
                         self._parse_sietyp(line)
+                    elif line.startswith('#RAR'):
+                        self._parse_rar(line)
                     elif line.startswith('#FNAMN'):
                         self._parse_fnamn(line)
                     elif line.startswith('#ORGNR'):
@@ -460,6 +464,13 @@ class SIEParser:
                     'start_date': start_date,
                     'end_date': end_date
                 }
+
+                # Store the RAR value (reference year) directly in metadata for easier access
+                # This will be used by the frontend to properly display result years
+                if year_id == '0' or year_id == 0:
+                    if start_date and len(start_date) >= 4:
+                        self.data['metadata']['rar'] = start_date[:4]
+                        print(f"Stored RAR value: {start_date[:4]}")
                 
                 # Store formatted dates for easier access
                 if start_date and len(start_date) >= 8:
