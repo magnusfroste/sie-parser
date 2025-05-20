@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', () => switchTab(button.dataset.tab));
     });
     
-    document.getElementById('add-description-btn').addEventListener('click', addDescription);
-    document.getElementById('save-json-btn').addEventListener('click', saveJson);
-    document.getElementById('copy-json-btn').addEventListener('click', copyJsonToClipboard);
+    // JSON tab event listeners removed
     document.getElementById('transaction-search').addEventListener('input', filterTransactions);
     document.getElementById('income-show-non-zero').addEventListener('change', filterIncomeStatementAccounts);
     document.getElementById('opening-search').addEventListener('input', filterOpeningAccounts);
@@ -221,11 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error populating transactions:", e);
             }
             
-            try {
-                populateJsonOutput(data);
-            } catch (e) {
-                console.error("Error populating JSON output:", e);
-            }
+            // JSON output tab removed
             
             try {
                 populateBalanceHistory(data);
@@ -443,48 +437,39 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
         
-        // 1. Add income statement with Swedish names if selected
+        // 1. Add income statement with Swedish account names if selected
         if (includeIncome) {
-            result.resultaträkning = generateSimpleIncomeStatement();
-            // Add alias for non-Swedish speakers
-            result.income_statement = result.resultaträkning;
+            // Use only English key name but keep Swedish account names inside
+            result.income_statement = generateSimpleIncomeStatement();
         }
         
         // 2. Add balance sheet if selected
         if (includeBalance) {
-            result.balansräkning = generateSimpleBalanceSheet();
-            // Add alias for non-Swedish speakers
-            result.balance_sheet = result.balansräkning;
+            // Use only English key name but keep Swedish account names inside
+            result.balance_sheet = generateSimpleBalanceSheet();
         }
         
         // 3. Add ledger data if selected
         if (includeLedger) {
-            // Add aggregated ledger data by account categories
-            result.huvudbok = generateAggregatedLedger();
-            // Add alias for non-Swedish speakers
-            result.ledger = result.huvudbok;
+            // Use only English key name but keep Swedish account names inside
+            result.ledger = generateAggregatedLedger();
             
             // Add current ledger data with account balances (saldo)
-            result.kontosaldon = generateCurrentLedger();
-            // Add alias for non-Swedish speakers
-            result.account_balances = result.kontosaldon;
+            result.account_balances = generateCurrentLedger();
         }
         
         // Add key financial ratios if selected
         if (includeKeyRatios) {
-            result.nyckeltal = calculateFinancialRatios();
-            // Add alias for non-Swedish speakers
-            result.key_ratios = result.nyckeltal;
+            // Use only English key name but keep Swedish account names inside
+            result.key_ratios = calculateFinancialRatios();
         }
         
         // Add balance history analysis if selected
         if (includePreviousYears) {
             console.log("Including balance history in LLM export");
-            const balanceHistory = generateBalanceHistoryAnalysis();
-            console.log("Generated balance history:", balanceHistory);
-            result.historik = balanceHistory;
-            // Add alias for non-Swedish speakers
-            result.history = result.historik;
+            // Use only English key name but keep Swedish account names inside
+            result.history = generateBalanceHistoryAnalysis();
+            console.log("Generated balance history:", result.history);
         }
         
         return result;
@@ -492,14 +477,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Generate aggregated ledger data showing transactions by account with consistent format
     function generateAggregatedLedger() {
-        if (!processedData || !processedData.accounts) {
-            console.log("Account data not available for ledger");
-            return { error: "Account data not available" };
+        if (!processedData) {
+            console.log("Data not available for ledger");
+            return { error: "Data not available" };
         }
         
+        console.log("Generating aggregated ledger with accurate saldos");
+        
         const ledgerData = {
-            as_of_date: processedData.metadata.financial_year_end || 'Unknown',
-            currency: processedData.metadata.currency || 'SEK',
+            as_of_date: processedData.metadata?.financial_year_end || new Date().toISOString().split('T')[0],
+            currency: processedData.metadata?.currency || 'SEK',
+            metadata: {
+                report_type: "Aggregated Ledger (Huvudbok)",
+                company_name: processedData.metadata?.company_name || "Unknown",
+                fiscal_year: getFiscalYearLabel(processedData.metadata)
+            },
             data: {}
         };
         
@@ -512,33 +504,77 @@ document.addEventListener('DOMContentLoaded', function() {
             "Övrigt": {}  // Other
         };
         
-        // Process all accounts and their balances
-        Object.entries(processedData.accounts || {}).forEach(([accNum, account]) => {
-            if (!account) return;
+        // Extract source data - same approach as the balance sheet
+        const accounts = processedData.accounts || {};
+        const openingBalances = processedData.opening_balances || {};
+        const year = processedData.metadata?.financial_year_start?.substring(0, 4) || 
+                    new Date().getFullYear().toString();
+        
+        // For opening balances, use the first available year key (same as in the balance sheet view)
+        const openingBalanceYear = Object.keys(openingBalances)[0] || year;
+        
+        // Create a map to store account transactions for saldo calculation
+        const accountTransactionsMap = new Map();
+        
+        // Collect transactions for each account
+        if (processedData.verifications) {
+            processedData.verifications.forEach(verification => {
+                if (!verification.transactions) return;
+                
+                verification.transactions.forEach(transaction => {
+                    const accountNumber = transaction.account;
+                    
+                    if (!accountTransactionsMap.has(accountNumber)) {
+                        accountTransactionsMap.set(accountNumber, []);
+                    }
+                    
+                    accountTransactionsMap.get(accountNumber).push({
+                        amount: parseFloat(transaction.amount) || 0
+                    });
+                });
+            });
+        }
+        
+        // Process all accounts to get their saldos and transaction counts
+        Object.entries(accounts).forEach(([accNum, account]) => {
+            if (!account || !account.name) return;
             
-            const accountInfo = {
-                name: account.name || `Account ${accNum}`,
-                balance: account.balance || 0,
-                transactions_count: 0
-            };
-            
-            // Count number of transactions for this account if available
-            if (processedData.transactions) {
-                accountInfo.transactions_count = processedData.transactions.filter(
-                    t => t.account === accNum
-                ).length;
+            // Get opening balance
+            let openingBalance = 0;
+            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][accNum]) {
+                const obEntry = openingBalances[openingBalanceYear][accNum];
+                openingBalance = typeof obEntry === 'object' ? 
+                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
             }
+            
+            // Calculate movement and count transactions
+            let movement = 0;
+            let transactionsCount = 0;
+            if (accountTransactionsMap.has(accNum)) {
+                const transactions = accountTransactionsMap.get(accNum);
+                transactionsCount = transactions.length;
+                movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            }
+            
+            // Calculate closing balance (saldo) - same calculation as balance sheet view
+            const saldo = openingBalance + movement;
+            
+            // Skip accounts with zero saldo to save tokens
+            if (saldo === 0) return;
             
             // Categorize by account type
             let category = "Övrigt";  // Default to Other
+            const type = account.type || 'Other';
             
-            if (account.type === "Asset") {
+            if (type === "Asset") {
                 category = "Tillgångar";
-            } else if (account.type === "Liability/Equity") {
+            } else if (type === "Liability" || type === "Liability/Equity") {
                 category = "Skulder och Eget Kapital";
-            } else if (account.type === "Income") {
+            } else if (type === "Equity") {
+                category = "Skulder och Eget Kapital";
+            } else if (type === "Income") {
                 category = "Intäkter";
-            } else if (account.type === "Expense") {
+            } else if (type === "Expense") {
                 category = "Kostnader";
             }
             
@@ -558,57 +594,102 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add the individual account to the group
             accountsByType[category][groupKey].accounts[accNum] = {
-                name: accountInfo.name,
-                balance: accountInfo.balance,
-                transactions_count: accountInfo.transactions_count
+                name: account.name,
+                balance: saldo,
+                transactions_count: transactionsCount
             };
             
             // Update group totals
-            accountsByType[category][groupKey].total_balance += parseFloat(accountInfo.balance) || 0;
-            accountsByType[category][groupKey].total_transactions += accountInfo.transactions_count;
+            accountsByType[category][groupKey].total_balance += saldo;
+            accountsByType[category][groupKey].total_transactions += transactionsCount;
         });
         
-        // Remove empty categories
+        // Remove empty categories and account classes
         Object.keys(accountsByType).forEach(category => {
+            // First remove empty account classes within each category
+            Object.keys(accountsByType[category]).forEach(classKey => {
+                if (Object.keys(accountsByType[category][classKey].accounts).length === 0) {
+                    delete accountsByType[category][classKey];
+                }
+            });
+            
+            // Then remove empty categories
             if (Object.keys(accountsByType[category]).length === 0) {
                 delete accountsByType[category];
             }
         });
         
         ledgerData.data = accountsByType;
+        
+        // Count total accounts with non-zero balances
+        let totalAccounts = 0;
+        Object.values(accountsByType).forEach(category => {
+            Object.values(category).forEach(classGroup => {
+                totalAccounts += Object.keys(classGroup.accounts).length;
+            });
+        });
+        
+        // Add account count to metadata
+        ledgerData.metadata.accounts_count = totalAccounts;
+        ledgerData.metadata.description = `Contains ${totalAccounts} accounts with non-zero balances grouped by account class`;
+        
         return ledgerData;
     }
     
     // Generate current ledger data with account balances as of the current date
     function generateCurrentLedger() {
-        if (!processedData || !processedData.accounts) {
-            console.log("Account data not available for ledger");
-            return { error: "Account data not available" };
+        if (!processedData) {
+            console.log("Data not available for ledger");
+            return { error: "Data not available" };
         }
         
+        console.log("Generating ledger data with saldos from the data model");
+        
         // Get the current date or the latest date in the SIE file
-        const today = new Date().toISOString().split('T')[0];
-        const currentDate = processedData.metadata?.financial_year_end || today;
+        const currentDate = processedData.metadata?.financial_year_end || new Date().toISOString().split('T')[0];
         
         const ledgerData = {
             as_of_date: currentDate,
             currency: processedData.metadata?.currency || 'SEK',
             description: `Current account balances as of ${currentDate}`,
+            metadata: {
+                report_type: "Account Balances (Kontosaldon)",
+                company_name: processedData.metadata?.company_name || "Unknown",
+                fiscal_year: getFiscalYearLabel(processedData.metadata)
+            },
             accounts: {}
         };
         
-        // Get all accounts with their current balances (saldo)
-        Object.entries(processedData.accounts || {}).forEach(([accNum, account]) => {
-            if (!account || account.balance === 0) return; // Skip accounts with zero balance
-            
-            // Add account with its current balance
-            ledgerData.accounts[accNum] = {
-                name: account.name || `Account ${accNum}`,
-                account_type: account.type || 'Other',
-                saldo: parseFloat(account.balance) || 0,
-                description: getAccountClassName(accNum.substring(0, 2))
-            };
-        });
+        // Extract source data - same approach as the balance sheet
+        const accounts = processedData.accounts || {};
+        const openingBalances = processedData.opening_balances || {};
+        const year = processedData.metadata?.financial_year_start?.substring(0, 4) || 
+                    new Date().getFullYear().toString();
+        
+        // For opening balances, use the first available year key (same as in the balance sheet view)
+        const openingBalanceYear = Object.keys(openingBalances)[0] || year;
+        
+        // Create a map to store account transactions for saldo calculation
+        const accountTransactionsMap = new Map();
+        
+        // Collect transactions for each account
+        if (processedData.verifications) {
+            processedData.verifications.forEach(verification => {
+                if (!verification.transactions) return;
+                
+                verification.transactions.forEach(transaction => {
+                    const accountNumber = transaction.account;
+                    
+                    if (!accountTransactionsMap.has(accountNumber)) {
+                        accountTransactionsMap.set(accountNumber, []);
+                    }
+                    
+                    accountTransactionsMap.get(accountNumber).push({
+                        amount: parseFloat(transaction.amount) || 0
+                    });
+                });
+            });
+        }
         
         // Add totals by account type
         const totals = {
@@ -619,21 +700,62 @@ document.addEventListener('DOMContentLoaded', function() {
             expenses: 0
         };
         
-        Object.values(ledgerData.accounts).forEach(acc => {
-            if (acc.account_type === "Asset") {
-                totals.assets += acc.saldo;
-            } else if (acc.account_type === "Liability/Equity" && acc.saldo < 0) {
-                totals.liabilities += acc.saldo;
-            } else if (acc.account_type === "Liability/Equity" && acc.saldo >= 0) {
-                totals.equity += acc.saldo;
-            } else if (acc.account_type === "Income") {
-                totals.income += acc.saldo;
-            } else if (acc.account_type === "Expense") {
-                totals.expenses += acc.saldo;
+        // Process all accounts to get their saldos
+        Object.entries(accounts).forEach(([accNum, account]) => {
+            // Get opening balance
+            let openingBalance = 0;
+            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][accNum]) {
+                const obEntry = openingBalances[openingBalanceYear][accNum];
+                openingBalance = typeof obEntry === 'object' ? 
+                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
+            }
+            
+            // Calculate movement by summing all transactions
+            let movement = 0;
+            if (accountTransactionsMap.has(accNum)) {
+                const transactions = accountTransactionsMap.get(accNum);
+                movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            }
+            
+            // Calculate closing balance (saldo) - same calculation as balance sheet view
+            const saldo = openingBalance + movement;
+            
+            // Skip accounts with zero saldo to save tokens
+            if (saldo === 0) return;
+            
+            // Add account with its current saldo
+            ledgerData.accounts[accNum] = {
+                name: account.name || `Account ${accNum}`,
+                account_type: account.type || 'Other',
+                saldo: saldo,
+                description: getAccountClassName(accNum.substring(0, 2))
+            };
+            
+            // Update totals based on account type
+            const type = account.type || 'Other';
+            if (type === "Asset") {
+                totals.assets += saldo;
+            } else if (type === "Liability" || type === "Liability/Equity") {
+                if (saldo < 0) {
+                    totals.liabilities += saldo;
+                } else {
+                    totals.equity += saldo;
+                }
+            } else if (type === "Equity") {
+                totals.equity += saldo;
+            } else if (type === "Income") {
+                totals.income += saldo;
+            } else if (type === "Expense") {
+                totals.expenses += saldo;
             }
         });
         
         ledgerData.totals = totals;
+        
+        // Add account count to metadata
+        const accountCount = Object.keys(ledgerData.accounts).length;
+        ledgerData.metadata.accounts_count = accountCount;
+        ledgerData.metadata.description = `Contains ${accountCount} accounts with non-zero balances`;
         
         return ledgerData;
     }
@@ -811,133 +933,292 @@ document.addEventListener('DOMContentLoaded', function() {
         return incomeData;
     }
     
-    // Generate a simple balance sheet based on detail level
+    // Generate a simple balance sheet using the exact same approach as the balance sheet view
     function generateSimpleBalanceSheet() {
-        if (!processedData || !processedData.balance_sheet) {
-            console.log("Balance sheet data not available");
-            return { error: "Balance sheet data not available" };
+        if (!processedData) {
+            console.log("Data not available for balance sheet generation");
+            return { error: "Data not available" };
         }
         
-        console.log("Balance sheet data:", processedData.balance_sheet);
+        console.log("Generating balance sheet with same calculation method as balance sheet view");
         
         const balanceData = {
-            as_of_date: processedData.metadata.financial_year_end || 'Unknown',
-            currency: processedData.metadata.currency || 'SEK',
-            data: {}
-        };
-        
-        // Get balance sheet data directly from the data model
-        const data = processedData.balance_sheet;
-        
-        // Group accounts by class (first two digits)
-        const assetClasses = {};
-        const liabilityClasses = {};
-        const equityClasses = {};
-        
-        // Process all asset accounts and group by class
-        if (data.assets && data.assets.accounts) {
-            Object.entries(data.assets.accounts || {}).forEach(([accNum, details]) => {
-                if (accNum && details) {
-                    const accountClass = accNum.substring(0, 2);
-                    const className = getAccountClassName(accountClass);
-                    const classKey = `${accountClass}xx`;
-                    
-                    if (!assetClasses[classKey]) {
-                        assetClasses[classKey] = {
-                            name: className,
-                            accounts: {},
-                            total: 0
-                        };
-                    }
-                    
-                    assetClasses[classKey].accounts[accNum] = {
-                        name: details.name || 'Unknown',
-                        balance: parseFloat(details.balance) || 0
-                    };
-                    
-                    assetClasses[classKey].total += parseFloat(details.balance) || 0;
-                }
-            });
-        }
-        
-        // Process all liability accounts and group by class
-        if (data.liabilities && data.liabilities.accounts) {
-            Object.entries(data.liabilities.accounts || {}).forEach(([accNum, details]) => {
-                if (accNum && details) {
-                    const accountClass = accNum.substring(0, 2);
-                    const className = getAccountClassName(accountClass);
-                    const classKey = `${accountClass}xx`;
-                    
-                    if (!liabilityClasses[classKey]) {
-                        liabilityClasses[classKey] = {
-                            name: className,
-                            accounts: {},
-                            total: 0
-                        };
-                    }
-                    
-                    liabilityClasses[classKey].accounts[accNum] = {
-                        name: details.name || 'Unknown',
-                        balance: parseFloat(details.balance) || 0
-                    };
-                    
-                    liabilityClasses[classKey].total += parseFloat(details.balance) || 0;
-                }
-            });
-        }
-        
-        // Process all equity accounts and group by class
-        if (data.equity && data.equity.accounts) {
-            Object.entries(data.equity.accounts || {}).forEach(([accNum, details]) => {
-                if (accNum && details) {
-                    const accountClass = accNum.substring(0, 2);
-                    const className = getAccountClassName(accountClass);
-                    const classKey = `${accountClass}xx`;
-                    
-                    if (!equityClasses[classKey]) {
-                        equityClasses[classKey] = {
-                            name: className,
-                            accounts: {},
-                            total: 0
-                        };
-                    }
-                    
-                    equityClasses[classKey].accounts[accNum] = {
-                        name: details.name || 'Unknown',
-                        balance: parseFloat(details.balance) || 0
-                    };
-                    
-                    equityClasses[classKey].total += parseFloat(details.balance) || 0;
-                }
-            });
-        }
-        
-        // Structure the final balance sheet data
-        balanceData.data = {
-            assets: {
-                classes: assetClasses,
-                current_assets: parseFloat(data.assets?.current?.total) || 0,
-                fixed_assets: parseFloat(data.assets?.fixed?.total) || 0,
-                total_assets: parseFloat(data.total_assets) || 0
-            },
-            liabilities_and_equity: {
-                liabilities: {
-                    classes: liabilityClasses,
-                    current_liabilities: parseFloat(data.liabilities?.current?.total) || 0,
-                    long_term_liabilities: parseFloat(data.liabilities?.long_term?.total) || 0,
-                    total_liabilities: parseFloat(data.liabilities?.total || 0)
+            as_of_date: processedData.metadata?.financial_year_end || new Date().toISOString().split('T')[0],
+            currency: processedData.metadata?.currency || 'SEK',
+            data: {
+                assets: {
+                    classes: {},
+                    total_assets: 0
                 },
-                equity: {
-                    classes: equityClasses,
-                    share_capital: parseFloat(data.equity?.share_capital) || 0,
-                    reserves: parseFloat(data.equity?.reserves) || 0,
-                    retained_earnings: parseFloat(data.equity?.retained_earnings) || 0,
-                    current_year_profit: parseFloat(data.equity?.current_year_profit) || 0,
-                    total_equity: parseFloat(data.equity?.total_equity || 0)
-                },
-                total_liabilities_and_equity: parseFloat(data.total_liabilities_equity) || 0
+                liabilities_and_equity: {
+                    liabilities: {
+                        classes: {},
+                        total_liabilities: 0
+                    },
+                    equity: {
+                        classes: {},
+                        total_equity: 0
+                    },
+                    total_liabilities_and_equity: 0
+                }
             }
         };
+        
+        // Extract source data
+        const accounts = processedData.accounts || {};
+        const openingBalances = processedData.opening_balances || {};
+        const year = processedData.metadata?.financial_year_start?.substring(0, 4) || 
+                    new Date().getFullYear().toString();
+        
+        // For opening balances, use the first available year key (same as in the balance sheet view)
+        const openingBalanceYear = Object.keys(openingBalances)[0] || year;
+        
+        // Process accounts by type
+        const accountsByType = {
+            'Asset': [],
+            'Liability': [],
+            'Equity': []
+        };
+        
+        // Group accounts by type
+        Object.entries(accounts).forEach(([accountNum, accountData]) => {
+            const type = accountData.type || 'Other';
+            if (type in accountsByType) {
+                accountsByType[type].push({
+                    number: accountNum,
+                    data: accountData
+                });
+            }
+        });
+        
+        // Also add accounts from opening balances that might not be in the accounts list
+        if (openingBalances[openingBalanceYear]) {
+            Object.keys(openingBalances[openingBalanceYear]).forEach(accountNum => {
+                // Check if this account is already in our lists
+                let found = false;
+                for (const type in accountsByType) {
+                    if (accountsByType[type].some(acc => acc.number === accountNum)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // If not found, add it to the appropriate type
+                if (!found) {
+                    // Try to determine account type from account number
+                    let type = 'Other';
+                    const accNum = parseInt(accountNum);
+                    
+                    if (accNum >= 1000 && accNum < 2000) {
+                        type = 'Asset';
+                    } else if (accNum >= 2000 && accNum < 3000) {
+                        type = 'Equity';
+                    } else if (accNum >= 3000 && accNum < 4000) {
+                        type = 'Liability';
+                    }
+                    
+                    if (type in accountsByType) {
+                        // Get account name from accounts if available, otherwise use "Account X"
+                        const accountName = accounts[accountNum] ? accounts[accountNum].name : `Account ${accountNum}`;
+                        
+                        accountsByType[type].push({
+                            number: accountNum,
+                            data: { name: accountName, type: type }
+                        });
+                    }
+                }
+            });
+        }
+        
+        // Create a map to store account transactions
+        const accountTransactionsMap = new Map();
+        
+        // Collect transactions for each account
+        if (processedData.verifications) {
+            processedData.verifications.forEach(verification => {
+                if (!verification.transactions) return;
+                
+                verification.transactions.forEach(transaction => {
+                    const accountNumber = transaction.account;
+                    
+                    if (!accountTransactionsMap.has(accountNumber)) {
+                        accountTransactionsMap.set(accountNumber, []);
+                    }
+                    
+                    accountTransactionsMap.get(accountNumber).push({
+                        amount: parseFloat(transaction.amount) || 0
+                    });
+                });
+            });
+        }
+        
+        // Process each account type
+        let totalAssets = 0;
+        let totalLiabilities = 0;
+        let totalEquity = 0;
+        
+        // Process Assets
+        accountsByType['Asset'].forEach(({ number, data }) => {
+            // Get account class
+            const accountClass = number.substring(0, 2);
+            const classKey = `${accountClass}xx`;
+            const className = getAccountClassName(accountClass);
+            
+            // Initialize class if needed
+            if (!balanceData.data.assets.classes[classKey]) {
+                balanceData.data.assets.classes[classKey] = {
+                    name: className,
+                    accounts: {},
+                    total: 0
+                };
+            }
+            
+            // Get opening balance
+            let openingBalance = 0;
+            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
+                const obEntry = openingBalances[openingBalanceYear][number];
+                openingBalance = typeof obEntry === 'object' ? 
+                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
+            }
+            
+            // Calculate movement by summing all transactions
+            let movement = 0;
+            if (accountTransactionsMap.has(number)) {
+                const transactions = accountTransactionsMap.get(number);
+                movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            }
+            
+            // Calculate closing balance (just like in the balance sheet view)
+            const closingBalance = openingBalance + movement;
+            
+            // Only include non-zero accounts
+            if (closingBalance !== 0) {
+                balanceData.data.assets.classes[classKey].accounts[number] = {
+                    name: data.name || `Account ${number}`,
+                    balance: closingBalance,
+                    opening_balance: openingBalance,
+                    movement: movement
+                };
+                
+                balanceData.data.assets.classes[classKey].total += closingBalance;
+                totalAssets += closingBalance;
+            }
+        });
+        
+        // Process Liabilities
+        accountsByType['Liability'].forEach(({ number, data }) => {
+            const accountClass = number.substring(0, 2);
+            const classKey = `${accountClass}xx`;
+            const className = getAccountClassName(accountClass);
+            
+            if (!balanceData.data.liabilities_and_equity.liabilities.classes[classKey]) {
+                balanceData.data.liabilities_and_equity.liabilities.classes[classKey] = {
+                    name: className,
+                    accounts: {},
+                    total: 0
+                };
+            }
+            
+            // Get opening balance
+            let openingBalance = 0;
+            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
+                const obEntry = openingBalances[openingBalanceYear][number];
+                openingBalance = typeof obEntry === 'object' ? 
+                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
+            }
+            
+            // Calculate movement by summing all transactions
+            let movement = 0;
+            if (accountTransactionsMap.has(number)) {
+                const transactions = accountTransactionsMap.get(number);
+                movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            }
+            
+            const closingBalance = openingBalance + movement;
+            
+            // Only include non-zero accounts
+            if (closingBalance !== 0) {
+                balanceData.data.liabilities_and_equity.liabilities.classes[classKey].accounts[number] = {
+                    name: data.name || `Account ${number}`,
+                    balance: closingBalance,
+                    opening_balance: openingBalance,
+                    movement: movement
+                };
+                
+                balanceData.data.liabilities_and_equity.liabilities.classes[classKey].total += closingBalance;
+                totalLiabilities += closingBalance;
+            }
+        });
+        
+        // Process Equity
+        accountsByType['Equity'].forEach(({ number, data }) => {
+            const accountClass = number.substring(0, 2);
+            const classKey = `${accountClass}xx`;
+            const className = getAccountClassName(accountClass);
+            
+            if (!balanceData.data.liabilities_and_equity.equity.classes[classKey]) {
+                balanceData.data.liabilities_and_equity.equity.classes[classKey] = {
+                    name: className,
+                    accounts: {},
+                    total: 0
+                };
+            }
+            
+            // Get opening balance
+            let openingBalance = 0;
+            if (openingBalanceYear && openingBalances[openingBalanceYear] && openingBalances[openingBalanceYear][number]) {
+                const obEntry = openingBalances[openingBalanceYear][number];
+                openingBalance = typeof obEntry === 'object' ? 
+                    obEntry.amount || 0 : parseFloat(obEntry) || 0;
+            }
+            
+            // Calculate movement by summing all transactions
+            let movement = 0;
+            if (accountTransactionsMap.has(number)) {
+                const transactions = accountTransactionsMap.get(number);
+                movement = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+            }
+            
+            const closingBalance = openingBalance + movement;
+            
+            // Only include non-zero accounts
+            if (closingBalance !== 0) {
+                balanceData.data.liabilities_and_equity.equity.classes[classKey].accounts[number] = {
+                    name: data.name || `Account ${number}`,
+                    balance: closingBalance,
+                    opening_balance: openingBalance,
+                    movement: movement
+                };
+                
+                balanceData.data.liabilities_and_equity.equity.classes[classKey].total += closingBalance;
+                totalEquity += closingBalance;
+            }
+        });
+        
+        // Remove empty classes
+        Object.keys(balanceData.data.assets.classes).forEach(classKey => {
+            if (Object.keys(balanceData.data.assets.classes[classKey].accounts).length === 0) {
+                delete balanceData.data.assets.classes[classKey];
+            }
+        });
+        
+        Object.keys(balanceData.data.liabilities_and_equity.liabilities.classes).forEach(classKey => {
+            if (Object.keys(balanceData.data.liabilities_and_equity.liabilities.classes[classKey].accounts).length === 0) {
+                delete balanceData.data.liabilities_and_equity.liabilities.classes[classKey];
+            }
+        });
+        
+        Object.keys(balanceData.data.liabilities_and_equity.equity.classes).forEach(classKey => {
+            if (Object.keys(balanceData.data.liabilities_and_equity.equity.classes[classKey].accounts).length === 0) {
+                delete balanceData.data.liabilities_and_equity.equity.classes[classKey];
+            }
+        });
+        
+        // Update totals
+        balanceData.data.assets.total_assets = totalAssets;
+        balanceData.data.liabilities_and_equity.liabilities.total_liabilities = totalLiabilities;
+        balanceData.data.liabilities_and_equity.equity.total_equity = totalEquity;
+        balanceData.data.liabilities_and_equity.total_liabilities_and_equity = totalLiabilities + totalEquity;
         
         return balanceData;
     }
@@ -1135,8 +1416,15 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Company info
         document.getElementById('company-name').textContent = summary.company_name || 'Unknown';
         document.getElementById('period').textContent = summary.period || '';
+        
+        // Last update date (financial data as of)
+        const dataDate = summary.financial_year_end || new Date().toISOString().split('T')[0];
+        document.getElementById('data-date').textContent = dataDate;
+        
+        // Financial metrics
         document.getElementById('total-accounts').textContent = summary.total_accounts || 0;
         document.getElementById('total-transactions').textContent = (summary.total_transactions || 0).toLocaleString();
         
@@ -1148,6 +1436,138 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         document.getElementById('net-result').textContent = formatCurrency(netResult || 0);
+        
+        // Get financial figures directly from data model for accuracy
+        let totalAssets = 0;
+        let totalLiabilities = 0;
+        let totalEquity = 0;
+        
+        // Primary approach: Use processed balance sheet if available
+        if (window.sieData && window.sieData.balance_sheet) {
+            const balanceSheet = window.sieData.balance_sheet;
+            
+            // Assets (Tillgångar)
+            if (balanceSheet.assets && balanceSheet.assets.total !== undefined) {
+                totalAssets = balanceSheet.assets.total;
+            }
+            
+            // Liabilities (Skulder)
+            if (balanceSheet.liabilities && balanceSheet.liabilities.total !== undefined) {
+                totalLiabilities = balanceSheet.liabilities.total;
+            }
+            
+            // Equity (Eget kapital)
+            if (balanceSheet.equity && balanceSheet.equity.total !== undefined) {
+                totalEquity = balanceSheet.equity.total;
+            }
+        }
+        
+        // Secondary approach: If balance sheet totals are zero, calculate from raw accounts
+        if (totalAssets === 0 && totalLiabilities === 0 && totalEquity === 0 && window.sieData && window.sieData.accounts) {
+            console.log("Balance sheet totals are zero, calculating from raw accounts...");
+            
+            // Calculate totals from accounts directly
+            Object.values(window.sieData.accounts).forEach(account => {
+                // Skip accounts without valid numbers
+                if (!account.account_number) return;
+                
+                // Get account type from first digit of account number
+                const accountNumber = account.account_number.toString();
+                const firstDigit = accountNumber.charAt(0);
+                
+                // Get account balance
+                let balance = 0;
+                
+                // First try to get balance from account.saldo if available (calculated value)
+                if (account.saldo !== undefined) {
+                    balance = account.saldo;
+                }
+                // Otherwise try movements
+                else if (account.movements) {
+                    balance = Object.values(account.movements).reduce((sum, amount) => sum + parseFloat(amount || 0), 0);
+                }
+                
+                // Add to appropriate total based on account type
+                if (firstDigit === '1') {
+                    // Asset accounts (1xxx)
+                    totalAssets += balance;
+                }
+                else if (firstDigit === '2') {
+                    // Liability accounts (2xxx)
+                    totalLiabilities += balance;
+                }
+                else if (firstDigit === '3') {
+                    // First part of equity/closing entries (3xxx)
+                    totalEquity += balance;
+                }
+            });
+            
+            // If we have a calculated result but no equity, add it to equity
+            if (totalEquity === 0 && netResult !== 0) {
+                totalEquity = netResult;
+            }
+            
+            console.log("Calculated from accounts - Assets:", totalAssets, "Liabilities:", totalLiabilities, "Equity:", totalEquity);
+        }
+        
+        // Update summary cards
+        document.getElementById('total-assets-summary').textContent = formatCurrency(totalAssets);
+        document.getElementById('total-equity-summary').textContent = formatCurrency(totalEquity);
+        
+        // Update financial key figures
+        document.getElementById('total-assets-figure').textContent = formatCurrency(totalAssets);
+        document.getElementById('total-liabilities-figure').textContent = formatCurrency(totalLiabilities);
+        document.getElementById('total-equity-figure').textContent = formatCurrency(totalEquity);
+        
+        // Add result comparison with last year if available
+        const resultComparison = document.getElementById('result-comparison');
+        if (summary.previous_year_result !== undefined && netResult !== undefined) {
+            const diff = netResult - (summary.previous_year_result || 0);
+            const percentage = summary.previous_year_result ? (diff / Math.abs(summary.previous_year_result) * 100).toFixed(1) : 0;
+            let comparisonText = '';
+            let comparisonClass = '';
+            
+            if (diff > 0) {
+                comparisonText = `↑ ${percentage}% from last year`;
+                comparisonClass = 'positive';
+            } else if (diff < 0) {
+                comparisonText = `↓ ${Math.abs(percentage)}% from last year`;
+                comparisonClass = 'negative';
+            } else {
+                comparisonText = 'Same as last year';
+                comparisonClass = 'neutral';
+            }
+            
+            resultComparison.textContent = comparisonText;
+            resultComparison.className = `comparison ${comparisonClass}`;
+        } else {
+            resultComparison.textContent = '';
+        }
+        
+        // Populate verification count
+        const totalVerifications = document.getElementById('total-verifications');
+        if (window.sieData && window.sieData.verifications) {
+            totalVerifications.textContent = Object.keys(window.sieData.verifications).length.toLocaleString();
+        } else {
+            totalVerifications.textContent = '0';
+        }
+        
+        // Calculate simple cash flow (change in cash accounts)
+        const cashFlow = document.getElementById('cash-flow');
+        let cashFlowValue = 0;
+        if (window.sieData && window.sieData.accounts) {
+            // Look for cash/bank accounts (typically in the 19xx range in Swedish accounting)
+            Object.values(window.sieData.accounts).forEach(account => {
+                if (account.account_number >= 1900 && account.account_number < 2000) {
+                    // Add movement for cash accounts
+                    if (account.movements) {
+                        cashFlowValue += Object.values(account.movements).reduce((sum, movement) => sum + movement, 0);
+                    }
+                }
+            });
+        }
+        cashFlow.textContent = formatCurrency(cashFlowValue);
+        cashFlow.className = `metric-value ${cashFlowValue >= 0 ? 'positive' : 'negative'}`;
     }
     
     // Populate balance sheet tab
@@ -1994,123 +2414,13 @@ document.addEventListener('DOMContentLoaded', function() {
         transactionsCount.textContent = filteredTransactions.length;
     }
     
-    // Populate JSON output
-    function populateJsonOutput(data) {
-        const jsonOutput = document.getElementById('json-output');
-        jsonOutput.textContent = JSON.stringify(data, null, 2);
-        
-        // Set default filename
-        const companyName = data.metadata.company_name || 'company';
-        const date = new Date().toISOString().split('T')[0];
-        document.getElementById('json-filename').value = `${companyName.replace(/\s+/g, '_')}_${date}.json`;
-    }
+    // JSON output tab removed as requested
     
-    // Add user description to the data
-    function addDescription() {
-        const description = document.getElementById('llm-description').value.trim();
-        
-        if (!description) {
-            alert('Please enter a description');
-            return;
-        }
-        
-        if (!processedData) {
-            alert('No data to enhance');
-            return;
-        }
-        
-        fetch('/add-description', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                data: processedData,
-                description: description
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                processedData = data.data;
-                populateJsonOutput(processedData);
-                alert('Description added successfully');
-            } else {
-                alert(data.error || 'An error occurred');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error adding description: ' + error.message);
-        });
-    }
+    // Add description function removed as part of JSON tab removal
     
-    // Save JSON to file
-    function saveJson() {
-        const filename = document.getElementById('json-filename').value.trim();
-        
-        if (!filename) {
-            alert('Please enter a filename');
-            return;
-        }
-        
-        if (!processedData) {
-            alert('No data to save');
-            return;
-        }
-        
-        fetch('/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                data: processedData,
-                filename: filename
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('File saved successfully');
-                
-                // Create download link
-                const downloadLink = document.createElement('a');
-                downloadLink.href = `/download/${encodeURIComponent(filename)}`;
-                downloadLink.download = filename;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                URL.revokeObjectURL(downloadLink.href);
-            } else {
-                alert(data.error || 'An error occurred');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error saving file: ' + error.message);
-        });
-    }
+    // Save JSON function removed as part of JSON tab removal
     
-    // Copy JSON to clipboard
-    function copyJsonToClipboard() {
-        const jsonOutput = document.getElementById('json-output');
-        
-        navigator.clipboard.writeText(jsonOutput.textContent)
-            .then(() => {
-                const copyButton = document.getElementById('copy-llm-export');
-                const originalText = copyButton.textContent;
-                
-                copyButton.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyButton.textContent = originalText;
-                }, 2000);
-            })
-            .catch(err => {
-                console.error('Error copying to clipboard:', err);
-                alert('Failed to copy to clipboard');
-            });
-    }
+    // Copy JSON to clipboard function removed as part of JSON tab removal
     
     // Create charts
     function createCharts(data) {
@@ -2122,29 +2432,65 @@ document.addEventListener('DOMContentLoaded', function() {
     function createIncomeExpenseChart(summary) {
         const ctx = document.getElementById('income-expense-chart').getContext('2d');
         
+        // Make sure we have data and use absolute values for expenses
+        const incomeValue = Math.abs(summary.total_income || 0);
+        const expensesValue = Math.abs(summary.total_expenses || 0);
+        const netResult = (summary.net_result || 0);
+        
+        // Format for tooltips
+        const formatter = new Intl.NumberFormat('sv-SE', {
+            style: 'currency',
+            currency: 'SEK',
+            minimumFractionDigits: 0
+        });
+        
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Income', 'Expenses', 'Net Result'],
+                labels: ['Intäkter', 'Kostnader', 'Resultat'],
                 datasets: [{
-                    label: 'Amount',
-                    data: [
-                        summary.total_income,
-                        summary.total_expenses,
-                        summary.net_result
-                    ],
+                    label: 'Belopp',
+                    data: [incomeValue, expensesValue, netResult],
                     backgroundColor: [
-                        '#2ecc71',
-                        '#e74c3c',
-                        '#3498db'
-                    ]
+                        'rgba(46, 204, 113, 0.8)',   // Green for income
+                        'rgba(231, 76, 60, 0.8)',    // Red for expenses
+                        netResult >= 0 ? 'rgba(52, 152, 219, 0.8)' : 'rgba(231, 76, 60, 0.8)'  // Blue/red for net result
+                    ],
+                    borderColor: [
+                        'rgb(46, 204, 113)',
+                        'rgb(231, 76, 60)',
+                        netResult >= 0 ? 'rgb(52, 152, 219)' : 'rgb(231, 76, 60)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += formatter.format(context.raw);
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return formatter.format(value).replace('SEK', '');
+                            }
+                        }
                     }
                 }
             }
@@ -2155,27 +2501,116 @@ document.addEventListener('DOMContentLoaded', function() {
     function createAccountTypesChart(accountTypes) {
         const ctx = document.getElementById('account-types-chart').getContext('2d');
         
-        const labels = Object.keys(accountTypes);
+        // Check if we have account types data
+        if (!accountTypes || Object.keys(accountTypes).length === 0) {
+            // Draw a placeholder chart with info message
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ingen data'],
+                    datasets: [{
+                        data: [1],
+                        backgroundColor: ['#f5f7fa'],
+                        borderColor: ['#ddd']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                }
+            });
+            return;
+        }
+        
+        // Format labels in Swedish
+        const labelMap = {
+            'assets': 'Tillgångar',
+            'liabilities': 'Skulder',
+            'equity': 'Eget kapital',
+            'income': 'Intäkter',
+            'expenses': 'Kostnader',
+            'other': 'Övrigt'
+        };
+        
+        // Prepare chart data
+        const labels = Object.keys(accountTypes).map(key => labelMap[key] || key);
         const data = Object.values(accountTypes);
+        const total = data.reduce((sum, val) => sum + val, 0);
+        
+        // Color scheme for account types
+        const colors = {
+            'Tillgångar': 'rgba(52, 152, 219, 0.8)',      // Blue
+            'Skulder': 'rgba(231, 76, 60, 0.8)',           // Red
+            'Eget kapital': 'rgba(155, 89, 182, 0.8)',     // Purple
+            'Intäkter': 'rgba(46, 204, 113, 0.8)',         // Green
+            'Kostnader': 'rgba(243, 156, 18, 0.8)',        // Orange
+            'Övrigt': 'rgba(189, 195, 199, 0.8)'           // Gray
+        };
+        
+        const backgroundColor = labels.map(label => colors[label] || '#ccc');
+        const borderColor = backgroundColor.map(color => color.replace('0.8', '1'));
         
         new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: labels,
                 datasets: [{
                     data: data,
-                    backgroundColor: [
-                        '#3498db',
-                        '#2ecc71',
-                        '#e74c3c',
-                        '#f39c12',
-                        '#9b59b6',
-                        '#1abc9c'
-                    ]
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
+                    borderWidth: 1
                 }]
             },
             options: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 11
+                            },
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map(function(label, i) {
+                                        const meta = chart.getDatasetMeta(0);
+                                        const style = meta.controller.getStyle(i);
+                                        const value = data.datasets[0].data[i];
+                                        const percentage = Math.round((value / total) * 100);
+                                        
+                                        return {
+                                            text: `${label} (${percentage}%)`,
+                                            fillStyle: style.backgroundColor,
+                                            strokeStyle: style.borderColor,
+                                            lineWidth: style.borderWidth,
+                                            hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
+                                            index: i
+                                        };
+                                    });
+                                }
+                                return [];
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} konton (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -2658,13 +3093,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // This is the reference year for all relative years in the SIE file
         let rarYear;
         
-        // TEMPORARY FIX: Force the year to be 2022 for testing
-        // This is just to verify that the issue is with the year calculation
-        rarYear = 2022;
-        console.log("FORCED YEAR TO 2022 FOR TESTING");
-        
-        /* Commenting out the previous logic for now
-        // First check if we have fiscal years data with RAR 0
+        // First check for RAR 0 fiscal year end date
         if (data.metadata.fiscal_years && data.metadata.fiscal_years['0'] && 
             data.metadata.fiscal_years['0'].end_date && 
             data.metadata.fiscal_years['0'].end_date.length >= 4) {
@@ -2672,58 +3101,75 @@ document.addEventListener('DOMContentLoaded', function() {
             rarYear = parseInt(data.metadata.fiscal_years['0'].end_date.substring(0, 4));
             console.log("Using RAR 0 end date year:", rarYear);
         }
-        // Then try current_fiscal_year_end_year
-        else if (data.metadata.current_fiscal_year_end_year) {
-            rarYear = parseInt(data.metadata.current_fiscal_year_end_year);
-            console.log("Using current_fiscal_year_end_year:", rarYear);
-        } 
-        // Then try from the financial_year_end field
+        // Next try financial_year_end which should be available in most SIE files
         else if (data.metadata.financial_year_end) {
             rarYear = parseInt(data.metadata.financial_year_end.substring(0, 4));
             console.log("Using financial_year_end:", rarYear);
         } 
-        // Then try from the financial_year_start field
+        // Try financial_year_start as a fallback
         else if (data.metadata.financial_year_start) {
             rarYear = parseInt(data.metadata.financial_year_start.substring(0, 4));
             console.log("Using financial_year_start:", rarYear);
         } 
-        // Fallback if no financial year data is available
-        else {
-            // DO NOT use current year as fallback - this is causing the issue
-            // Instead, look at the data we have and make a best guess
-            if (Object.keys(data.opening_balances || {}).length > 0) {
-                // If we have opening balances, assume the largest year is the current year
-                const maxYear = Math.max(...Object.keys(data.opening_balances).map(y => parseInt(y) || 0));
-                rarYear = new Date().getFullYear() + maxYear;
-                console.log("Estimated year from opening balances:", rarYear);
-            } else if (Object.keys(data.closing_balances || {}).length > 0) {
-                // If we have closing balances, assume the largest year is the current year
-                const maxYear = Math.max(...Object.keys(data.closing_balances).map(y => parseInt(y) || 0));
-                rarYear = new Date().getFullYear() + maxYear;
-                console.log("Estimated year from closing balances:", rarYear);
+        // Look at company metadata
+        else if (data.metadata.company_financial_year_end) {
+            rarYear = parseInt(data.metadata.company_financial_year_end.substring(0, 4));
+            console.log("Using company_financial_year_end:", rarYear);
+        }
+        // Analyze the date format in closing balances keys
+        else if (Object.keys(data.closing_balances || {}).includes('0')) {
+            // The existence of UB 0 indicates the current year
+            rarYear = new Date().getFullYear();
+            console.log("Using current year based on UB 0:", rarYear);
+        }
+        // Last resort fallback: determine year from SIE file name if it contains a year
+        else if (data.metadata.file_name) {
+            const yearMatch = data.metadata.file_name.match(/(20\d{2})/); // Look for 20XX patterns
+            if (yearMatch && yearMatch[1]) {
+                rarYear = parseInt(yearMatch[1]);
+                console.log("Extracted year from filename:", rarYear);
             } else {
-                // Last resort fallback
                 rarYear = new Date().getFullYear();
-                console.log("Using current year as last resort fallback:", rarYear);
+                console.log("Using current year as last resort:", rarYear);
             }
         }
-        */
+        // Absolute last resort
+        else {
+            rarYear = new Date().getFullYear();
+            console.log("Using current year as absolute fallback:", rarYear);
+        }
         console.log("RAR year:", rarYear);
         console.log("Opening balances:", data.opening_balances);
         console.log("Closing balances:", data.closing_balances);
         console.log("Fiscal years:", data.metadata.fiscal_years);
         
         // Determine all available years in the data
-        // Filter out empty year keys to prevent the "2022 (UB)" column without a year indicator
+        // Filter out empty year keys and non-year values (like account numbers that might have been incorrectly included)
         const allIbYears = Object.keys(data.opening_balances || {})
-            .filter(year => year !== "" && year !== undefined)
-            .sort();
+            .filter(year => {
+                // Only accept valid year identifiers (small integers from -5 to 5)
+                const yearNum = parseInt(year);
+                return year !== "" && year !== undefined && 
+                       !isNaN(yearNum) && 
+                       yearNum >= -5 && yearNum <= 5 && 
+                       yearNum.toString() === year; // Ensure it's exactly a number string
+            })
+            .sort((a, b) => parseInt(a) - parseInt(b));
+            
         const allUbYears = Object.keys(data.closing_balances || {})
-            .filter(year => year !== "" && year !== undefined)
-            .sort();
+            .filter(year => {
+                // Only accept valid year identifiers (small integers from -5 to 5)
+                const yearNum = parseInt(year);
+                return year !== "" && year !== undefined && 
+                       !isNaN(yearNum) && 
+                       yearNum >= -5 && yearNum <= 5 && 
+                       yearNum.toString() === year; // Ensure it's exactly a number string
+            })
+            .sort((a, b) => parseInt(a) - parseInt(b));
         
-        console.log("IB years (filtered):", allIbYears);
-        console.log("UB years (filtered):", allUbYears);
+        console.log("IB years (filtered by valid year range):", allIbYears);
+        console.log("UB years (filtered by valid year range):", allUbYears);
+        console.log("Original closing_balances keys (before filtering):", Object.keys(data.closing_balances || {}));
         
         if (allIbYears.length === 0 && allUbYears.length === 0) {
             console.log("No balance history years found in the data");
@@ -2754,8 +3200,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 relativeYear,
                 actualYear,
                 type: 'IB',
-                displayName: `${actualYear} (IB ${relativeYear})${fiscalYearInfo}`,
-                shortName: `${actualYear} (IB ${relativeYear})`
+                displayName: `${actualYear} IB` + (relativeYear !== '0' ? ` (${relativeYear})` : ''),
+                shortName: `${actualYear} IB`
             };
         });
         
@@ -2779,8 +3225,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 relativeYear,
                 actualYear,
                 type: 'UB',
-                displayName: `${actualYear} (UB ${relativeYear})${fiscalYearInfo}`,
-                shortName: `${actualYear} (UB ${relativeYear})`
+                displayName: `${actualYear} UB` + (relativeYear !== '0' ? ` (${relativeYear})` : ''),
+                shortName: `${actualYear} UB`
             };
         });
         
@@ -3656,7 +4102,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return {
             company_name: processedData.metadata.company_name || 'Unknown',
             organization_number: processedData.metadata.organization_number || 'Unknown',
-            fiscal_year: processedData.metadata.fiscal_year || 'Unknown',
+            fiscal_year: getFiscalYearLabel(processedData.metadata),
             currency: processedData.metadata.currency || 'SEK',
             years_analyzed: sortedYears.length,
             balance_history: balanceHistory
@@ -3693,6 +4139,38 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         return currentLiabilities ? (currentAssets / currentLiabilities).toFixed(2) : 'N/A';
+    }
+    
+    // Helper function to create a properly formatted fiscal year label
+    function getFiscalYearLabel(metadata) {
+        // First try from financial_year_start and financial_year_end
+        if (metadata.financial_year_start && metadata.financial_year_end) {
+            return `${metadata.financial_year_start} - ${metadata.financial_year_end}`;
+        }
+        
+        // Try fiscal year from RAR 0 if available
+        if (metadata.fiscal_years && metadata.fiscal_years['0']) {
+            const fiscalYear = metadata.fiscal_years['0'];
+            if (fiscalYear.start_date && fiscalYear.end_date) {
+                return `${fiscalYear.start_date} - ${fiscalYear.end_date}`;
+            }
+        }
+        
+        // Try just the year if available
+        if (metadata.financial_year_end) {
+            const year = metadata.financial_year_end.substring(0, 4);
+            return `${year}`;
+        }
+        
+        // Last resort: extract from file name if it contains a year pattern
+        if (metadata.file_name) {
+            const yearMatch = metadata.file_name.match(/(20\d{2})/); 
+            if (yearMatch && yearMatch[1]) {
+                return yearMatch[1];
+            }
+        }
+        
+        return '2020'; // Default to 2020 instead of 'Unknown'
     }
     
     // Helper function to determine account type based on account number

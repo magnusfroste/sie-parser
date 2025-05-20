@@ -169,52 +169,224 @@ button:hover {
 }
 
 /* Summary Tab */
-.summary-cards {
+/* Company header */
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.company-info h2 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin-bottom: 4px;
+}
+
+.company-subheader {
+    font-size: 1rem;
+    color: var(--dark-color);
+    opacity: 0.8;
+}
+
+.last-update {
+    font-size: 0.9rem;
+    color: var(--dark-color);
+    opacity: 0.7;
+}
+
+/* Financial highlights */
+.financial-highlights {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
 
-.card {
-    background-color: #fff;
+.highlight-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--box-shadow);
-    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid var(--primary-color);
 }
 
-.card h3 {
-    margin-top: 0;
+.highlight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-card.primary {
+    background-color: var(--primary-color);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.highlight-card.primary h3,
+.highlight-card.primary .highlight-text,
+.highlight-card.primary .comparison {
+    color: white;
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-right: 15px;
     color: var(--primary-color);
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.highlight-card.primary .card-icon {
+    color: white;
+}
+
+.card-content h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--dark-color);
 }
 
 .highlight-text {
     font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin: 10px 0;
-}
-
-.card p {
-    font-size: 1.5rem;
     font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 4px;
 }
 
-.charts-container {
+.comparison {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.comparison.positive {
+    color: var(--success-color);
+}
+
+.comparison.negative {
+    color: var(--error-color);
+}
+
+.comparison.neutral {
+    color: var(--dark-color);
+    opacity: 0.7;
+}
+
+.metric-value.positive {
+    color: var(--success-color);
+}
+
+.metric-value.negative {
+    color: var(--error-color);
+}
+
+/* Data metrics */
+.data-metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
 }
 
-.chart-card {
+.metric-card {
+    display: flex;
+    align-items: center;
     background-color: white;
-    padding: 20px;
     border-radius: var(--border-radius);
+    padding: 15px;
     box-shadow: var(--box-shadow);
+    transition: transform 0.2s;
 }
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-bg-color);
+    border-radius: 50%;
+    margin-right: 12px;
+    color: var(--primary-color);
+}
+
+.metric-content h4 {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: var(--dark-color);
+    opacity: 0.8;
+}
+
+.metric-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--dark-color);
+}
+
+/* Financial Key Figures */
+.financial-key-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.figure-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.2s;
+    border-top: 4px solid var(--primary-color);
+}
+
+.figure-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.figure-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.figure-header i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 12px;
+    opacity: 0.8;
+}
+
+.figure-header h3 {
+    margin: 0;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.figure-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+}
+
+.figure-description {
+    font-size: 0.85rem;
+    color: var(--dark-color);
+    opacity: 0.7;
+}
+
+/* Chart styles moved and enhanced above */
 
 /* Balance Sheet Tab */
 .balance-controls {

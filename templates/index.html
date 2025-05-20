@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIE Parser for LLM Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -40,42 +41,63 @@
                     <button class="tab-btn" data-tab="balance-history">Balance History</button>
                     <button class="tab-btn" data-tab="result-history">Result History</button>
                     <button class="tab-btn" data-tab="llm-export">LLM Export</button>
-                    <button class="tab-btn" data-tab="json">JSON Output</button>
                     <button class="tab-btn" data-tab="schema">Schema</button>
                 </div>
                 
                 <div class="tab-content">
                     <div id="summary-tab" class="tab-pane active">
-                        <div class="summary-cards">
-                            <div class="card">
-                                <h3>Company</h3>
-                                <p id="company-name" class="highlight-text">-</p>
+                        <!-- Company header with metadata -->
+                        <div class="company-header">
+                            <div class="company-info">
+                                <h2 id="company-name">-</h2>
+                                <p class="company-subheader">Fiscal period: <span id="period" class="highlight-text">-</span></p>
                             </div>
-                            <div class="card">
-                                <h3>Fiscal Year</h3>
-                                <p id="period" class="highlight-text">-</p>
-                            </div>
-                            <div class="card">
-                                <h3>Accounts</h3>
-                                <p id="total-accounts" class="highlight-text">-</p>
-                            </div>
-                            <div class="card">
-                                <h3>Transactions</h3>
-                                <p id="total-transactions" class="highlight-text">-</p>
-                            </div>
-                            <div class="card">
-                                <h3>Net Result</h3>
-                                <p id="net-result" class="highlight-text">-</p>
+                            <div class="last-update">
+                                <p>Financial data as of: <span id="data-date" class="highlight-text">-</span></p>
                             </div>
                         </div>
-                        <div class="charts-container">
-                            <div class="chart-card">
-                                <h3>Income vs Expenses</h3>
-                                <canvas id="income-expense-chart"></canvas>
+
+                        <!-- Financial highlights removed as requested -->
+
+                        <!-- Financial Key Figures removed as requested -->
+
+                        <!-- Data metrics cards -->
+                        <div class="data-metrics">
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>Accounts</h4>
+                                    <p id="total-accounts" class="metric-value">-</p>
+                                </div>
                             </div>
-                            <div class="chart-card">
-                                <h3>Account Distribution</h3>
-                                <canvas id="account-types-chart"></canvas>
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>Transactions</h4>
+                                    <p id="total-transactions" class="metric-value">-</p>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>Verifications</h4>
+                                    <p id="total-verifications" class="metric-value">-</p>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <h4>Cash Flow</h4>
+                                    <p id="cash-flow" class="metric-value">-</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -405,24 +427,7 @@
                         </div>
                     </div>
                     
-                    <div id="json-tab" class="tab-pane">
-                        <div class="json-controls">
-                            <h3>LLM-Ready JSON Output</h3>
-                            <div class="description-box">
-                                <label for="llm-description">Add description for LLM context:</label>
-                                <textarea id="llm-description" placeholder="Describe what you want the LLM to analyze in this data..."></textarea>
-                                <button id="add-description-btn">Add Description</button>
-                            </div>
-                            <div class="save-controls">
-                                <input type="text" id="json-filename" placeholder="filename.json">
-                                <button id="save-json-btn">Save JSON</button>
-                                <button id="copy-json-btn">Copy to Clipboard</button>
-                            </div>
-                        </div>
-                        <div class="json-preview">
-                            <pre id="json-output"></pre>
-                        </div>
-                    </div>
+                    <!-- JSON Output tab removed as requested -->
                     
                     <div id="schema-tab" class="tab-pane">
                         <!-- Schema tab content will be added here -->
