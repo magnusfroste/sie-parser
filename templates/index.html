@@ -38,7 +38,6 @@
                     <button class="tab-btn" data-tab="ledger">Ledger</button>
                     <button class="tab-btn" data-tab="transactions">Transactions</button>
                     <button class="tab-btn" data-tab="balance-history">Balance History</button>
-                    <button class="tab-btn" data-tab="result-history">Result History</button>
                     <button class="tab-btn" data-tab="llm-export">LLM Export</button>
                     <button class="tab-btn" data-tab="json">JSON Output</button>
                     <button class="tab-btn" data-tab="schema">Schema</button>
@@ -371,39 +370,7 @@
                         </div>
                     </div>
                     
-                    <div id="result-history-tab" class="tab-pane">
-                        <div class="result-history-header">
-                            <div class="company-info">
-                                <h2 id="result-history-company-name">Company Name</h2>
-                                <h3>Result History</h3>
-                                <p id="result-history-period">Period: <span></span></p>
-                            </div>
-                            <div class="filter-controls">
-                                <div class="search-box">
-                                    <input type="text" id="result-history-search" placeholder="Search accounts...">
-                                </div>
-                                <label class="toggle-checkbox">
-                                    <input type="checkbox" id="result-history-show-non-zero" checked>
-                                    <span class="checkbox-text">Show only accounts with values</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="result-history-container">
-                            <table class="result-history-table">
-                                <thead>
-                                    <tr>
-                                        <th class="account-col">Account</th>
-                                        <th class="name-col">Description</th>
-                                        <!-- Year columns will be added dynamically -->
-                                    </tr>
-                                </thead>
-                                <tbody id="result-history-body">
-                                    <!-- Result history data will be inserted here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <!-- Result History tab removed for reimplementation -->
                     
                     <div id="json-tab" class="tab-pane">
                         <div class="json-controls">
