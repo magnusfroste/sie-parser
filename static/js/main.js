@@ -321,17 +321,31 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('download-llm-export').addEventListener('click', downloadLLMExport);
             document.getElementById('copy-llm-export').addEventListener('click', copyLLMExportToClipboard);
             
-            // Add listeners for radio buttons to update preview when changed
-            document.querySelectorAll('input[name="detail-level"]').forEach(radio => {
-                radio.addEventListener('change', updateLLMPreview);
-            });
+            // Instead of automatically updating preview, just enable the generate button
+            // This makes the Generate LLM Export button's behavior clearer
+            const controlInputs = [
+                document.getElementById('include-previous-years'),
+                document.getElementById('include-summary'),
+                document.getElementById('include-income'),
+                document.getElementById('include-balance'),
+                document.getElementById('include-key-ratios')
+            ];
             
-            // Add listeners for checkboxes to update preview when changed
-            document.getElementById('include-previous-years').addEventListener('change', updateLLMPreview);
-            document.getElementById('include-summary').addEventListener('change', updateLLMPreview);
-            document.getElementById('include-income').addEventListener('change', updateLLMPreview);
-            document.getElementById('include-balance').addEventListener('change', updateLLMPreview);
-            document.getElementById('include-key-ratios').addEventListener('change', updateLLMPreview);
+            // Add event listeners to all control inputs
+            controlInputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    // Enable the generate button with visual indicator that settings have changed
+                    const generateBtn = document.getElementById('generate-llm-export');
+                    generateBtn.classList.add('highlight-btn');
+                    generateBtn.textContent = 'Generate LLM Export ↻';
+                    
+                    // Set a small hint to show that user needs to click generate
+                    const previewElement = document.getElementById('llm-preview');
+                    if (previewElement.querySelector('.placeholder-text')) {
+                        previewElement.innerHTML = '<p class="placeholder-text">Settings changed. Click "Generate LLM Export" to update the output.</p>';
+                    }
+                });
+            });
         }
         
         // Generate initial preview
@@ -343,15 +357,24 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("updateLLMPreview function called");
         
         try {
-            const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
             const includePreviousYears = document.getElementById('include-previous-years').checked;
             const includeSummary = document.getElementById('include-summary').checked;
             const includeIncome = document.getElementById('include-income').checked;
             const includeBalance = document.getElementById('include-balance').checked;
+            const includeLedger = document.getElementById('include-ledger').checked;
             const includeKeyRatios = document.getElementById('include-key-ratios').checked;
             
+            console.log("Checkbox values:", {
+                includePreviousYears,
+                includeSummary,
+                includeIncome,
+                includeBalance,
+                includeLedger,
+                includeKeyRatios
+            });
+            
             // Generate preview data
-            const previewData = generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios);
+            const previewData = generateLLMData(includePreviousYears, includeSummary, includeIncome, includeBalance, includeLedger, includeKeyRatios);
             
             // Display preview
             const previewElement = document.getElementById('llm-preview');
@@ -363,7 +386,6 @@ document.addEventListener('DOMContentLoaded', function() {
             previewElement.innerHTML = `<pre>${formattedPreview}</pre>`;
             
             // Enhanced debugging
-            console.log("Detail Level:", detailLevel);
             console.log("Preview Data:", previewData);
             console.log("Original Data Structure:", JSON.stringify(processedData, null, 2));
             
@@ -385,8 +407,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Generate LLM-optimized data structure based on selected options
-    function generateLLMData(detailLevel, includePreviousYears, includeSummary, includeIncome, includeBalance, includeKeyRatios) {
+    function generateLLMData(includePreviousYears, includeSummary, includeIncome, includeBalance, includeLedger, includeKeyRatios) {
         if (!processedData) return {};
+        
+        console.log("generateLLMData params:", {
+            includePreviousYears,
+            includeSummary,
+            includeIncome,
+            includeBalance,
+            includeLedger,
+            includeKeyRatios
+        });
         
         // Log the entire processed data for debugging
         console.log("Full processed data:", JSON.stringify(processedData, null, 2));
@@ -400,7 +431,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     : 'Unknown'
             },
             generated_at: new Date().toISOString(),
-            detail_level: detailLevel,
             currency: processedData.metadata.currency || 'SEK'
         };
         
@@ -413,19 +443,38 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
         
-        // Add income statement if selected
+        // 1. Add income statement with Swedish names if selected
         if (includeIncome) {
-            result.income_statement = generateSimpleIncomeStatement(detailLevel);
+            result.resultaträkning = generateSimpleIncomeStatement();
+            // Add alias for non-Swedish speakers
+            result.income_statement = result.resultaträkning;
         }
         
-        // Add balance sheet if selected
+        // 2. Add balance sheet if selected
         if (includeBalance) {
-            result.balance_sheet = generateSimpleBalanceSheet(detailLevel);
+            result.balansräkning = generateSimpleBalanceSheet();
+            // Add alias for non-Swedish speakers
+            result.balance_sheet = result.balansräkning;
+        }
+        
+        // 3. Add ledger data if selected
+        if (includeLedger) {
+            // Add aggregated ledger data by account categories
+            result.huvudbok = generateAggregatedLedger();
+            // Add alias for non-Swedish speakers
+            result.ledger = result.huvudbok;
+            
+            // Add current ledger data with account balances (saldo)
+            result.kontosaldon = generateCurrentLedger();
+            // Add alias for non-Swedish speakers
+            result.account_balances = result.kontosaldon;
         }
         
         // Add key financial ratios if selected
         if (includeKeyRatios) {
-            result.key_ratios = calculateFinancialRatios();
+            result.nyckeltal = calculateFinancialRatios();
+            // Add alias for non-Swedish speakers
+            result.key_ratios = result.nyckeltal;
         }
         
         // Add balance history analysis if selected
@@ -433,14 +482,239 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Including balance history in LLM export");
             const balanceHistory = generateBalanceHistoryAnalysis();
             console.log("Generated balance history:", balanceHistory);
-            result.balance_history = balanceHistory;
+            result.historik = balanceHistory;
+            // Add alias for non-Swedish speakers
+            result.history = result.historik;
         }
         
         return result;
     }
     
-    // Generate a simple income statement based on detail level
-    function generateSimpleIncomeStatement(detailLevel) {
+    // Generate aggregated ledger data showing transactions by account with consistent format
+    function generateAggregatedLedger() {
+        if (!processedData || !processedData.accounts) {
+            console.log("Account data not available for ledger");
+            return { error: "Account data not available" };
+        }
+        
+        const ledgerData = {
+            as_of_date: processedData.metadata.financial_year_end || 'Unknown',
+            currency: processedData.metadata.currency || 'SEK',
+            data: {}
+        };
+        
+        // Group accounts by type
+        const accountsByType = {
+            "Tillgångar": {}, // Assets
+            "Skulder och Eget Kapital": {}, // Liabilities and Equity
+            "Intäkter": {}, // Income
+            "Kostnader": {}, // Expenses
+            "Övrigt": {}  // Other
+        };
+        
+        // Process all accounts and their balances
+        Object.entries(processedData.accounts || {}).forEach(([accNum, account]) => {
+            if (!account) return;
+            
+            const accountInfo = {
+                name: account.name || `Account ${accNum}`,
+                balance: account.balance || 0,
+                transactions_count: 0
+            };
+            
+            // Count number of transactions for this account if available
+            if (processedData.transactions) {
+                accountInfo.transactions_count = processedData.transactions.filter(
+                    t => t.account === accNum
+                ).length;
+            }
+            
+            // Categorize by account type
+            let category = "Övrigt";  // Default to Other
+            
+            if (account.type === "Asset") {
+                category = "Tillgångar";
+            } else if (account.type === "Liability/Equity") {
+                category = "Skulder och Eget Kapital";
+            } else if (account.type === "Income") {
+                category = "Intäkter";
+            } else if (account.type === "Expense") {
+                category = "Kostnader";
+            }
+            
+            // Group by first two digits (account class)
+            const accountClass = accNum.substring(0, 2);
+            const groupKey = `${accountClass}xx`;
+            
+            // Create account class group if it doesn't exist
+            if (!accountsByType[category][groupKey]) {
+                accountsByType[category][groupKey] = {
+                    class_name: getAccountClassName(accountClass),
+                    accounts: {},
+                    total_balance: 0,
+                    total_transactions: 0
+                };
+            }
+            
+            // Add the individual account to the group
+            accountsByType[category][groupKey].accounts[accNum] = {
+                name: accountInfo.name,
+                balance: accountInfo.balance,
+                transactions_count: accountInfo.transactions_count
+            };
+            
+            // Update group totals
+            accountsByType[category][groupKey].total_balance += parseFloat(accountInfo.balance) || 0;
+            accountsByType[category][groupKey].total_transactions += accountInfo.transactions_count;
+        });
+        
+        // Remove empty categories
+        Object.keys(accountsByType).forEach(category => {
+            if (Object.keys(accountsByType[category]).length === 0) {
+                delete accountsByType[category];
+            }
+        });
+        
+        ledgerData.data = accountsByType;
+        return ledgerData;
+    }
+    
+    // Generate current ledger data with account balances as of the current date
+    function generateCurrentLedger() {
+        if (!processedData || !processedData.accounts) {
+            console.log("Account data not available for ledger");
+            return { error: "Account data not available" };
+        }
+        
+        // Get the current date or the latest date in the SIE file
+        const today = new Date().toISOString().split('T')[0];
+        const currentDate = processedData.metadata?.financial_year_end || today;
+        
+        const ledgerData = {
+            as_of_date: currentDate,
+            currency: processedData.metadata?.currency || 'SEK',
+            description: `Current account balances as of ${currentDate}`,
+            accounts: {}
+        };
+        
+        // Get all accounts with their current balances (saldo)
+        Object.entries(processedData.accounts || {}).forEach(([accNum, account]) => {
+            if (!account || account.balance === 0) return; // Skip accounts with zero balance
+            
+            // Add account with its current balance
+            ledgerData.accounts[accNum] = {
+                name: account.name || `Account ${accNum}`,
+                account_type: account.type || 'Other',
+                saldo: parseFloat(account.balance) || 0,
+                description: getAccountClassName(accNum.substring(0, 2))
+            };
+        });
+        
+        // Add totals by account type
+        const totals = {
+            assets: 0,
+            liabilities: 0,
+            equity: 0,
+            income: 0,
+            expenses: 0
+        };
+        
+        Object.values(ledgerData.accounts).forEach(acc => {
+            if (acc.account_type === "Asset") {
+                totals.assets += acc.saldo;
+            } else if (acc.account_type === "Liability/Equity" && acc.saldo < 0) {
+                totals.liabilities += acc.saldo;
+            } else if (acc.account_type === "Liability/Equity" && acc.saldo >= 0) {
+                totals.equity += acc.saldo;
+            } else if (acc.account_type === "Income") {
+                totals.income += acc.saldo;
+            } else if (acc.account_type === "Expense") {
+                totals.expenses += acc.saldo;
+            }
+        });
+        
+        ledgerData.totals = totals;
+        
+        return ledgerData;
+    }
+    
+    // Helper function to get account class names in Swedish
+    function getAccountClassName(accountClass) {
+        const classMap = {
+            "10": "Immateriella anläggningstillgångar",
+            "11": "Byggnader och mark",
+            "12": "Maskiner och inventarier",
+            "13": "Finansiella anläggningstillgångar",
+            "14": "Lager och pågående arbeten",
+            "15": "Kundfordringar",
+            "16": "Övriga kortfristiga fordringar",
+            "17": "Förutbetalda kostnader och upplupna intäkter",
+            "19": "Kassa och bank",
+            "20": "Eget kapital",
+            "21": "Obeskattade reserver",
+            "22": "Avsättningar",
+            "23": "Långfristiga skulder",
+            "24": "Kortfristiga skulder",
+            "25": "Skatteskulder",
+            "26": "Momsskulder",
+            "27": "Personalskatter",
+            "29": "Upplupna kostnader och förutbetalda intäkter",
+            "30": "Försäljning",
+            "31": "Försäljning",
+            "32": "Försäljning",
+            "35": "Fakturerade kostnader",
+            "36": "Övriga rörelseintäkter",
+            "37": "Intäktskorrigeringar",
+            "38": "Aktiverat arbete",
+            "39": "Övriga rörelseintäkter",
+            "40": "Material och varor",
+            "41": "Material och varor",
+            "45": "Underleverantörer",
+            "46": "Legoarbeten, underentreprenad",
+            "47": "Reduktion av inköpspriser",
+            "49": "Förändring av lager",
+            "50": "Lokalkostnader",
+            "51": "Fastighetskostnader",
+            "52": "Hyra anläggningstillgångar",
+            "53": "Energikostnader",
+            "54": "Förbrukningsinventarier",
+            "55": "Reparation och underhåll",
+            "56": "Kostnader transportmedel",
+            "57": "Frakter och transporter",
+            "58": "Resekostnader",
+            "59": "Reklam och PR",
+            "60": "Övriga försäljningskostnader",
+            "61": "Kontorsmaterial och trycksaker",
+            "62": "Tele och post",
+            "63": "Försäkningar",
+            "64": "Förvaltningskostnader",
+            "65": "Övriga externa tjänster",
+            "68": "Inhyrd personal",
+            "69": "Övriga externa kostnader",
+            "70": "Löner kollektivanställda",
+            "71": "Löner tjänstemän",
+            "72": "Löner företagsledare",
+            "73": "Kostnadsersättningar och förmåner",
+            "74": "Pensionskostnader",
+            "75": "Sociala och andra avgifter",
+            "76": "Övriga personalkostnader",
+            "77": "Nedskrivningar och avskrivningar",
+            "78": "Avskrivningar",
+            "79": "Övriga rörelsekostnader",
+            "80": "Resultat från andelar i koncernföretag",
+            "81": "Resultat från andelar i intresseföretag",
+            "82": "Resultat från övriga finansiella anläggningstillgångar",
+            "83": "Ränteintäkter och liknande resultatposter",
+            "84": "Räntekostnader och liknande resultatposter",
+            "88": "Bokslutsdipositioner",
+            "89": "Skatter och årets resultat"
+        };
+        
+        return classMap[accountClass] || `Kontogrupp ${accountClass}xx`;
+    }
+    
+    // Generate a simple income statement with a consistent format
+    function generateSimpleIncomeStatement() {
         if (!processedData || !processedData.income_statement) {
             console.log("Income statement data not available");
             return { error: "Income statement data not available" };
@@ -461,100 +735,84 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get income statement data directly from the data model
         const data = processedData.income_statement;
         
-        if (detailLevel === 'high') {
-            // High level - only major categories
-            incomeData.data = {
-                revenue: {
-                    total_revenue: parseFloat(data.total_income) || 0
-                },
-                expenses: {
-                    total_expenses: parseFloat(data.total_expenses) || 0
-                },
-                net_result: parseFloat(data.net_income) || 0
-            };
-        } else if (detailLevel === 'medium') {
-            // Medium level - major categories with subcategories
-            const incomeCategories = {};
-            const expenseCategories = {};
-            
-            // Process income categories
-            if (data.income) {
-                Object.entries(data.income).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        const category = `Income ${accNum.substring(0, 2)}xx`;
-                        if (!incomeCategories[category]) {
-                            incomeCategories[category] = 0;
-                        }
-                        incomeCategories[category] += parseFloat(details.amount) || 0;
+        // Group income accounts by class (first two digits)
+        const incomeClasses = {};
+        const expenseClasses = {};
+        
+        // Process all income accounts and group by class (first two digits)
+        if (data.income) {
+            Object.entries(data.income).forEach(([accNum, details]) => {
+                if (accNum && details) {
+                    const accountClass = accNum.substring(0, 2);
+                    const className = getAccountClassName(accountClass);
+                    const classKey = `${accountClass}xx`;
+                    
+                    if (!incomeClasses[classKey]) {
+                        incomeClasses[classKey] = {
+                            name: className,
+                            accounts: {},
+                            total: 0
+                        };
                     }
-                });
-            }
-            
-            // Process expense categories
-            if (data.expenses) {
-                Object.entries(data.expenses).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        const category = `Expense ${accNum.substring(0, 2)}xx`;
-                        if (!expenseCategories[category]) {
-                            expenseCategories[category] = 0;
-                        }
-                        expenseCategories[category] += parseFloat(details.amount) || 0;
-                    }
-                });
-            }
-            
-            incomeData.data = {
-                revenue: {
-                    categories: incomeCategories,
-                    total_revenue: parseFloat(data.total_income) || 0
-                },
-                expenses: {
-                    categories: expenseCategories,
-                    total_expenses: parseFloat(data.total_expenses) || 0
-                },
-                net_result: parseFloat(data.net_income) || 0
-            };
-        } else {
-            // Detailed level - all accounts
-            const incomeAccounts = {};
-            const expenseAccounts = {};
-            
-            // Process all income accounts
-            if (data.income) {
-                Object.entries(data.income).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        incomeAccounts[`${accNum} - ${details.name || 'Unknown'}`] = parseFloat(details.amount) || 0;
-                    }
-                });
-            }
-            
-            // Process all expense accounts
-            if (data.expenses) {
-                Object.entries(data.expenses).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        expenseAccounts[`${accNum} - ${details.name || 'Unknown'}`] = parseFloat(details.amount) || 0;
-                    }
-                });
-            }
-            
-            incomeData.data = {
-                revenue: {
-                    accounts: incomeAccounts,
-                    total_revenue: parseFloat(data.total_income) || 0
-                },
-                expenses: {
-                    accounts: expenseAccounts,
-                    total_expenses: parseFloat(data.total_expenses) || 0
-                },
-                net_result: parseFloat(data.net_income) || 0
-            };
+                    
+                    incomeClasses[classKey].accounts[accNum] = {
+                        name: details.name || 'Unknown',
+                        amount: parseFloat(details.amount) || 0
+                    };
+                    
+                    incomeClasses[classKey].total += parseFloat(details.amount) || 0;
+                }
+            });
         }
+        
+        // Process all expense accounts and group by class (first two digits)
+        if (data.expenses) {
+            Object.entries(data.expenses).forEach(([accNum, details]) => {
+                if (accNum && details) {
+                    const accountClass = accNum.substring(0, 2);
+                    const className = getAccountClassName(accountClass);
+                    const classKey = `${accountClass}xx`;
+                    
+                    if (!expenseClasses[classKey]) {
+                        expenseClasses[classKey] = {
+                            name: className,
+                            accounts: {},
+                            total: 0
+                        };
+                    }
+                    
+                    expenseClasses[classKey].accounts[accNum] = {
+                        name: details.name || 'Unknown',
+                        amount: parseFloat(details.amount) || 0
+                    };
+                    
+                    expenseClasses[classKey].total += parseFloat(details.amount) || 0;
+                }
+            });
+        }
+        
+        // Structure the final income statement data
+        incomeData.data = {
+            revenue: {
+                classes: incomeClasses,
+                total_revenue: parseFloat(data.total_income) || 0
+            },
+            expenses: {
+                classes: expenseClasses,
+                total_expenses: parseFloat(data.total_expenses) || 0
+            },
+            result: {
+                operating_profit: parseFloat(data.operating_profit) || parseFloat(data.ebit) || 0,
+                profit_before_tax: parseFloat(data.profit_before_tax) || 0,
+                net_result: parseFloat(data.net_income) || 0
+            }
+        };
         
         return incomeData;
     }
     
     // Generate a simple balance sheet based on detail level
-    function generateSimpleBalanceSheet(detailLevel) {
+    function generateSimpleBalanceSheet() {
         if (!processedData || !processedData.balance_sheet) {
             console.log("Balance sheet data not available");
             return { error: "Balance sheet data not available" };
@@ -571,118 +829,115 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get balance sheet data directly from the data model
         const data = processedData.balance_sheet;
         
-        if (detailLevel === 'high') {
-            // High level - only major categories
-            balanceData.data = {
-                assets: {
-                    total_assets: parseFloat(data.total_assets) || 0
-                },
-                liabilities: {
-                    total_liabilities: parseFloat(data.total_liabilities_equity) - (parseFloat(data.equity?.total_equity) || 0) || 0
-                },
-                equity: {
-                    total_equity: parseFloat(data.equity?.total_equity) || 0
+        // Group accounts by class (first two digits)
+        const assetClasses = {};
+        const liabilityClasses = {};
+        const equityClasses = {};
+        
+        // Process all asset accounts and group by class
+        if (data.assets && data.assets.accounts) {
+            Object.entries(data.assets.accounts || {}).forEach(([accNum, details]) => {
+                if (accNum && details) {
+                    const accountClass = accNum.substring(0, 2);
+                    const className = getAccountClassName(accountClass);
+                    const classKey = `${accountClass}xx`;
+                    
+                    if (!assetClasses[classKey]) {
+                        assetClasses[classKey] = {
+                            name: className,
+                            accounts: {},
+                            total: 0
+                        };
+                    }
+                    
+                    assetClasses[classKey].accounts[accNum] = {
+                        name: details.name || 'Unknown',
+                        balance: parseFloat(details.balance) || 0
+                    };
+                    
+                    assetClasses[classKey].total += parseFloat(details.balance) || 0;
                 }
-            };
-        } else if (detailLevel === 'medium') {
-            // Medium level - major categories with subcategories
-            const assetCategories = {};
-            const liabilityCategories = {};
-            const equityCategories = {};
-            
-            // Process asset categories
-            if (data.assets) {
-                Object.entries(data.assets).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        const category = `Asset ${accNum.substring(0, 2)}xx`;
-                        if (!assetCategories[category]) {
-                            assetCategories[category] = 0;
-                        }
-                        assetCategories[category] += parseFloat(details.balance) || 0;
-                    }
-                });
-            }
-            
-            // Process liability and equity categories
-            if (data.liabilities) {
-                Object.entries(data.liabilities).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        // Equity accounts typically start with 20-21
-                        if (accNum.startsWith('20') || accNum.startsWith('21')) {
-                            const category = `Equity ${accNum.substring(0, 2)}xx`;
-                            if (!equityCategories[category]) {
-                                equityCategories[category] = 0;
-                            }
-                            equityCategories[category] += parseFloat(details.balance) || 0;
-                        } else {
-                            const category = `Liability ${accNum.substring(0, 2)}xx`;
-                            if (!liabilityCategories[category]) {
-                                liabilityCategories[category] = 0;
-                            }
-                            liabilityCategories[category] += parseFloat(details.balance) || 0;
-                        }
-                    }
-                });
-            }
-            
-            balanceData.data = {
-                assets: {
-                    categories: assetCategories,
-                    total_assets: parseFloat(data.total_assets) || 0
-                },
-                liabilities: {
-                    categories: liabilityCategories,
-                    total_liabilities: parseFloat(data.total_liabilities_equity) - (parseFloat(data.equity?.total_equity) || 0) || 0
-                },
-                equity: {
-                    categories: equityCategories,
-                    total_equity: parseFloat(data.equity?.total_equity) || 0
-                }
-            };
-        } else {
-            // Detailed level - all accounts
-            const assetAccounts = {};
-            const liabilityAccounts = {};
-            const equityAccounts = {};
-            
-            // Process all asset accounts
-            if (data.assets) {
-                Object.entries(data.assets).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        assetAccounts[`${accNum} - ${details.name || 'Unknown'}`] = parseFloat(details.balance) || 0;
-                    }
-                });
-            }
-            
-            // Process all liability and equity accounts
-            if (data.liabilities) {
-                Object.entries(data.liabilities).forEach(([accNum, details]) => {
-                    if (accNum && details) {
-                        // Equity accounts typically start with 20-21
-                        if (accNum.startsWith('20') || accNum.startsWith('21')) {
-                            equityAccounts[`${accNum} - ${details.name || 'Unknown'}`] = parseFloat(details.balance) || 0;
-                        } else {
-                            liabilityAccounts[`${accNum} - ${details.name || 'Unknown'}`] = parseFloat(details.balance) || 0;
-                        }
-                    }
-                });
-            }
-            
-            balanceData.data = {
-                assets: {
-                    accounts: assetAccounts,
-                    total_assets: parseFloat(data.total_assets) || 0
-                },
-                liabilities: {
-                    accounts: liabilityAccounts,
-                    total_liabilities: parseFloat(data.total_liabilities_equity) - (parseFloat(data.equity?.total_equity) || 0) || 0
-                },
-                equity: {
-                    accounts: equityAccounts,
-                    total_equity: parseFloat(data.equity?.total_equity) || 0
-                }
-            };
+            });
         }
+        
+        // Process all liability accounts and group by class
+        if (data.liabilities && data.liabilities.accounts) {
+            Object.entries(data.liabilities.accounts || {}).forEach(([accNum, details]) => {
+                if (accNum && details) {
+                    const accountClass = accNum.substring(0, 2);
+                    const className = getAccountClassName(accountClass);
+                    const classKey = `${accountClass}xx`;
+                    
+                    if (!liabilityClasses[classKey]) {
+                        liabilityClasses[classKey] = {
+                            name: className,
+                            accounts: {},
+                            total: 0
+                        };
+                    }
+                    
+                    liabilityClasses[classKey].accounts[accNum] = {
+                        name: details.name || 'Unknown',
+                        balance: parseFloat(details.balance) || 0
+                    };
+                    
+                    liabilityClasses[classKey].total += parseFloat(details.balance) || 0;
+                }
+            });
+        }
+        
+        // Process all equity accounts and group by class
+        if (data.equity && data.equity.accounts) {
+            Object.entries(data.equity.accounts || {}).forEach(([accNum, details]) => {
+                if (accNum && details) {
+                    const accountClass = accNum.substring(0, 2);
+                    const className = getAccountClassName(accountClass);
+                    const classKey = `${accountClass}xx`;
+                    
+                    if (!equityClasses[classKey]) {
+                        equityClasses[classKey] = {
+                            name: className,
+                            accounts: {},
+                            total: 0
+                        };
+                    }
+                    
+                    equityClasses[classKey].accounts[accNum] = {
+                        name: details.name || 'Unknown',
+                        balance: parseFloat(details.balance) || 0
+                    };
+                    
+                    equityClasses[classKey].total += parseFloat(details.balance) || 0;
+                }
+            });
+        }
+        
+        // Structure the final balance sheet data
+        balanceData.data = {
+            assets: {
+                classes: assetClasses,
+                current_assets: parseFloat(data.assets?.current?.total) || 0,
+                fixed_assets: parseFloat(data.assets?.fixed?.total) || 0,
+                total_assets: parseFloat(data.total_assets) || 0
+            },
+            liabilities_and_equity: {
+                liabilities: {
+                    classes: liabilityClasses,
+                    current_liabilities: parseFloat(data.liabilities?.current?.total) || 0,
+                    long_term_liabilities: parseFloat(data.liabilities?.long_term?.total) || 0,
+                    total_liabilities: parseFloat(data.liabilities?.total || 0)
+                },
+                equity: {
+                    classes: equityClasses,
+                    share_capital: parseFloat(data.equity?.share_capital) || 0,
+                    reserves: parseFloat(data.equity?.reserves) || 0,
+                    retained_earnings: parseFloat(data.equity?.retained_earnings) || 0,
+                    current_year_profit: parseFloat(data.equity?.current_year_profit) || 0,
+                    total_equity: parseFloat(data.equity?.total_equity || 0)
+                },
+                total_liabilities_and_equity: parseFloat(data.total_liabilities_equity) || 0
+            }
+        };
         
         return balanceData;
     }
@@ -764,38 +1019,64 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateLLMExport() {
         console.log("generateLLMExport function called");
         
-        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+        // Reset button styling
+        const generateBtn = document.getElementById('generate-llm-export');
+        generateBtn.classList.remove('highlight-btn');
+        generateBtn.textContent = 'Generate LLM Export';
+        
+        // Show loading indicator in the preview area
+        const previewElement = document.getElementById('llm-preview');
+        previewElement.innerHTML = '<p class="processing-text">Processing data and generating LLM-friendly output...</p>';
+        
+        // Get all the selected options
         const includePreviousYears = document.getElementById('include-previous-years').checked;
         const includeSummary = document.getElementById('include-summary').checked;
         const includeIncome = document.getElementById('include-income').checked;
         const includeBalance = document.getElementById('include-balance').checked;
+        const includeLedger = document.getElementById('include-ledger').checked;
         const includeKeyRatios = document.getElementById('include-key-ratios').checked;
         
         console.log("Options:", {
-            detailLevel,
             includePreviousYears,
             includeSummary,
             includeIncome,
             includeBalance,
+            includeLedger,
             includeKeyRatios
         });
         
         try {
-            // Generate the complete data
+            // Generate the complete data for LLM consumption
             window.llmExportData = generateLLMData(
-                detailLevel, 
                 includePreviousYears, 
                 includeSummary, 
                 includeIncome, 
                 includeBalance, 
+                includeLedger,
                 includeKeyRatios
             );
             
-            // Update the preview
-            updateLLMPreview();
+            // Display formatted output in the preview area
+            const formattedOutput = JSON.stringify(window.llmExportData, null, 2);
+            previewElement.innerHTML = `<pre>${formattedOutput}</pre>`;
+            
+            // Show the export actions section
+            document.querySelector('.llm-export-actions').style.display = 'flex';
+            
+            // Estimate tokens (rough approximation: 1 token ≈ 4 characters for English text)
+            const estimatedTokens = Math.ceil(formattedOutput.length / 4);
+            document.getElementById('token-estimate').textContent = estimatedTokens.toLocaleString();
+            
+            // Add success indicator
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success-message';
+            successMsg.textContent = `LLM-friendly data successfully generated`;
+            previewElement.prepend(successMsg);
+            
+            // Automatically scroll to show the output
+            previewElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } catch (error) {
             console.error("Error generating LLM export:", error);
-            const previewElement = document.getElementById('llm-preview');
             previewElement.innerHTML = `<div class="error-message">Error generating LLM export: ${error.message}</div>`;
         }
     }
@@ -812,11 +1093,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const companyName = processedData.metadata.company_name || 'company';
         const sanitizedName = companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        const detailLevel = document.querySelector('input[name="detail-level"]:checked').value;
+        const today = new Date().toISOString().slice(0, 10);
         
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${sanitizedName}_financial_data_${detailLevel}_level.json`;
+        a.download = `${sanitizedName}_financial_data_${today}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

@@ -777,7 +777,7 @@ pre {
     font-style: italic;
 }
 
-/* P&L Report Styling - CFO Edition */
+/* Income Statement Styling - CFO Edition */
 .pl-report-header {
     display: flex;
     justify-content: space-between;
@@ -983,7 +983,7 @@ pre {
     color: #dc3545;
 }
 
-/* P&L Report Styles */
+/* Income Statement Styles */
 .pl-report-table {
     width: 100%;
     border-collapse: collapse;
@@ -1246,10 +1246,23 @@ pre {
 .ledger-report-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    position: relative;
+}
+
+.ledger-report-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #dee2e6, transparent);
 }
 
 .ledger-report-header .company-info {
@@ -1257,29 +1270,84 @@ pre {
 }
 
 .ledger-report-header h2 {
-    color: #2c3e50;
-    margin-bottom: 5px;
-    font-size: 1.8rem;
-    border-bottom: none;
+    font-size: 1.6rem;
+    margin: 0 0 8px;
+    color: #212529;
+    font-weight: 700;
 }
 
 .ledger-report-header h3 {
-    color: #34495e;
-    font-size: 1.4rem;
-    margin-bottom: 10px;
+    font-size: 1.2rem;
+    margin: 0 0 12px;
+    color: #495057;
     font-weight: 600;
 }
 
 .ledger-report-header p {
-    color: #7f8c8d;
-    font-size: 1rem;
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.95rem;
 }
 
 .ledger-report-header .filter-controls {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-content: center;
     gap: 10px;
+}
+
+/* Modern search box styling */
+.search-box {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.search-box input {
+    padding: 10px 15px 10px 36px;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+    width: 250px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    color: #495057;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    background-color: #fff;
+}
+
+.search-box input::placeholder {
+    color: #adb5bd;
+}
+
+.search-box::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adb5bd;
+    font-size: 0.9rem;
+}
+
+.ledger-info {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 4px;
+    background-color: #f1f3f5;
+    padding: 4px 12px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+#account-count {
+    font-weight: 600;
+    color: #495057;
 }
 
 .ledger-report-container {
@@ -1287,29 +1355,36 @@ pre {
     overflow-x: auto;
 }
 
-/* Simplified Ledger Table Styling */
+/* Modern Ledger Table Styling */
 .ledger-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 0.95rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
 }
 
 .ledger-table thead {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 2px solid #dee2e6;
 }
 
 .ledger-table th {
-    padding: 10px 15px;
+    padding: 12px 16px;
     text-align: left;
     font-weight: 600;
-    color: #495057;
+    color: #343a40;
     position: sticky;
     top: 0;
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     z-index: 10;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .ledger-table th.amount-col,
@@ -1319,28 +1394,47 @@ pre {
 
 .ledger-table .account-col {
     width: 10%;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9rem;
+    color: #495057;
 }
 
 .ledger-table .date-col {
     width: 10%;
+    white-space: nowrap;
+    color: #6c757d;
 }
 
 .ledger-table .ver-col {
     width: 8%;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: #6c757d;
+    text-align: center;
 }
 
 .ledger-table .desc-col {
     width: 42%;
+    color: #212529;
+    font-weight: 500;
 }
 
 .ledger-table .amount-col {
     width: 15%;
     text-align: right;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 500;
 }
 
 .ledger-table .balance-col {
     width: 15%;
     text-align: right;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.ledger-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
 }
 
 .ledger-table tbody tr:nth-child(even) {
@@ -1348,67 +1442,94 @@ pre {
 }
 
 .ledger-table tbody tr:hover {
-    background-color: #f1f3f5;
+    background-color: #e9ecef;
 }
 
 .ledger-table td {
-    padding: 8px 15px;
+    padding: 10px 16px;
     border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.15s ease-in-out;
 }
 
-/* Account type color coding - simplified */
+/* Modern Account Headers - with subtle gradient */
 .ledger-table tr.account-header {
     border-top: 1px solid #dee2e6;
-    font-weight: 600;
-    background-color: #f1f3f5;
+    font-weight: 700;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
     margin-top: 20px;
+    position: relative;
 }
 
 .ledger-table tr.account-header td {
-    padding: 12px 15px;
-    font-size: 1.05rem;
-    color: #2c3e50;
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    color: #212529;
     border-left: 4px solid #4dabf7;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Add space after closing balance row to separate accounts */
+.ledger-table tr.account-header:hover td {
+    background-color: #f1f3f5;
+}
+
+/* Enhanced spacing and styling for closing balance row */
 .ledger-table tr.closing-balance-row {
-    border-bottom: 15px solid white;
+    border-bottom: 1px solid white;
+    position: relative;
+}
+
+.ledger-table tr.closing-balance-row::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.02), transparent);
 }
 
 .ledger-table tr.closing-balance-row td {
     font-weight: 600;
-    border-top: 1px solid #adb5bd;
-    border-bottom: 2px solid #dee2e6;
-    background-color: #f1f3f5;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 2px solid #e9ecef;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    padding: 12px 16px;
 }
 
-/* Color coding for account types - just the left border */
+/* Modern color coding for account types with enhanced visuals */
 .ledger-table tr.account-type-Asset.account-header td {
-    border-left-color: #2196f3; /* Blue for assets */
+    border-left-color: #0091ea; /* Vivid blue for assets */
+    background: linear-gradient(to right, rgba(0, 145, 234, 0.05), transparent);
 }
 
 .ledger-table tr.account-type-Liability.account-header td {
-    border-left-color: #ff9800; /* Orange for liabilities */
+    border-left-color: #d81b60; /* Pink-red for liabilities */
+    background: linear-gradient(to right, rgba(216, 27, 96, 0.05), transparent);
 }
 
 .ledger-table tr.account-type-Equity.account-header td {
-    border-left-color: #4caf50; /* Green for equity */
+    border-left-color: #00c853; /* Vivid green for equity */
+    background: linear-gradient(to right, rgba(0, 200, 83, 0.05), transparent);
 }
 
 .ledger-table tr.account-type-Income.account-header td {
-    border-left-color: #9c27b0; /* Purple for income */
+    border-left-color: #6200ea; /* Deep purple for income */
+    background: linear-gradient(to right, rgba(98, 0, 234, 0.05), transparent);
 }
 
 .ledger-table tr.account-type-Expense.account-header td {
-    border-left-color: #f44336; /* Red for expenses */
+    border-left-color: #ff6d00; /* Deep orange for expenses */
+    background: linear-gradient(to right, rgba(255, 109, 0, 0.05), transparent);
 }
 
 .ledger-table tr.account-type-Other.account-header td {
-    border-left-color: #9e9e9e; /* Gray for other */
+    border-left-color: #455a64; /* Blue-gray for other */
+    background: linear-gradient(to right, rgba(69, 90, 100, 0.05), transparent);
 }
 
 .ledger-table tr.opening-balance-row td {

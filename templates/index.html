@@ -33,7 +33,7 @@
                 <div class="tabs">
                     <button class="tab-btn active" data-tab="summary">Summary</button>
                     <button class="tab-btn" data-tab="balance">Balance Sheet</button>
-                    <button class="tab-btn" data-tab="income">P&L Report</button>
+                    <button class="tab-btn" data-tab="income">Income Statement</button>
                     <button class="tab-btn" data-tab="opening">Opening Balance</button>
                     <button class="tab-btn" data-tab="ledger">Ledger</button>
                     <button class="tab-btn" data-tab="transactions">Transactions</button>
@@ -438,23 +438,7 @@
                         </div>
                         
                         <div class="llm-export-controls">
-                            <div class="control-group">
-                                <h4>Detail Level</h4>
-                                <div class="radio-group">
-                                    <label class="radio-label">
-                                        <input type="radio" name="detail-level" value="high" checked>
-                                        <span>High Level (Executive Summary)</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="detail-level" value="medium">
-                                        <span>Medium Level (Key Accounts)</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="detail-level" value="detailed">
-                                        <span>Detailed (All Accounts)</span>
-                                    </label>
-                                </div>
-                            </div>
+
                             
                             <div class="control-group">
                                 <h4>Data to Include</h4>
@@ -470,6 +454,10 @@
                                     <label class="checkbox-label">
                                         <input type="checkbox" id="include-balance" checked>
                                         <span>Balance Sheet</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="include-ledger" checked>
+                                        <span>Ledger (Account Balances)</span>
                                     </label>
                                     <label class="checkbox-label">
                                         <input type="checkbox" id="include-previous-years" checked>
@@ -488,13 +476,13 @@
                         </div>
                         
                         <div class="llm-preview-container">
-                            <h4>Preview</h4>
+                            <h4>Output</h4>
                             <div class="preview-info">
-                                <p>This preview shows how your data will be formatted for LLM analysis. The actual JSON will contain more data based on your selections.</p>
+                                <p>This output shows your data formatted for LLM analysis. Copy or download this to use with language models.</p>
                                 <p><strong>Estimated token count: </strong><span id="token-estimate">0</span></p>
                             </div>
                             <div class="llm-preview" id="llm-preview">
-                                <p class="placeholder-text">Select options and click "Generate LLM Export" to see a preview</p>
+                                <p class="placeholder-text">Select options and click "Generate LLM Export" to see the formatted output</p>
                             </div>
                         </div>
                         
