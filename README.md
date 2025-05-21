@@ -1,5 +1,11 @@
 # SIE Parser for LLM Analysis
 
+## Open Source Project - Privacy First
+
+**IMPORTANT**: This SIE parser is open source software intended to be used locally on a private machine to guarantee personal data protection. If you're certain your SIE 4 files don't contain any personal information, you may run it publicly.
+
+Contributions are welcome! The vision is to expand support for more accounting programs and make this a powerful tool for LLMs to provide financial reports and analyses.
+
 A web-based application for processing Swedish SIE 4 files and preparing them for LLM analysis. This tool handles CP437 encoding for proper Swedish character support and provides a user-friendly interface for uploading, processing, and exporting SIE data.
 
 ## Features

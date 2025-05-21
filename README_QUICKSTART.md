@@ -1,5 +1,11 @@
 # SIE Parser - Quick Start Guide
 
+## Open Source Privacy Notice
+
+**IMPORTANT**: This SIE parser is open source software intended for local use on your private machine to ensure personal data protection. SIE files often contain sensitive information. Only run this application publicly if you're certain your SIE 4 files don't contain any personal information.
+
+Contributions to the project are welcome! The vision is to expand support for more accounting programs and develop a powerful tool for LLMs to provide financial reports and analyses.
+
 This guide explains how to quickly run the SIE Parser application on a Mac.
 
 ## Prerequisites

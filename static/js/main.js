@@ -425,7 +425,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     : 'Unknown'
             },
             generated_at: new Date().toISOString(),
-            currency: processedData.metadata.currency || 'SEK'
+            currency: processedData.metadata.currency || 'SEK',
+            accounting_context: {
+                source: "This data comes from Swedish SIE 4 files, which is a standard format for financial data in Sweden.",
+                accounting_principles: "The data follows double-entry accounting principles where each transaction affects at least two accounts.",
+                debit_credit_explanation: "In Swedish accounting (BAS), accounts have both debit and credit sides. Negative amounts often indicate entries on the credit side. The general rule is that Assets increase with debit entries, while Liabilities and Equity increase with credit entries.",
+                accounting_equation: "Assets = Liabilities + Equity",
+                debit_credit_examples: [
+                    { "account_type": "Assets (1xxx)", "debit": "Increase (+)", "credit": "Decrease (-)" },
+                    { "account_type": "Liabilities (2xxx)", "debit": "Decrease (-)", "credit": "Increase (+)" },
+                    { "account_type": "Equity (3xxx)", "debit": "Decrease (-)", "credit": "Increase (+)" },
+                    { "account_type": "Income (3xxx-8xxx)", "debit": "Decrease (-)", "credit": "Increase (+)" },
+                    { "account_type": "Expenses (4xxx-8xxx)", "debit": "Increase (+)", "credit": "Decrease (-)" }
+                ],
+                example_transaction: {
+                    "description": "Purchase of equipment for 10,000 SEK",
+                    "entries": [
+                        { "account": "1220 (Equipment)", "debit": 10000, "credit": 0 },
+                        { "account": "1930 (Bank Account)", "debit": 0, "credit": 10000 }
+                    ],
+                    "explanation": "The asset (equipment) increases with a debit entry, while another asset (bank account) decreases with a credit entry."
+                }
+            }
         };
         
         // Add company summary if selected
