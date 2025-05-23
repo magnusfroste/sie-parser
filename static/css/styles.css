@@ -891,6 +891,138 @@ pre {
     }
 }
 
+/* Opening Balance - Enhanced Professional Styling */
+.ob-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.ob-report-header .company-info {
+    flex: 1;
+}
+
+.ob-report-header .company-info h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.ob-report-header .company-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.ob-report-header .filter-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.opening-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+.ob-report-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-radius: 5px;
+}
+
+.ob-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.ob-report-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.ob-report-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+}
+
+.ob-report-table th.amount-col {
+    text-align: right;
+}
+
+.ob-report-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.ob-report-table td.amount-col {
+    text-align: right;
+    font-family: var(--mono-font);
+}
+
+.ob-report-table .section-header {
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #495057;
+}
+
+.ob-report-table .section-header td {
+    padding: 10px 15px;
+}
+
+.ob-report-table .subtotal-row {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.ob-report-table .balance-check-row {
+    background-color: #e9ecef;
+    font-weight: bold;
+    border-top: 2px solid #adb5bd;
+}
+
+.ob-report-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.ob-report-footer .notes {
+    font-style: italic;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.ob-report-footer .report-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.ob-report-footer .action-btn {
+    padding: 8px 15px;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-report-footer .action-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
 /* Opening Balance Tab */
 .opening-controls {
     display: flex;
@@ -1565,40 +1697,49 @@ pre {
 }
 
 .ledger-table .account-col {
-    width: 10%;
+    width: 22%;
+    max-width: 250px; /* Limit maximum width */
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 0.9rem;
     color: #495057;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ledger-table .date-col {
     width: 10%;
+    min-width: 90px; /* Ensure minimum width for date */
     white-space: nowrap;
     color: #6c757d;
 }
 
 .ledger-table .ver-col {
-    width: 8%;
+    width: 5%;
+    min-width: 50px; /* Ensure minimum width for verification numbers */
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     color: #6c757d;
     text-align: center;
 }
 
 .ledger-table .desc-col {
-    width: 42%;
+    width: 35%;
+    min-width: 200px; /* Ensure minimum width for descriptions */
     color: #212529;
     font-weight: 500;
 }
 
 .ledger-table .amount-col {
-    width: 15%;
+    width: 12%;
+    min-width: 100px; /* Ensure minimum width for amounts */
     text-align: right;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-weight: 500;
 }
 
 .ledger-table .balance-col {
-    width: 15%;
+    width: 12%;
+    min-width: 100px; /* Ensure minimum width for balances */
     text-align: right;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-weight: 600;
@@ -1632,11 +1773,19 @@ pre {
     position: relative;
 }
 
-.ledger-table tr.account-header td {
+.ledger-table tr.account-header td:first-child {
     padding: 14px 16px;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #212529;
     border-left: 4px solid #4dabf7;
+    /* Compact account display */
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ledger-table tr.account-header td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

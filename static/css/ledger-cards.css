@@ -1,0 +1,185 @@
+/* Card-based Ledger View Styles */
+.ledger-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 30px;
+    padding: 0 5px;
+}
+
+.account-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+}
+
+.account-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.account-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Add specific colors for different account types */
+.account-card.account-type-Asset .account-card-header {
+    border-left: 4px solid #4dabf7;
+}
+
+.account-card.account-type-Liability .account-card-header {
+    border-left: 4px solid #ff922b;
+}
+
+.account-card.account-type-Equity .account-card-header {
+    border-left: 4px solid #40c057;
+}
+
+.account-card.account-type-Income .account-card-header {
+    border-left: 4px solid #7950f2;
+}
+
+.account-card.account-type-Expense .account-card-header {
+    border-left: 4px solid #fa5252;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.account-number {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #495057;
+}
+
+.account-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #212529;
+}
+
+.account-balance {
+    text-align: right;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.final-balance {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 1.1rem;
+}
+
+.account-card-body {
+    padding: 0;
+    overflow-x: auto;
+}
+
+/* Transactions table inside each account card */
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.transactions-table thead {
+    background-color: #f8f9fa;
+}
+
+.transactions-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.transactions-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.transactions-table .date-col {
+    width: 12%;
+    white-space: nowrap;
+    color: #6c757d;
+}
+
+.transactions-table .ver-col {
+    width: 8%;
+    text-align: center;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: #6c757d;
+}
+
+.transactions-table .desc-col {
+    width: 50%;
+    color: #212529;
+}
+
+.transactions-table .amount-col {
+    width: 15%;
+    text-align: right;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 500;
+}
+
+.transactions-table .balance-col {
+    width: 15%;
+    text-align: right;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.opening-balance-row {
+    background-color: #f8f9fa;
+    font-style: italic;
+    color: #6c757d;
+}
+
+.closing-balance-row {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Empty state */
+.empty-ledger {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Card-specific empty state */
+.empty-account-transactions {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .account-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .account-balance {
+        text-align: left;
+    }
+}

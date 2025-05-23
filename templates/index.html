@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIE Parser for LLM Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ledger-cards.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -264,37 +265,89 @@
                     </div>
                     
                     <div id="opening-tab" class="tab-pane">
-                        <div class="opening-controls">
-                            <div class="search-box">
-                                <input type="text" id="opening-search" placeholder="Search accounts...">
+                        <div class="ob-report-header">
+                            <div class="company-info">
+                                <h2 id="ob-company-name">Company Name</h2>
+                                <h3>Opening Balance</h3>
+                                <p id="ob-period">As of: <span id="opening-year"></span></p>
                             </div>
-                            <div class="opening-info">
-                                <span id="opening-account-count">0</span> accounts shown
+                            <div class="filter-controls">
+                                <div class="search-box">
+                                    <input type="text" id="opening-search" placeholder="Search accounts...">
+                                </div>
+                                <label class="toggle-checkbox">
+                                    <input type="checkbox" id="opening-show-non-zero" checked>
+                                    <span class="checkbox-text">Show only accounts with values</span>
+                                </label>
+                                <div class="opening-info">
+                                    <span id="opening-account-count">0</span> accounts shown
+                                </div>
                             </div>
                         </div>
-                        <div class="opening-container">
-                            <div class="opening-header">
-                                <h3>Opening Balance <span id="opening-year"></span></h3>
-                                <p class="note">Opening balances (#IB) represent account values at the beginning of the fiscal year.</p>
-                            </div>
-                            <div class="balance-container">
-                                <div class="balance-column">
-                                    <h3>Assets</h3>
-                                    <div id="opening-assets-list" class="account-list"></div>
-                                    <div class="total-row">
-                                        <strong>Total Assets:</strong>
-                                        <span id="opening-total-assets">-</span>
-                                    </div>
-                                </div>
-                                <div class="balance-column">
-                                    <h3>Liabilities & Equity</h3>
-                                    <div id="opening-liabilities-list" class="account-list"></div>
-                                    <div id="opening-equity-list" class="account-list"></div>
-                                    <div class="total-row">
-                                        <strong>Total Liabilities & Equity:</strong>
-                                        <span id="opening-total-liab-equity">-</span>
-                                    </div>
-                                </div>
+                        
+                        <div class="ob-report-container">
+                            <table class="ob-report-table">
+                                <thead>
+                                    <tr>
+                                        <th class="account-col">Account</th>
+                                        <th class="name-col">Description</th>
+                                        <th class="amount-col">Opening Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Assets Section -->
+                                    <tr class="section-header">
+                                        <td colspan="3">Assets</td>
+                                    </tr>
+                                    <tr id="ob-assets-placeholder">
+                                        <td colspan="3" class="empty-message">No asset accounts found</td>
+                                    </tr>
+                                    <!-- Asset accounts will be inserted here by JavaScript -->
+                                    <tr class="subtotal-row">
+                                        <td colspan="2">Total Assets</td>
+                                        <td id="opening-total-assets" class="amount-col">-</td>
+                                    </tr>
+                                    
+                                    <!-- Liabilities Section -->
+                                    <tr class="section-header">
+                                        <td colspan="3">Liabilities</td>
+                                    </tr>
+                                    <tr id="ob-liabilities-placeholder">
+                                        <td colspan="3" class="empty-message">No liability accounts found</td>
+                                    </tr>
+                                    <!-- Liability accounts will be inserted here by JavaScript -->
+                                    <tr class="subtotal-row">
+                                        <td colspan="2">Total Liabilities</td>
+                                        <td id="opening-total-liabilities" class="amount-col">-</td>
+                                    </tr>
+                                    
+                                    <!-- Equity Section -->
+                                    <tr class="section-header">
+                                        <td colspan="3">Equity</td>
+                                    </tr>
+                                    <tr id="ob-equity-placeholder">
+                                        <td colspan="3" class="empty-message">No equity accounts found</td>
+                                    </tr>
+                                    <!-- Equity accounts will be inserted here by JavaScript -->
+                                    <tr class="subtotal-row">
+                                        <td colspan="2">Total Equity</td>
+                                        <td id="opening-total-equity" class="amount-col">-</td>
+                                    </tr>
+                                    
+                                    <!-- Balance Check -->
+                                    <tr class="balance-check-row">
+                                        <td colspan="2">Total Liabilities & Equity</td>
+                                        <td id="opening-total-liab-equity" class="amount-col">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="ob-report-footer">
+                            <p class="notes">Notes: Opening balances (#IB) represent account values at the beginning of the fiscal year. Assets = Liabilities + Equity.</p>
+                            <div class="report-actions">
+                                <button id="export-ob-pdf" class="action-btn">Export as PDF</button>
+                                <button id="print-ob" class="action-btn">Print</button>
                             </div>
                         </div>
                     </div>
@@ -316,23 +369,41 @@
                             </div>
                         </div>
                         
-                        <div class="ledger-report-container">
-                            <table class="ledger-table">
-                                <thead>
-                                    <tr>
-                                        <th class="account-col">Account</th>
-                                        <th class="date-col">Date</th>
-                                        <th class="ver-col">Ver.</th>
-                                        <th class="desc-col">Description</th>
-                                        <th class="amount-col">Amount</th>
-                                        <th class="balance-col">Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ledger-transactions">
-                                    <!-- Transactions will be inserted here -->
-                                </tbody>
-                            </table>
+                        <div class="ledger-cards-container" id="ledger-accounts-container">
+                            <!-- Account cards will be inserted here -->
                         </div>
+                        
+                        <!-- Template for account cards -->
+                        <template id="account-card-template">
+                            <div class="account-card">
+                                <div class="account-card-header">
+                                    <div class="account-info">
+                                        <span class="account-number"></span>
+                                        <span class="account-name"></span>
+                                    </div>
+                                    <div class="account-balance">
+                                        <span>Balance: </span>
+                                        <span class="final-balance"></span>
+                                    </div>
+                                </div>
+                                <div class="account-card-body">
+                                    <table class="transactions-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="date-col">Date</th>
+                                                <th class="ver-col">Ver.</th>
+                                                <th class="desc-col">Description</th>
+                                                <th class="amount-col">Amount</th>
+                                                <th class="balance-col">Balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="transaction-list">
+                                            <!-- Transactions will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </template>
                         
                         <div class="ledger-report-footer">
                             <p class="notes">Notes: This ledger shows all accounts with their transactions in chronological order.</p>
