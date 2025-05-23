@@ -1518,6 +1518,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('total-accounts').textContent = summary.total_accounts || 0;
         document.getElementById('total-transactions').textContent = (summary.total_transactions || 0).toLocaleString();
         
+        // Update verification count - use the summary data if available, otherwise fallback to window.sieData
+        let verificationCount = summary.total_verifications || 0;
+        if (verificationCount === 0 && window.sieData && window.sieData.verifications) {
+            verificationCount = window.sieData.verifications.length;
+        }
+        document.getElementById('total-verifications').textContent = verificationCount.toLocaleString();
+        
         // Calculate net result if not provided
         let netResult = summary.net_result;
         if (netResult === undefined && window.sieData && window.sieData.income_statement) {
