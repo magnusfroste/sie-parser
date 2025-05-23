@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Generate LLM-optimized data structure based on selected options
-    function generateLLMData(includePreviousYears, includeSummary, includeIncome, includeBalance, includeLedger, includeKeyRatios) {
+    function generateLLMData(includePreviousYears, includeSummary, includeIncome, includeBalance, includeLedger, includeKeyRatios, includeTransactions) {
         if (!processedData) return {};
         
         console.log("generateLLMData params:", {
@@ -411,7 +411,8 @@ document.addEventListener('DOMContentLoaded', function() {
             includeIncome,
             includeBalance,
             includeLedger,
-            includeKeyRatios
+            includeKeyRatios,
+            includeTransactions
         });
         
         // Log the entire processed data for debugging
@@ -492,6 +493,70 @@ document.addEventListener('DOMContentLoaded', function() {
             // Use only English key name but keep Swedish account names inside
             result.history = generateBalanceHistoryAnalysis();
             console.log("Generated balance history:", result.history);
+        }
+        
+        // Add transaction data if selected
+        if (includeTransactions && processedData.verifications) {
+            console.log("Including transaction data in LLM export");
+            
+            // Get fiscal year from metadata
+            const fiscalYear = processedData.metadata?.financial_year_start?.substring(0, 4) || 
+                              new Date().getFullYear().toString();
+            
+            // Format transactions in an LLM-friendly structure
+            result.transactions = {
+                fiscal_year: fiscalYear,
+                description: `Complete transaction log for fiscal year ${fiscalYear}`,
+                explanation: "Each verification (VER) contains one or more transactions (TRANS) in double-entry format. Every transaction affects at least two accounts, maintaining the accounting equation Assets = Liabilities + Equity.",
+                verifications: []
+            };
+            
+            // Sort verifications by date
+            const sortedVerifications = [...processedData.verifications].sort((a, b) => {
+                return a.date.localeCompare(b.date);
+            });
+            
+            // Process each verification
+            sortedVerifications.forEach(verification => {
+                if (!verification.transactions || verification.transactions.length === 0) return;
+                
+                const verificationData = {
+                    id: verification.id,
+                    date: verification.date,
+                    text: verification.text || 'No description',
+                    transactions: []
+                };
+                
+                // Process transactions within this verification
+                verification.transactions.forEach(transaction => {
+                    // Get account name if available
+                    const accountNumber = transaction.account;
+                    const accountName = processedData.accounts[accountNumber]?.name || 'Unknown account';
+                    
+                    verificationData.transactions.push({
+                        account_number: accountNumber,
+                        account_name: accountName,
+                        amount: parseFloat(transaction.amount) || 0,
+                        text: transaction.text || ''
+                    });
+                });
+                
+                result.transactions.verifications.push(verificationData);
+            });
+            
+            // Add summary metrics
+            result.transactions.summary = {
+                total_verifications: result.transactions.verifications.length,
+                total_transactions: result.transactions.verifications.reduce(
+                    (sum, ver) => sum + ver.transactions.length, 0
+                ),
+                date_range: {
+                    start: sortedVerifications.length > 0 ? sortedVerifications[0].date : null,
+                    end: sortedVerifications.length > 0 ? sortedVerifications[sortedVerifications.length - 1].date : null
+                }
+            };
+            
+            console.log(`Generated transactions export with ${result.transactions.summary.total_verifications} verifications`);
         }
         
         return result;
@@ -1338,6 +1403,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const includeBalance = document.getElementById('include-balance').checked;
         const includeLedger = document.getElementById('include-ledger').checked;
         const includeKeyRatios = document.getElementById('include-key-ratios').checked;
+        const includeTransactions = document.getElementById('include-transactions').checked;
         
         console.log("Options:", {
             includePreviousYears,
@@ -1345,7 +1411,8 @@ document.addEventListener('DOMContentLoaded', function() {
             includeIncome,
             includeBalance,
             includeLedger,
-            includeKeyRatios
+            includeKeyRatios,
+            includeTransactions
         });
         
         try {
@@ -1356,7 +1423,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 includeIncome, 
                 includeBalance, 
                 includeLedger,
-                includeKeyRatios
+                includeKeyRatios,
+                includeTransactions
             );
             
             // Display formatted output in the preview area
